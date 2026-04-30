@@ -280,16 +280,2920 @@
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 
-  <script type="text/babel" src="animations.jsx"></script>
-  <script type="text/babel" src="scenes/scene-shared.jsx"></script>
-  <script type="text/babel" src="scenes/scenes-1-2.jsx"></script>
-  <script type="text/babel" src="scenes/scenes-3-4.jsx"></script>
-  <script type="text/babel" src="scenes/scenes-5-6.jsx"></script>
-  <script type="text/babel" src="scenes/scenes-7-8.jsx"></script>
-  <script type="text/babel" src="scenes/scenes-9-12.jsx"></script>
-  <script type="text/babel" src="scenes/scene-13.jsx"></script>
-  <script type="text/babel" src="scenes/scene-14.jsx"></script>
-  <script type="text/babel" src="scenes/scene-12-pilot.jsx"></script>
+  <script type="text/babel" data-from="animations.jsx">
+
+// animations.jsx
+// Reusable animation starter: Stage, Timeline, Sprite, easing helpers.
+// Usage (in an HTML file that loads React + Babel):
+//
+//   <Stage width={1280} height={720} duration={10} background="#f6f4ef">
+//     <MyScene />
+//   </Stage>
+//
+// Inside <Stage>, any child can call useTime() to read the current
+// playhead (seconds). Or wrap content in <Sprite start={1} end={4}>...</Sprite>
+// to only render during that window -- children receive a `localTime` and
+// `progress` via the useSprite() hook.
+//
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Easing functions (hand-rolled, Popmotion-style) ─────────────────────────
+// All easings take t ∈ [0,1] and return eased t ∈ [0,1] (may overshoot for back/elastic).
+const Easing = {
+  linear: (t) => t,
+
+  // Quad
+  easeInQuad:    (t) => t * t,
+  easeOutQuad:   (t) => t * (2 - t),
+  easeInOutQuad: (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t),
+
+  // Cubic
+  easeInCubic:    (t) => t * t * t,
+  easeOutCubic:   (t) => (--t) * t * t + 1,
+  easeInOutCubic: (t) => (t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1),
+
+  // Quart
+  easeInQuart:    (t) => t * t * t * t,
+  easeOutQuart:   (t) => 1 - (--t) * t * t * t,
+  easeInOutQuart: (t) => (t < 0.5 ? 8 * t * t * t * t : 1 - 8 * (--t) * t * t * t),
+
+  // Expo
+  easeInExpo:  (t) => (t === 0 ? 0 : Math.pow(2, 10 * (t - 1))),
+  easeOutExpo: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)),
+  easeInOutExpo: (t) => {
+    if (t === 0) return 0;
+    if (t === 1) return 1;
+    if (t < 0.5) return 0.5 * Math.pow(2, 20 * t - 10);
+    return 1 - 0.5 * Math.pow(2, -20 * t + 10);
+  },
+
+  // Sine
+  easeInSine:    (t) => 1 - Math.cos((t * Math.PI) / 2),
+  easeOutSine:   (t) => Math.sin((t * Math.PI) / 2),
+  easeInOutSine: (t) => -(Math.cos(Math.PI * t) - 1) / 2,
+
+  // Back (overshoot)
+  easeOutBack: (t) => {
+    const c1 = 1.70158, c3 = c1 + 1;
+    return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+  },
+  easeInBack: (t) => {
+    const c1 = 1.70158, c3 = c1 + 1;
+    return c3 * t * t * t - c1 * t * t;
+  },
+  easeInOutBack: (t) => {
+    const c1 = 1.70158, c2 = c1 * 1.525;
+    return t < 0.5
+      ? (Math.pow(2 * t, 2) * ((c2 + 1) * 2 * t - c2)) / 2
+      : (Math.pow(2 * t - 2, 2) * ((c2 + 1) * (t * 2 - 2) + c2) + 2) / 2;
+  },
+
+  // Elastic
+  easeOutElastic: (t) => {
+    const c4 = (2 * Math.PI) / 3;
+    if (t === 0) return 0;
+    if (t === 1) return 1;
+    return Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * c4) + 1;
+  },
+};
+
+// ── Core interpolation helpers ──────────────────────────────────────────────
+
+// Clamp a value to [min, max]
+const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+
+// interpolate([0, 0.5, 1], [0, 100, 50], ease?) -> fn(t)
+// Popmotion-style: linearly maps t across input keyframes to output values,
+// with optional easing per segment (single fn or array of fns).
+function interpolate(input, output, ease = Easing.linear) {
+  return (t) => {
+    if (t <= input[0]) return output[0];
+    if (t >= input[input.length - 1]) return output[output.length - 1];
+    for (let i = 0; i < input.length - 1; i++) {
+      if (t >= input[i] && t <= input[i + 1]) {
+        const span = input[i + 1] - input[i];
+        const local = span === 0 ? 0 : (t - input[i]) / span;
+        const easeFn = Array.isArray(ease) ? (ease[i] || Easing.linear) : ease;
+        const eased = easeFn(local);
+        return output[i] + (output[i + 1] - output[i]) * eased;
+      }
+    }
+    return output[output.length - 1];
+  };
+}
+
+// animate({from, to, start, end, ease})(t) — simpler single-segment tween.
+// Returns `from` before `start`, `to` after `end`.
+function animate({ from = 0, to = 1, start = 0, end = 1, ease = Easing.easeInOutCubic }) {
+  return (t) => {
+    if (t <= start) return from;
+    if (t >= end) return to;
+    const local = (t - start) / (end - start);
+    return from + (to - from) * ease(local);
+  };
+}
+
+// ── Timeline context ────────────────────────────────────────────────────────
+
+const TimelineContext = React.createContext({ time: 0, duration: 10, playing: false });
+
+const useTime = () => React.useContext(TimelineContext).time;
+const useTimeline = () => React.useContext(TimelineContext);
+
+// ── Sprite ──────────────────────────────────────────────────────────────────
+// Renders children only when the playhead is inside [start, end]. Provides
+// a sub-context with `localTime` (seconds since start) and `progress` (0..1).
+//
+//   <Sprite start={2} end={5}>
+//     {({ localTime, progress }) => <Thing x={progress * 100} />}
+//   </Sprite>
+//
+// Or as a plain wrapper — children can call useSprite() themselves.
+
+const SpriteContext = React.createContext({ localTime: 0, progress: 0, duration: 0 });
+const useSprite = () => React.useContext(SpriteContext);
+
+function Sprite({ start = 0, end = Infinity, children, keepMounted = false }) {
+  const { time } = useTimeline();
+  const visible = time >= start && time <= end;
+  if (!visible && !keepMounted) return null;
+
+  const duration = end - start;
+  const localTime = Math.max(0, time - start);
+  const progress = duration > 0 && isFinite(duration)
+    ? clamp(localTime / duration, 0, 1)
+    : 0;
+
+  const value = { localTime, progress, duration, visible };
+
+  return (
+    <SpriteContext.Provider value={value}>
+      {typeof children === 'function' ? children(value) : children}
+    </SpriteContext.Provider>
+  );
+}
+
+// ── Sample sprite components ────────────────────────────────────────────────
+
+// TextSprite: fades/slides text in on entry, holds, then fades out on exit.
+// Props: text, x, y, size, color, font, entryDur, exitDur, align
+function TextSprite({
+  text,
+  x = 0, y = 0,
+  size = 48,
+  color = '#111',
+  font = 'Inter, system-ui, sans-serif',
+  weight = 600,
+  entryDur = 0.45,
+  exitDur = 0.35,
+  entryEase = Easing.easeOutBack,
+  exitEase = Easing.easeInCubic,
+  align = 'left',
+  letterSpacing = '-0.01em',
+}) {
+  const { localTime, duration } = useSprite();
+  const exitStart = Math.max(0, duration - exitDur);
+
+  let opacity = 1;
+  let ty = 0;
+
+  if (localTime < entryDur) {
+    const t = entryEase(clamp(localTime / entryDur, 0, 1));
+    opacity = t;
+    ty = (1 - t) * 16;
+  } else if (localTime > exitStart) {
+    const t = exitEase(clamp((localTime - exitStart) / exitDur, 0, 1));
+    opacity = 1 - t;
+    ty = -t * 8;
+  }
+
+  const translateX = align === 'center' ? '-50%' : align === 'right' ? '-100%' : '0';
+
+  return (
+    <div style={{
+      position: 'absolute',
+      left: x, top: y,
+      transform: `translate(${translateX}, ${ty}px)`,
+      opacity,
+      fontFamily: font,
+      fontSize: size,
+      fontWeight: weight,
+      color,
+      letterSpacing,
+      whiteSpace: 'pre',
+      lineHeight: 1.1,
+      willChange: 'transform, opacity',
+    }}>
+      {text}
+    </div>
+  );
+}
+
+// ImageSprite: scales + fades in; optional Ken Burns drift during hold.
+function ImageSprite({
+  src,
+  x = 0, y = 0,
+  width = 400, height = 300,
+  entryDur = 0.6,
+  exitDur = 0.4,
+  kenBurns = false,
+  kenBurnsScale = 1.08,
+  radius = 12,
+  fit = 'cover',
+  placeholder = null, // {label: string} for striped placeholder
+}) {
+  const { localTime, duration } = useSprite();
+  const exitStart = Math.max(0, duration - exitDur);
+
+  let opacity = 1;
+  let scale = 1;
+
+  if (localTime < entryDur) {
+    const t = Easing.easeOutCubic(clamp(localTime / entryDur, 0, 1));
+    opacity = t;
+    scale = 0.96 + 0.04 * t;
+  } else if (localTime > exitStart) {
+    const t = Easing.easeInCubic(clamp((localTime - exitStart) / exitDur, 0, 1));
+    opacity = 1 - t;
+    scale = (kenBurns ? kenBurnsScale : 1) + 0.02 * t;
+  } else if (kenBurns) {
+    const holdSpan = exitStart - entryDur;
+    const holdT = holdSpan > 0 ? (localTime - entryDur) / holdSpan : 0;
+    scale = 1 + (kenBurnsScale - 1) * holdT;
+  }
+
+  const content = placeholder ? (
+    <div style={{
+      width: '100%', height: '100%',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      background: 'repeating-linear-gradient(135deg, #e9e6df 0 10px, #dcd8cf 10px 20px)',
+      color: '#6b6458',
+      fontFamily: 'JetBrains Mono, ui-monospace, monospace',
+      fontSize: 13,
+      letterSpacing: '0.04em',
+      textTransform: 'uppercase',
+    }}>
+      {placeholder.label || 'image'}
+    </div>
+  ) : (
+    <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: fit, display: 'block' }} />
+  );
+
+  return (
+    <div style={{
+      position: 'absolute',
+      left: x, top: y,
+      width, height,
+      opacity,
+      transform: `scale(${scale})`,
+      transformOrigin: 'center',
+      borderRadius: radius,
+      overflow: 'hidden',
+      willChange: 'transform, opacity',
+    }}>
+      {content}
+    </div>
+  );
+}
+
+// RectSprite: simple rectangle that animates position/size/color via props.
+// Useful demo primitive — takes a `render` fn for per-frame customization.
+function RectSprite({
+  x = 0, y = 0,
+  width = 100, height = 100,
+  color = '#111',
+  radius = 8,
+  entryDur = 0.4,
+  exitDur = 0.3,
+  render, // optional: (ctx) => style overrides
+}) {
+  const spriteCtx = useSprite();
+  const { localTime, duration } = spriteCtx;
+  const exitStart = Math.max(0, duration - exitDur);
+
+  let opacity = 1;
+  let scale = 1;
+
+  if (localTime < entryDur) {
+    const t = Easing.easeOutBack(clamp(localTime / entryDur, 0, 1));
+    opacity = clamp(localTime / entryDur, 0, 1);
+    scale = 0.4 + 0.6 * t;
+  } else if (localTime > exitStart) {
+    const t = Easing.easeInQuad(clamp((localTime - exitStart) / exitDur, 0, 1));
+    opacity = 1 - t;
+    scale = 1 - 0.15 * t;
+  }
+
+  const overrides = render ? render(spriteCtx) : {};
+
+  return (
+    <div style={{
+      position: 'absolute',
+      left: x, top: y,
+      width, height,
+      background: color,
+      borderRadius: radius,
+      opacity,
+      transform: `scale(${scale})`,
+      transformOrigin: 'center',
+      willChange: 'transform, opacity',
+      ...overrides,
+    }} />
+  );
+}
+
+
+function Stage({
+  width = 1280,
+  height = 720,
+  duration = 10,
+  background = '#f6f4ef',
+  fps = 60,
+  loop = true,
+  autoplay = true,
+  persistKey = 'animstage',
+  children,
+}) {
+  const [time, setTime] = React.useState(() => {
+    try {
+      const v = parseFloat(localStorage.getItem(persistKey + ':t') || '0');
+      return isFinite(v) ? clamp(v, 0, duration) : 0;
+    } catch { return 0; }
+  });
+  const [playing, setPlaying] = React.useState(autoplay);
+  const [hoverTime, setHoverTime] = React.useState(null);
+  const [scale, setScale] = React.useState(1);
+
+  const stageRef = React.useRef(null);
+  const canvasRef = React.useRef(null);
+  const rafRef = React.useRef(null);
+  const lastTsRef = React.useRef(null);
+
+  // Persist playhead
+  React.useEffect(() => {
+    try { localStorage.setItem(persistKey + ':t', String(time)); } catch {}
+  }, [time, persistKey]);
+
+  // Auto-scale to fit viewport
+  React.useEffect(() => {
+    if (!stageRef.current) return;
+    const el = stageRef.current;
+    const measure = () => {
+      const barH = 44; // playback bar height
+      const s = Math.min(
+        el.clientWidth / width,
+        (el.clientHeight - barH) / height
+      );
+      setScale(Math.max(0.05, s));
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    window.addEventListener('resize', measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', measure);
+    };
+  }, [width, height]);
+
+  // Animation loop
+  React.useEffect(() => {
+    if (!playing) {
+      lastTsRef.current = null;
+      return;
+    }
+    const step = (ts) => {
+      if (lastTsRef.current == null) lastTsRef.current = ts;
+      const dt = (ts - lastTsRef.current) / 1000;
+      lastTsRef.current = ts;
+      setTime((t) => {
+        let next = t + dt;
+        if (next >= duration) {
+          if (loop) next = next % duration;
+          else { next = duration; setPlaying(false); }
+        }
+        return next;
+      });
+      rafRef.current = requestAnimationFrame(step);
+    };
+    rafRef.current = requestAnimationFrame(step);
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      lastTsRef.current = null;
+    };
+  }, [playing, duration, loop]);
+
+  // Keyboard: space = play/pause, ← → = seek
+  React.useEffect(() => {
+    const onKey = (e) => {
+      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+      if (e.code === 'Space') {
+        e.preventDefault();
+        setPlaying(p => !p);
+      } else if (e.code === 'ArrowLeft') {
+        setTime(t => clamp(t - (e.shiftKey ? 1 : 0.1), 0, duration));
+      } else if (e.code === 'ArrowRight') {
+        setTime(t => clamp(t + (e.shiftKey ? 1 : 0.1), 0, duration));
+      } else if (e.key === '0' || e.code === 'Home') {
+        setTime(0);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [duration]);
+
+  const displayTime = hoverTime != null ? hoverTime : time;
+
+  const ctxValue = React.useMemo(
+    () => ({ time: displayTime, duration, playing, setTime, setPlaying }),
+    [displayTime, duration, playing]
+  );
+
+  return (
+    <div
+      ref={stageRef}
+      style={{
+        position: 'absolute', inset: 0,
+        display: 'flex', flexDirection: 'column',
+        alignItems: 'center',
+        background: '#0a0a0a',
+        fontFamily: 'Inter, system-ui, sans-serif',
+      }}
+    >
+      {/* Canvas area — vertically centered in remaining space */}
+      <div style={{
+        flex: 1,
+        width: '100%',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        overflow: 'hidden',
+        minHeight: 0,
+      }}>
+        <div
+          ref={canvasRef}
+          style={{
+            width, height,
+            background,
+            position: 'relative',
+            transform: `scale(${scale})`,
+            transformOrigin: 'center',
+            flexShrink: 0,
+            boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
+            overflow: 'hidden',
+          }}
+        >
+          <TimelineContext.Provider value={ctxValue}>
+            {children}
+          </TimelineContext.Provider>
+        </div>
+      </div>
+
+      {/* Playback bar — stacked below canvas, never overlapping */}
+      <PlaybackBar
+        time={displayTime}
+        actualTime={time}
+        duration={duration}
+        playing={playing}
+        onPlayPause={() => setPlaying(p => !p)}
+        onReset={() => { setTime(0); }}
+        onSeek={(t) => setTime(t)}
+        onHover={(t) => setHoverTime(t)}
+      />
+    </div>
+  );
+}
+
+// ── Playback bar ────────────────────────────────────────────────────────────
+// Play/pause, return-to-begin, scrub track, time display.
+// Uses fixed-width time fields so layout doesn't thrash.
+
+function PlaybackBar({ time, duration, playing, onPlayPause, onReset, onSeek, onHover }) {
+  const trackRef = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+
+  const timeFromEvent = React.useCallback((e) => {
+    const rect = trackRef.current.getBoundingClientRect();
+    const x = clamp((e.clientX - rect.left) / rect.width, 0, 1);
+    return x * duration;
+  }, [duration]);
+
+  const onTrackMove = (e) => {
+    if (!trackRef.current) return;
+    const t = timeFromEvent(e);
+    if (dragging) {
+      onSeek(t);
+    } else {
+      onHover(t);
+    }
+  };
+
+  const onTrackLeave = () => {
+    if (!dragging) onHover(null);
+  };
+
+  const onTrackDown = (e) => {
+    setDragging(true);
+    const t = timeFromEvent(e);
+    onSeek(t);
+    onHover(null);
+  };
+
+  React.useEffect(() => {
+    if (!dragging) return;
+    const onUp = () => setDragging(false);
+    const onMove = (e) => {
+      if (!trackRef.current) return;
+      const t = timeFromEvent(e);
+      onSeek(t);
+    };
+    window.addEventListener('mouseup', onUp);
+    window.addEventListener('mousemove', onMove);
+    return () => {
+      window.removeEventListener('mouseup', onUp);
+      window.removeEventListener('mousemove', onMove);
+    };
+  }, [dragging, timeFromEvent, onSeek]);
+
+  const pct = duration > 0 ? (time / duration) * 100 : 0;
+  const fmt = (t) => {
+    const total = Math.max(0, t);
+    const m = Math.floor(total / 60);
+    const s = Math.floor(total % 60);
+    const cs = Math.floor((total * 100) % 100);
+    return `${String(m).padStart(1, '0')}:${String(s).padStart(2, '0')}.${String(cs).padStart(2, '0')}`;
+  };
+
+  const mono = 'JetBrains Mono, ui-monospace, SFMono-Regular, monospace';
+
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center', gap: 12,
+      padding: '8px 16px',
+      background: 'rgba(20,20,20,0.92)',
+      borderTop: '1px solid rgba(255,255,255,0.08)',
+      width: '100%',
+      maxWidth: 680,
+      alignSelf: 'center',
+
+      borderRadius: 8,
+      color: '#f6f4ef',
+      fontFamily: 'Inter, system-ui, sans-serif',
+      userSelect: 'none',
+      flexShrink: 0,
+    }}>
+      <IconButton onClick={onReset} title="Return to start (0)">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M3 2v10M12 2L5 7l7 5V2z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round"/>
+        </svg>
+      </IconButton>
+      <IconButton onClick={onPlayPause} title="Play/pause (space)">
+        {playing ? (
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <rect x="3" y="2" width="3" height="10" fill="currentColor"/>
+            <rect x="8" y="2" width="3" height="10" fill="currentColor"/>
+          </svg>
+        ) : (
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M3 2l9 5-9 5V2z" fill="currentColor"/>
+          </svg>
+        )}
+      </IconButton>
+
+      {/* Current time: fixed width so it doesn't thrash */}
+      <div style={{
+        fontFamily: mono,
+        fontSize: 12,
+        fontVariantNumeric: 'tabular-nums',
+        width: 64, textAlign: 'right',
+        color: '#f6f4ef',
+      }}>
+        {fmt(time)}
+      </div>
+
+      {/* Scrub track */}
+      <div
+        ref={trackRef}
+        onMouseMove={onTrackMove}
+        onMouseLeave={onTrackLeave}
+        onMouseDown={onTrackDown}
+        style={{
+          flex: 1,
+          height: 22,
+          position: 'relative',
+          cursor: 'pointer',
+          display: 'flex', alignItems: 'center',
+        }}
+      >
+        <div style={{
+          position: 'absolute',
+          left: 0, right: 0, height: 4,
+          background: 'rgba(255,255,255,0.12)',
+          borderRadius: 2,
+        }}/>
+        <div style={{
+          position: 'absolute',
+          left: 0, width: `${pct}%`, height: 4,
+          background: 'oklch(72% 0.12 250)',
+          borderRadius: 2,
+        }}/>
+        <div style={{
+          position: 'absolute',
+          left: `${pct}%`, top: '50%',
+          width: 12, height: 12,
+          marginLeft: -6, marginTop: -6,
+          background: '#fff',
+          borderRadius: 6,
+          boxShadow: '0 2px 4px rgba(0,0,0,0.4)',
+        }}/>
+      </div>
+
+      {/* Duration: fixed width */}
+      <div style={{
+        fontFamily: mono,
+        fontSize: 12,
+        fontVariantNumeric: 'tabular-nums',
+        width: 64, textAlign: 'left',
+        color: 'rgba(246,244,239,0.55)',
+      }}>
+        {fmt(duration)}
+      </div>
+    </div>
+  );
+}
+
+function IconButton({ children, onClick, title }) {
+  const [hover, setHover] = React.useState(false);
+  return (
+    <button
+      onClick={onClick}
+      title={title}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        width: 28, height: 28,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: hover ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.04)',
+        border: '1px solid rgba(255,255,255,0.1)',
+        borderRadius: 6,
+        color: '#f6f4ef',
+        cursor: 'pointer',
+        padding: 0,
+        transition: 'background 120ms',
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
+
+Object.assign(window, {
+  Easing, interpolate, animate, clamp,
+  TimelineContext, useTime, useTimeline,
+  Sprite, SpriteContext, useSprite,
+  TextSprite, ImageSprite, RectSprite,
+  Stage, PlaybackBar,
+});
+
+
+</script>
+  <script type="text/babel" data-from="scenes/scene-shared.jsx">
+// Shared visual primitives — 3D heart, particles, grid, glow.
+
+const C = {
+  bg0: '#020617',          // deep navy black
+  bg1: '#050a1f',
+  bg2: '#0a1535',
+  cyan: '#22d3ee',
+  cyanDim: '#0891b2',
+  blue: '#3b82f6',
+  blueDeep: '#1e3a8a',
+  red: '#f43f5e',
+  redDim: '#9f1239',
+  gold: '#fbbf24',
+  goldDim: '#b45309',
+  white: '#f8fafc',
+  whiteDim: 'rgba(248,250,252,0.62)',
+  line: 'rgba(34,211,238,0.18)',
+  lineStrong: 'rgba(34,211,238,0.35)',
+};
+
+// ── 3D space backdrop with parallax grid + drifting particles ─────────────
+function CosmicBackdrop({ depth = 0, hue = 'cyan' }) {
+  const t = useTime();
+  const accent = hue === 'red' ? C.red : hue === 'gold' ? C.gold : C.cyan;
+  return (
+    <div style={{
+      position: 'absolute', inset: 0,
+      background: `
+        radial-gradient(ellipse at 30% 20%, ${accent}22 0%, transparent 45%),
+        radial-gradient(ellipse at 70% 80%, ${C.blue}33 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, ${C.bg2} 0%, ${C.bg0} 75%)
+      `,
+      overflow: 'hidden',
+    }}>
+      {/* Parallax grid (CSS 3D) */}
+      <div style={{
+        position: 'absolute', inset: '-20%',
+        perspective: 900,
+        opacity: 0.55,
+      }}>
+        <div style={{
+          position: 'absolute', inset: 0,
+          transform: `rotateX(64deg) translateZ(${depth * 0.6}px) translateY(${(t * 60) % 200 - 100}px)`,
+          backgroundImage: `
+            linear-gradient(${C.lineStrong} 1px, transparent 1px),
+            linear-gradient(90deg, ${C.lineStrong} 1px, transparent 1px)
+          `,
+          backgroundSize: '120px 120px',
+          maskImage: 'radial-gradient(ellipse at 50% 30%, #000 25%, transparent 70%)',
+          WebkitMaskImage: 'radial-gradient(ellipse at 50% 30%, #000 25%, transparent 70%)',
+        }} />
+      </div>
+      {/* Drift particles */}
+      <ParticleField count={50} t={t} accent={accent} />
+    </div>
+  );
+}
+
+function ParticleField({ count = 40, t, accent }) {
+  const items = React.useMemo(() => Array.from({ length: count }, (_, i) => {
+    const seed = i * 9301 + 49297;
+    const r = (n) => ((Math.sin(seed * n) + 1) / 2);
+    return {
+      x: r(1) * 1920,
+      y: r(2) * 1080,
+      size: 1 + r(3) * 3,
+      speed: 0.2 + r(4) * 0.6,
+      drift: r(5) * 30,
+      phase: r(6) * Math.PI * 2,
+    };
+  }), [count]);
+  return (
+    <>
+      {items.map((p, i) => {
+        const yy = (p.y + t * p.speed * 80) % 1080;
+        const xx = p.x + Math.sin(t * 0.8 + p.phase) * p.drift;
+        return (
+          <div key={i} style={{
+            position: 'absolute',
+            left: xx, top: yy,
+            width: p.size, height: p.size,
+            borderRadius: '50%',
+            background: accent,
+            boxShadow: `0 0 ${p.size * 4}px ${accent}`,
+            opacity: 0.5 + Math.sin(t * 1.5 + p.phase) * 0.3,
+          }} />
+        );
+      })}
+    </>
+  );
+}
+
+// ── 3D ECG / Pulse line ──────────────────────────────────────────────
+function PulseLine({ y = 540, color = C.cyan, amp = 80, opacity = 1 }) {
+  const t = useTime();
+  const points = [];
+  for (let x = 0; x <= 1920; x += 8) {
+    let yOff = Math.sin((x / 1920) * Math.PI * 6 + t * 2) * 6;
+    const beat = ((x / 1920) * 4 + t * 0.5) % 1;
+    if (beat > 0.45 && beat < 0.55) {
+      const k = (beat - 0.5) / 0.05;
+      yOff -= Math.exp(-k * k * 4) * amp;
+    } else if (beat > 0.55 && beat < 0.62) {
+      yOff += 12;
+    }
+    points.push(`${x},${y + yOff}`);
+  }
+  return (
+    <svg width="1920" height="1080" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', opacity }}>
+      <defs>
+        <filter id="pulseglow">
+          <feGaussianBlur stdDeviation="3" result="b" />
+          <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+      </defs>
+      <polyline points={points.join(' ')} fill="none" stroke={color} strokeWidth="2.5" filter="url(#pulseglow)" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+// ── 3D animated heart ──────────────────────────────────────────────
+function Heart3D({ x = 960, y = 540, size = 280, beat = true }) {
+  const t = useTime();
+  const pulse = beat ? 1 + Math.max(0, Math.sin(t * 2.4)) ** 8 * 0.18 : 1;
+  const wobble = Math.sin(t * 0.6) * 8;
+  return (
+    <div style={{
+      position: 'absolute',
+      left: x, top: y,
+      transform: `translate(-50%, -50%) perspective(1200px) rotateY(${wobble}deg) rotateX(${-Math.sin(t*0.5)*5}deg) scale(${pulse})`,
+      transformStyle: 'preserve-3d',
+      width: size, height: size,
+      filter: `drop-shadow(0 0 60px ${C.red}) drop-shadow(0 0 24px ${C.red})`,
+    }}>
+      <svg width={size} height={size} viewBox="-100 -100 200 200">
+        <defs>
+          <radialGradient id="heartGrad" cx="35%" cy="30%">
+            <stop offset="0%" stopColor="#ff6b8a" />
+            <stop offset="50%" stopColor={C.red} />
+            <stop offset="100%" stopColor={C.redDim} />
+          </radialGradient>
+          <linearGradient id="heartShine" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="rgba(255,255,255,0.7)" />
+            <stop offset="60%" stopColor="rgba(255,255,255,0)" />
+          </linearGradient>
+        </defs>
+        <path d="M 0,40 C -50,10 -90,-20 -90,-50 C -90,-80 -60,-95 -30,-80 C -10,-70 0,-50 0,-40 C 0,-50 10,-70 30,-80 C 60,-95 90,-80 90,-50 C 90,-20 50,10 0,40 Z"
+              fill="url(#heartGrad)" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+        <path d="M 0,30 C -42,4 -75,-18 -75,-44 C -75,-62 -55,-72 -32,-62"
+              fill="none" stroke="url(#heartShine)" strokeWidth="3" opacity="0.7" />
+      </svg>
+      {/* Pulse rings */}
+      {[0, 1, 2].map(i => {
+        const phase = (t * 1.2 + i * 0.4) % 1.5;
+        if (phase > 1) return null;
+        return (
+          <div key={i} style={{
+            position: 'absolute', left: '50%', top: '50%',
+            width: size * (0.7 + phase * 0.9), height: size * (0.7 + phase * 0.9),
+            transform: 'translate(-50%, -50%)',
+            border: `2px solid ${C.red}`,
+            borderRadius: '50%',
+            opacity: (1 - phase) * 0.5,
+          }} />
+        );
+      })}
+    </div>
+  );
+}
+
+// ── Glass card panel ──────────────────────────────────────────────
+function GlassCard({ x, y, w, h, children, tilt = 0, depth = 0, opacity = 1, border = C.lineStrong }) {
+  return (
+    <div style={{
+      position: 'absolute',
+      left: x, top: y,
+      width: w, height: h,
+      transform: `perspective(1400px) rotateY(${tilt}deg) translateZ(${depth}px)`,
+      transformStyle: 'preserve-3d',
+      background: 'linear-gradient(135deg, rgba(34,211,238,0.08) 0%, rgba(59,130,246,0.04) 100%)',
+      backdropFilter: 'blur(14px)',
+      WebkitBackdropFilter: 'blur(14px)',
+      border: `1px solid ${border}`,
+      borderRadius: 18,
+      boxShadow: `0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08)`,
+      opacity,
+      overflow: 'hidden',
+    }}>
+      <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0, height: 1,
+        background: `linear-gradient(90deg, transparent, ${C.cyan}, transparent)`,
+        opacity: 0.7,
+      }} />
+      {children}
+    </div>
+  );
+}
+
+// ── Section header tag ──────────────────────────────────────────────
+function SectionTag({ index, label, x = 96, y = 96, color = C.cyan }) {
+  return (
+    <div style={{
+      position: 'absolute', left: x, top: y,
+      display: 'flex', alignItems: 'center', gap: 14,
+      fontFamily: 'JetBrains Mono, monospace',
+      fontSize: 14,
+      letterSpacing: '0.3em',
+      color: color,
+      textTransform: 'uppercase',
+    }}>
+      <div style={{ width: 40, height: 1, background: color }} />
+      <span style={{ opacity: 0.7 }}>{index}</span>
+      <span style={{ color: C.white }}>{label}</span>
+    </div>
+  );
+}
+
+// ── Animated counter ──────────────────────────────────────────────
+function AnimatedNumber({ from = 0, to = 100, duration = 1, suffix = '', prefix = '', decimals = 0 }) {
+  const { localTime } = useSprite();
+  const t = clamp(localTime / duration, 0, 1);
+  const eased = Easing.easeOutCubic(t);
+  const v = from + (to - from) * eased;
+  return <>{prefix}{v.toFixed(decimals)}{suffix}</>;
+}
+
+Object.assign(window, {
+  C, CosmicBackdrop, ParticleField, PulseLine, Heart3D, GlassCard, SectionTag, AnimatedNumber,
+});
+
+</script>
+  <script type="text/babel" data-from="scenes/scenes-1-2.jsx">
+// Scene 1 — Intro: SilentCheck logo emerges from cardiac pulse
+function Scene1Intro({ start, end }) {
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime, progress }) => {
+        const t0 = clamp(localTime, 0, 6);
+        const titleAppear = clamp((t0 - 1.8) / 1.0, 0, 1);
+        const subAppear = clamp((t0 - 2.8) / 0.8, 0, 1);
+        const taglineAppear = clamp((t0 - 4.0) / 0.8, 0, 1);
+        const pulseOpacity = clamp((t0 - 0.2) / 0.8, 0, 1) * (1 - clamp((t0 - 5.2) / 0.8, 0, 1));
+        return (
+          <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
+            <CosmicBackdrop hue="cyan" />
+            <PulseLine y={540} color={C.cyan} amp={140} opacity={pulseOpacity * 0.9} />
+            <PulseLine y={540} color={C.red} amp={120} opacity={pulseOpacity * 0.4} />
+
+            {/* Center logo mark */}
+            <div style={{
+              position: 'absolute', left: '50%', top: '38%',
+              transform: `translate(-50%, -50%) scale(${0.7 + titleAppear * 0.3})`,
+              opacity: titleAppear,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              gap: 18,
+            }}>
+              <svg width="72" height="72" viewBox="0 0 72 72" style={{ filter: `drop-shadow(0 0 18px ${C.cyan})` }}>
+                <circle cx="36" cy="36" r="30" fill="none" stroke={C.cyan} strokeWidth="2" opacity="0.5" />
+                <circle cx="36" cy="36" r="22" fill="none" stroke={C.cyan} strokeWidth="1.5" opacity="0.8" />
+                <path d="M 8 36 L 22 36 L 28 22 L 36 50 L 42 30 L 48 36 L 64 36"
+                      fill="none" stroke={C.cyan} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+              </svg>
+              <div style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: 96, fontWeight: 200,
+                letterSpacing: '-0.04em',
+                color: C.white,
+                lineHeight: 1,
+              }}>
+                Silent<span style={{ fontWeight: 600, background: `linear-gradient(135deg, ${C.cyan}, ${C.blue})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Check</span>
+              </div>
+            </div>
+
+            {/* Subtitle */}
+            <div style={{
+              position: 'absolute', left: '50%', top: '52%',
+              transform: `translate(-50%, ${(1 - subAppear) * 16}px)`,
+              opacity: subAppear,
+              fontFamily: 'JetBrains Mono, monospace',
+              fontSize: 18, letterSpacing: '0.42em',
+              color: C.cyan,
+              textTransform: 'uppercase',
+            }}>
+              Stratification du risque cardiovasculaire
+            </div>
+
+            {/* Tagline */}
+            <div style={{
+              position: 'absolute', left: '50%', top: '62%',
+              transform: `translate(-50%, ${(1 - taglineAppear) * 16}px)`,
+              opacity: taglineAppear,
+              fontFamily: 'Inter, sans-serif',
+              fontSize: 28, fontWeight: 300,
+              color: C.whiteDim,
+              fontStyle: 'italic',
+              textAlign: 'center',
+            }}>
+              « Le silence du corps n'est plus une fatalité. »
+            </div>
+
+            {/* Bottom credits */}
+            <div style={{
+              position: 'absolute', left: '50%', bottom: 80,
+              transform: 'translateX(-50%)',
+              opacity: taglineAppear * 0.9,
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
+              fontFamily: 'Inter, sans-serif',
+            }}>
+              <div style={{ fontSize: 14, color: C.whiteDim, letterSpacing: '0.3em', textTransform: 'uppercase' }}>
+                Powered by <span style={{ color: C.gold, fontWeight: 600 }}>Score BSD v5.0</span>
+              </div>
+            </div>
+
+            {/* Top corner brand */}
+            <div style={{
+              position: 'absolute', left: 96, top: 64,
+              fontFamily: 'JetBrains Mono, monospace',
+              fontSize: 13, letterSpacing: '0.4em',
+              color: C.whiteDim, textTransform: 'uppercase',
+            }}>
+              SilentCheck · 2026
+            </div>
+            <div style={{
+              position: 'absolute', right: 96, top: 64,
+              fontFamily: 'JetBrains Mono, monospace',
+              fontSize: 13, letterSpacing: '0.3em',
+              color: C.whiteDim,
+            }}>
+              Score BSD v5.0
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// Scene 2 — Stats: le silence tue
+function Scene2Crisis({ start, end }) {
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime }) => {
+        const t = localTime;
+        const headlineIn = clamp((t - 0.2) / 0.8, 0, 1);
+        const stat1In = clamp((t - 1.2) / 0.6, 0, 1);
+        const stat2In = clamp((t - 1.8) / 0.6, 0, 1);
+        const stat3In = clamp((t - 2.4) / 0.6, 0, 1);
+        const ctaIn = clamp((t - 4.4) / 0.6, 0, 1);
+        return (
+          <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
+            <CosmicBackdrop hue="red" />
+
+            <SectionTag index="01" label="Pourquoi SilentCheck" color={C.red} />
+
+            <div style={{
+              position: 'absolute', left: 96, top: 180, right: 96,
+              transform: `translateY(${(1 - headlineIn) * 30}px)`,
+              opacity: headlineIn,
+              fontFamily: 'Inter, sans-serif',
+              fontSize: 72, fontWeight: 200,
+              letterSpacing: '-0.03em', lineHeight: 1.05,
+              color: C.white,
+            }}>
+              Le <span style={{ fontStyle: 'italic', fontWeight: 300, color: C.red }}>silence du corps</span><br/>
+              tue plus que tout le reste.
+            </div>
+
+            {/* 3 stats with 3D cards */}
+            <div style={{ position: 'absolute', left: 96, top: 480, display: 'flex', gap: 32 }}>
+              {[
+                { in: stat1In, big: 20, suf: '%', label: 'd\'adultes diabétiques', sub: '1 sur 5 · 28% l\'ignorent encore', tilt: -8 },
+                { in: stat2In, big: 35, suf: '%', label: 'souffrent d\'hypertension', sub: 'silencieuse · souvent ignorée', tilt: 0 },
+                { in: stat3In, big: 85, suf: '%', label: 'des complications évitables', sub: 'avec une détection précoce · OMS', tilt: 8 },
+              ].map((s, i) => (
+                <div key={i} style={{
+                  width: 540, height: 320,
+                  transform: `perspective(1500px) rotateY(${s.tilt}deg) translateY(${(1 - s.in) * 60}px) scale(${0.9 + s.in * 0.1})`,
+                  opacity: s.in,
+                  transformStyle: 'preserve-3d',
+                }}>
+                  <GlassCard x={0} y={0} w={540} h={320} border={`rgba(244,63,94,0.3)`}>
+                    <div style={{ padding: 36, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                      <div style={{
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: 140, fontWeight: 200,
+                        background: `linear-gradient(135deg, ${C.red}, #ff8fa3)`,
+                        WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+                        letterSpacing: '-0.05em', lineHeight: 0.9,
+                      }}>
+                        {s.in > 0.4 ? Math.round((s.in - 0.4) / 0.6 * s.big) : 0}{s.suf}
+                      </div>
+                      <div>
+                        <div style={{ fontSize: 22, fontWeight: 500, color: C.white, marginBottom: 6 }}>{s.label}</div>
+                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.whiteDim, letterSpacing: '0.15em', textTransform: 'uppercase' }}>{s.sub}</div>
+                      </div>
+                    </div>
+                  </GlassCard>
+                </div>
+              ))}
+            </div>
+
+            <div style={{
+              position: 'absolute', left: 96, bottom: 80, right: 96,
+              opacity: ctaIn,
+              transform: `translateY(${(1 - ctaIn) * 20}px)`,
+              fontFamily: 'Inter, sans-serif',
+              fontSize: 28, fontWeight: 300, color: C.whiteDim,
+              borderTop: `1px solid ${C.line}`, paddingTop: 24,
+            }}>
+              La médecine classique intervient <span style={{ color: C.red, fontWeight: 500 }}>APRÈS</span> la maladie.
+              <span style={{ color: C.cyan, fontWeight: 500 }}>  SilentCheck agit AVANT.</span>
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+Object.assign(window, { Scene1Intro, Scene2Crisis });
+
+</script>
+  <script type="text/babel" data-from="scenes/scenes-3-4.jsx">
+// Scene 3 — 3D Heart with orbiting biomarkers
+function Scene3Heart({ start, end }) {
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime }) => {
+        const t = localTime;
+        const titleIn = clamp((t - 0.3) / 0.8, 0, 1);
+        const heartIn = clamp((t - 0.6) / 1.0, 0, 1);
+        const orbitIn = clamp((t - 1.6) / 1.0, 0, 1);
+        const calloutIn = clamp((t - 3.0) / 0.8, 0, 1);
+
+        const markers = [
+          'HbA1c','Glycémie','LDL','HDL','hs-CRP','Triglycérides',
+          'ApoB','Lp(a)','ACR','eGFR','Acide urique','NT-proBNP',
+          'Troponine','ASAT/ALAT','GGT'
+        ];
+
+        return (
+          <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
+            <CosmicBackdrop hue="cyan" />
+            <SectionTag index="02" label="15 biomarqueurs · tableau de bord intérieur" color={C.cyan} />
+
+            <div style={{
+              position: 'absolute', left: 96, top: 180, right: 96,
+              opacity: titleIn,
+              transform: `translateY(${(1-titleIn)*20}px)`,
+              fontFamily: 'Inter, sans-serif', fontSize: 64, fontWeight: 200,
+              color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
+            }}>
+              Votre voiture a un tableau de bord.<br/>
+              <span style={{ fontStyle: 'italic', color: C.cyan }}>Votre corps aussi.</span>
+            </div>
+
+            {/* 3D Heart center */}
+            <div style={{ opacity: heartIn, transform: `scale(${0.5 + heartIn * 0.5})`, transformOrigin: '960px 700px' }}>
+              <Heart3D x={960} y={700} size={300} />
+            </div>
+
+            {/* Orbiting biomarker pills */}
+            {markers.map((m, i) => {
+              const angle = (i / markers.length) * Math.PI * 2 + t * 0.25;
+              const radiusX = 540;
+              const radiusY = 220;
+              const cx = 960 + Math.cos(angle) * radiusX;
+              const cy = 700 + Math.sin(angle) * radiusY;
+              const z = Math.sin(angle); // -1 (back) to 1 (front)
+              const scale = 0.7 + (z + 1) * 0.25;
+              const opa = (0.45 + (z + 1) * 0.27) * orbitIn;
+              return (
+                <div key={i} style={{
+                  position: 'absolute',
+                  left: cx, top: cy,
+                  transform: `translate(-50%, -50%) scale(${scale})`,
+                  opacity: opa,
+                  padding: '8px 16px',
+                  fontFamily: 'JetBrains Mono, monospace',
+                  fontSize: 14, fontWeight: 500,
+                  color: C.cyan,
+                  background: 'rgba(8,145,178,0.12)',
+                  border: `1px solid ${C.lineStrong}`,
+                  borderRadius: 100,
+                  backdropFilter: 'blur(8px)',
+                  whiteSpace: 'nowrap',
+                  boxShadow: z > 0 ? `0 0 20px rgba(34,211,238,0.4)` : 'none',
+                  zIndex: Math.round(z * 100),
+                }}>
+                  {String(i+1).padStart(2,'0')} · {m}
+                </div>
+              );
+            })}
+
+            {/* Big stat callout */}
+            <div style={{
+              position: 'absolute', right: 96, top: 480,
+              opacity: calloutIn,
+              transform: `translateY(${(1-calloutIn)*30}px)`,
+              textAlign: 'right',
+            }}>
+              <div style={{
+                fontFamily: 'Inter, sans-serif', fontSize: 220, fontWeight: 100,
+                background: `linear-gradient(135deg, ${C.cyan}, ${C.gold})`,
+                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+                lineHeight: 0.9, letterSpacing: '-0.06em',
+              }}>80%</div>
+              <div style={{ fontSize: 22, color: C.whiteDim, fontWeight: 300, maxWidth: 480, marginLeft: 'auto' }}>
+                des maladies cardiaques se développent <span style={{ color: C.white, fontStyle: 'italic' }}>sans symptôme</span> pendant 10 à 20 ans.
+              </div>
+              <div style={{
+                marginTop: 18,
+                fontFamily: 'JetBrains Mono, monospace', fontSize: 13,
+                letterSpacing: '0.25em', color: C.gold, textTransform: 'uppercase',
+              }}>
+                ↳ Détection 5 à 10 ans à l'avance
+              </div>
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// Scene 4 — Score BSD with animated radial gauge
+function Scene4Score({ start, end }) {
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime }) => {
+        const t = localTime;
+        const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
+        const gaugeIn = clamp((t - 1.0) / 1.4, 0, 1);
+        const scoreCount = clamp((t - 1.4) / 2.0, 0, 1);
+        const sideIn = clamp((t - 2.6) / 0.8, 0, 1);
+
+        const score = Math.round(scoreCount * 78);
+        const arcLen = 2 * Math.PI * 220;
+        const dash = (score / 100) * arcLen * 0.75; // 270° arc
+
+        return (
+          <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
+            <CosmicBackdrop hue="cyan" />
+            <SectionTag index="03" label="La science du Score BSD" color={C.gold} />
+
+            <div style={{
+              position: 'absolute', left: 96, top: 180,
+              opacity: titleIn,
+              fontFamily: 'Inter, sans-serif', fontSize: 64, fontWeight: 200,
+              color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
+            }}>
+              Une science fondée sur<br/>
+              <span style={{ fontWeight: 600, background: `linear-gradient(135deg, ${C.cyan}, ${C.gold})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>4 millions de patients.</span>
+            </div>
+
+            {/* Radial gauge */}
+            <div style={{
+              position: 'absolute', left: 200, top: 480,
+              opacity: gaugeIn,
+              transform: `scale(${0.6 + gaugeIn * 0.4}) perspective(1000px) rotateY(${(1-gaugeIn)*-30}deg)`,
+              transformOrigin: 'center',
+            }}>
+              <svg width="540" height="540" viewBox="0 0 540 540">
+                <defs>
+                  <linearGradient id="gaugegrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor={C.cyan} />
+                    <stop offset="50%" stopColor={C.blue} />
+                    <stop offset="100%" stopColor={C.gold} />
+                  </linearGradient>
+                  <filter id="gaugeglow">
+                    <feGaussianBlur stdDeviation="6" />
+                  </filter>
+                </defs>
+                {/* outer ring */}
+                <circle cx="270" cy="270" r="240" fill="none" stroke={C.line} strokeWidth="1" />
+                {/* tick marks */}
+                {Array.from({length: 60}).map((_, i) => {
+                  const a = (i / 60) * Math.PI * 1.5 + Math.PI * 0.75;
+                  const r1 = 230, r2 = i % 5 === 0 ? 215 : 222;
+                  const x1 = 270 + Math.cos(a) * r1;
+                  const y1 = 270 + Math.sin(a) * r1;
+                  const x2 = 270 + Math.cos(a) * r2;
+                  const y2 = 270 + Math.sin(a) * r2;
+                  return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={i < 60 * (score/100) ? C.cyan : C.line} strokeWidth={i % 5 === 0 ? 2 : 1} />;
+                })}
+                {/* main arc bg */}
+                <circle cx="270" cy="270" r="200" fill="none" stroke="rgba(34,211,238,0.1)" strokeWidth="14"
+                        strokeDasharray={`${arcLen * 0.75} ${arcLen}`} transform="rotate(135 270 270)" strokeLinecap="round" />
+                {/* main arc fg */}
+                <circle cx="270" cy="270" r="200" fill="none" stroke="url(#gaugegrad)" strokeWidth="14"
+                        strokeDasharray={`${dash} ${arcLen}`} transform="rotate(135 270 270)" strokeLinecap="round"
+                        filter="url(#gaugeglow)" />
+                <circle cx="270" cy="270" r="200" fill="none" stroke="url(#gaugegrad)" strokeWidth="14"
+                        strokeDasharray={`${dash} ${arcLen}`} transform="rotate(135 270 270)" strokeLinecap="round" />
+                {/* center text */}
+                <text x="270" y="240" textAnchor="middle" fill={C.whiteDim} fontFamily="JetBrains Mono, monospace" fontSize="14" letterSpacing="6">SCORE BSD</text>
+                <text x="270" y="320" textAnchor="middle" fill={C.white} fontFamily="Inter" fontSize="140" fontWeight="200" letterSpacing="-0.04em">{score}</text>
+                <text x="270" y="360" textAnchor="middle" fill={C.cyan} fontFamily="JetBrains Mono, monospace" fontSize="14" letterSpacing="3">/ 100</text>
+              </svg>
+            </div>
+
+            {/* Side metrics */}
+            <div style={{ position: 'absolute', right: 96, top: 460, width: 600, opacity: sideIn, transform: `translateX(${(1-sideIn)*40}px)` }}>
+              {[
+                { num: '> 4M', label: 'participants suivis', sub: '52 pays · NHANES, JUPITER, MESA, ARIC' },
+                { num: '53', label: 'références scientifiques', sub: 'NEJM · Lancet · JACC · Circulation · EHJ' },
+                { num: '11 × 7', label: 'profils ethniques × multiplicateurs', sub: 'adaptation populationnelle internationale' },
+                { num: '69 612', label: 'individus dans la cohorte de validation', sub: 'NHANES 1999–2018 · 20 ans de suivi' },
+              ].map((row, i) => (
+                <div key={i} style={{
+                  display: 'flex', alignItems: 'baseline', gap: 24,
+                  padding: '20px 0',
+                  borderBottom: i < 3 ? `1px solid ${C.line}` : 'none',
+                }}>
+                  <div style={{
+                    fontFamily: 'Inter, sans-serif', fontSize: 44, fontWeight: 300,
+                    color: C.gold, letterSpacing: '-0.02em',
+                    minWidth: 160,
+                  }}>{row.num}</div>
+                  <div>
+                    <div style={{ fontSize: 18, color: C.white, fontWeight: 500 }}>{row.label}</div>
+                    <div style={{ fontSize: 13, color: C.whiteDim, fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.05em', marginTop: 4 }}>{row.sub}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+Object.assign(window, { Scene3Heart, Scene4Score });
+
+</script>
+  <script type="text/babel" data-from="scenes/scenes-5-6.jsx">
+// Scene 5 — 3 bilans selon le risque (3D parallax cards)
+function Scene5Bilans({ start, end }) {
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime }) => {
+        const t = localTime;
+        const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
+        const c1In = clamp((t - 1.0) / 0.6, 0, 1);
+        const c2In = clamp((t - 1.4) / 0.6, 0, 1);
+        const c3In = clamp((t - 1.8) / 0.6, 0, 1);
+
+        const bilans = [
+          { in: c1In, name: 'SOCLE', sub: 'Risque faible · score < 30', count: 5, color: C.cyan, items: ['HbA1c','Glycémie à jeun','LDL-Cholestérol','HDL-Cholestérol','hs-CRP'], extra: [], tilt: -10 },
+          { in: c2In, name: 'INTERMÉDIAIRE', sub: 'Risque modéré · score 30–59', count: 10, color: C.gold, items: ['HbA1c','Glycémie','LDL','HDL','hs-CRP'], extra: ['+ Triglycérides','+ ApoB','+ Lp(a)','+ ACR urinaire','+ eGFR'], tilt: 0 },
+          { in: c3In, name: 'COMPLET', sub: 'Risque élevé · score ≥ 60', count: 15, color: C.red, items: ['HbA1c','Glycémie','LDL','HDL','hs-CRP','+5'], extra: ['+ NT-proBNP','+ Troponine hs','+ ASAT/ALAT','+ GGT','+ Acide urique'], tilt: 10 },
+        ];
+
+        return (
+          <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
+            <CosmicBackdrop hue="gold" />
+            <SectionTag index="04" label="3 bilans · médecine de précision" color={C.gold} />
+
+            <div style={{
+              position: 'absolute', left: 96, top: 180, right: 96,
+              opacity: titleIn, transform: `translateY(${(1-titleIn)*20}px)`,
+              fontFamily: 'Inter, sans-serif', fontSize: 60, fontWeight: 200,
+              color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
+            }}>
+              Une prescription adaptée à <span style={{ fontStyle: 'italic', color: C.gold }}>VOTRE</span> niveau de risque.
+            </div>
+
+            <div style={{ position: 'absolute', left: 96, top: 420, display: 'flex', gap: 36 }}>
+              {bilans.map((b, i) => (
+                <div key={i} style={{
+                  width: 540, height: 520,
+                  transform: `perspective(1600px) rotateY(${b.tilt}deg) translateY(${(1 - b.in) * 50}px) scale(${0.85 + b.in * 0.15})`,
+                  opacity: b.in, transformStyle: 'preserve-3d',
+                }}>
+                  <GlassCard x={0} y={0} w={540} h={520} border={`${b.color}55`}>
+                    <div style={{ padding: 36, height: '100%', display: 'flex', flexDirection: 'column' }}>
+                      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, letterSpacing: '0.3em', color: b.color, textTransform: 'uppercase' }}>BILAN</div>
+                      <div style={{ fontFamily: 'Inter', fontSize: 44, fontWeight: 400, color: C.white, marginTop: 6, letterSpacing: '-0.02em' }}>{b.name}</div>
+                      <div style={{ fontSize: 14, color: C.whiteDim, marginTop: 4, fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.05em' }}>{b.sub}</div>
+
+                      <div style={{ display: 'flex', alignItems: 'baseline', gap: 14, marginTop: 32, marginBottom: 24 }}>
+                        <div style={{ fontFamily: 'Inter', fontSize: 120, fontWeight: 100, color: b.color, lineHeight: 1, letterSpacing: '-0.05em' }}>{b.count}</div>
+                        <div style={{ fontSize: 16, color: C.whiteDim, fontWeight: 300 }}>analyses<br/>biologiques</div>
+                      </div>
+
+                      <div style={{ borderTop: `1px solid ${b.color}33`, paddingTop: 18, fontSize: 13, fontFamily: 'JetBrains Mono, monospace', color: C.whiteDim, lineHeight: 1.8 }}>
+                        {b.items.map((it, j) => <div key={j}>{it}</div>)}
+                        {b.extra.map((it, j) => <div key={j} style={{ color: b.color }}>{it}</div>)}
+                      </div>
+                    </div>
+                  </GlassCard>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// Scene 6 — Synergie inflammatoire (3 orbiting nodes connected to center)
+function Scene6Synergy({ start, end }) {
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime }) => {
+        const t = localTime;
+        const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
+        const nodesIn = clamp((t - 1.2) / 1.0, 0, 1);
+        const linesIn = clamp((t - 2.2) / 0.8, 0, 1);
+        const centerIn = clamp((t - 3.0) / 0.6, 0, 1);
+        const calloutIn = clamp((t - 3.8) / 0.6, 0, 1);
+
+        const cx = 700, cy = 720;
+        const nodes = [
+          { name: 'hs-CRP', sub: 'Inflammation', a: -Math.PI/2, color: '#ff8fa3' },
+          { name: 'ACR urinaire', sub: 'Atteinte rénale', a: Math.PI/2 - Math.PI/3 + Math.PI*2/3, color: C.cyan },
+          { name: 'NT-proBNP', sub: 'Souffrance cardiaque', a: -Math.PI/2 + Math.PI*4/3, color: C.gold },
+        ];
+
+        return (
+          <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
+            <CosmicBackdrop hue="red" />
+            <SectionTag index="05" label="Innovation propriétaire" color={C.red} />
+
+            <div style={{
+              position: 'absolute', left: 96, top: 180,
+              opacity: titleIn, transform: `translateY(${(1-titleIn)*20}px)`,
+              fontFamily: 'Inter', fontSize: 64, fontWeight: 200,
+              color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
+            }}>
+              La <span style={{ fontStyle: 'italic', color: C.red }}>synergie inflammatoire.</span><br/>
+              <span style={{ fontSize: 32, color: C.whiteDim, fontWeight: 300 }}>Notre signature scientifique.</span>
+            </div>
+
+            {/* Connections */}
+            <svg width="1920" height="1080" style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+              <defs>
+                <linearGradient id="synergyLine" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor={C.red} stopOpacity="0.7" />
+                  <stop offset="100%" stopColor={C.cyan} stopOpacity="0.3" />
+                </linearGradient>
+                <filter id="lineglow"><feGaussianBlur stdDeviation="3" /></filter>
+              </defs>
+              {nodes.map((n, i) => {
+                const r = 240;
+                const x = cx + Math.cos(n.a) * r;
+                const y = cy + Math.sin(n.a) * r;
+                return (
+                  <g key={i} opacity={linesIn}>
+                    <line x1={cx} y1={cy} x2={x} y2={y} stroke={n.color} strokeWidth="2" opacity="0.6" filter="url(#lineglow)" strokeDasharray="6 4">
+                      <animate attributeName="stroke-dashoffset" values="0;-20" dur="1s" repeatCount="indefinite" />
+                    </line>
+                  </g>
+                );
+              })}
+              {/* triangle between nodes */}
+              <polygon
+                points={nodes.map(n => `${cx + Math.cos(n.a)*240},${cy + Math.sin(n.a)*240}`).join(' ')}
+                fill="rgba(244,63,94,0.06)" stroke={C.red} strokeWidth="1.5" opacity={linesIn * 0.7} strokeDasharray="3 6" />
+            </svg>
+
+            {/* 3 nodes */}
+            {nodes.map((n, i) => {
+              const r = 240;
+              const x = cx + Math.cos(n.a) * r;
+              const y = cy + Math.sin(n.a) * r;
+              const wob = Math.sin(t * 1.5 + i) * 4;
+              return (
+                <div key={i} style={{
+                  position: 'absolute', left: x, top: y + wob,
+                  transform: `translate(-50%, -50%) scale(${0.6 + nodesIn * 0.4})`,
+                  opacity: nodesIn,
+                }}>
+                  <div style={{
+                    width: 180, height: 180,
+                    borderRadius: '50%',
+                    background: `radial-gradient(circle at 35% 30%, ${n.color}cc, ${n.color}33)`,
+                    border: `2px solid ${n.color}`,
+                    boxShadow: `0 0 40px ${n.color}aa, inset 0 0 30px ${n.color}44`,
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                    backdropFilter: 'blur(8px)',
+                  }}>
+                    <div style={{ fontFamily: 'Inter', fontSize: 22, fontWeight: 600, color: C.white }}>{n.name}</div>
+                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: 'rgba(255,255,255,0.85)', marginTop: 4, letterSpacing: '0.1em' }}>{n.sub}</div>
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Center "TRIO" */}
+            <div style={{
+              position: 'absolute', left: cx, top: cy,
+              transform: `translate(-50%, -50%) scale(${0.5 + centerIn * 0.5})`,
+              opacity: centerIn,
+            }}>
+              <div style={{
+                width: 220, height: 220,
+                borderRadius: '50%',
+                background: `radial-gradient(circle, ${C.red}, ${C.redDim})`,
+                border: `3px solid ${C.gold}`,
+                boxShadow: `0 0 80px ${C.red}, 0 0 30px ${C.gold}`,
+                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <div style={{ fontFamily: 'Inter', fontSize: 44, fontWeight: 200, color: C.white, letterSpacing: '0.1em' }}>TRIO</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.gold, letterSpacing: '0.3em', textTransform: 'uppercase' }}>Amplificateur</div>
+              </div>
+              {/* Pulse rings */}
+              {[0,1,2].map(i => {
+                const phase = (t * 0.8 + i * 0.5) % 2;
+                if (phase > 1.4) return null;
+                return <div key={i} style={{
+                  position: 'absolute', inset: 0,
+                  border: `2px solid ${C.red}`, borderRadius: '50%',
+                  transform: `scale(${1 + phase * 0.6})`,
+                  opacity: (1 - phase / 1.4) * 0.6,
+                }} />;
+              })}
+            </div>
+
+            {/* Right callout */}
+            <div style={{
+              position: 'absolute', right: 96, top: 480, width: 540,
+              opacity: calloutIn, transform: `translateX(${(1-calloutIn)*40}px)`,
+            }}>
+              <div style={{
+                fontFamily: 'JetBrains Mono, monospace', fontSize: 12,
+                letterSpacing: '0.3em', color: C.gold, textTransform: 'uppercase',
+              }}>Innovation propriétaire</div>
+              <div style={{
+                fontFamily: 'Inter', fontSize: 40, fontWeight: 300,
+                color: C.white, marginTop: 16, lineHeight: 1.15, letterSpacing: '-0.02em',
+              }}>
+                Aucun autre score au monde n'intègre cette <span style={{ fontStyle: 'italic', color: C.red }}>synergie biologie × exposome.</span>
+              </div>
+              <div style={{ marginTop: 28, padding: 24, background: 'rgba(34,211,238,0.05)', border: `1px solid ${C.line}`, borderRadius: 12 }}>
+                <div style={{ fontSize: 16, color: C.whiteDim, lineHeight: 1.5 }}>
+                  Quand les trois biomarqueurs sont élevés, l'inflammation <span style={{ color: C.cyan }}>amplifie</span> l'impact de la pollution, du stress et de la chaleur sur votre cœur.
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+Object.assign(window, { Scene5Bilans, Scene6Synergy });
+
+</script>
+  <script type="text/babel" data-from="scenes/scenes-7-8.jsx">
+// Scene 7 — Parcours utilisateur (4 steps in 3D perspective)
+function Scene7Journey({ start, end }) {
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime }) => {
+        const t = localTime;
+        const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
+        const steps = [
+          { title: 'Questionnaire', sub: '15 min · santé, habitudes, environnement', icon: '✦' },
+          { title: 'Téléconsultation', sub: 'Score · espérance de vie · plan d\'action', icon: '◉' },
+          { title: 'Examens biologiques', sub: 'Bilan socle, intermédiaire ou complet', icon: '⬡' },
+          { title: 'Restitution finale', sub: 'Score affiné · plan d\'action personnalisé', icon: '★' },
+        ];
+
+        return (
+          <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
+            <CosmicBackdrop hue="cyan" />
+            <SectionTag index="06" label="Parcours utilisateur · 4 étapes" color={C.cyan} />
+
+            <div style={{
+              position: 'absolute', left: 96, top: 180,
+              opacity: titleIn, transform: `translateY(${(1-titleIn)*20}px)`,
+              fontFamily: 'Inter', fontSize: 64, fontWeight: 200,
+              color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
+            }}>
+              Comment ça se passe ?<br/>
+              <span style={{ fontStyle: 'italic', color: C.cyan, fontSize: 36, fontWeight: 300 }}>Quatre étapes. Une chaîne de soin intégrée.</span>
+            </div>
+
+            {/* Connector line */}
+            <svg width="1920" height="200" style={{ position: 'absolute', left: 0, top: 660 }}>
+              <defs>
+                <linearGradient id="journeyLine" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor={C.cyan} stopOpacity="0" />
+                  <stop offset="20%" stopColor={C.cyan} />
+                  <stop offset="80%" stopColor={C.gold} />
+                  <stop offset="100%" stopColor={C.gold} stopOpacity="0" />
+                </linearGradient>
+              </defs>
+              <line x1="160" y1="100" x2="1760" y2="100" stroke="url(#journeyLine)" strokeWidth="2" strokeDasharray="4 6" opacity={titleIn} />
+            </svg>
+
+            {/* 4 step cards in perspective */}
+            <div style={{ position: 'absolute', left: 96, top: 460, display: 'flex', gap: 32 }}>
+              {steps.map((s, i) => {
+                const stepIn = clamp((t - 1.0 - i * 0.4) / 0.7, 0, 1);
+                const tilt = (i - 1.5) * 4;
+                const wob = Math.sin(t * 1.5 + i) * 4;
+                return (
+                  <div key={i} style={{
+                    width: 410, height: 380,
+                    transform: `perspective(1500px) rotateY(${tilt}deg) translateY(${(1-stepIn)*40 + wob}px) scale(${0.85 + stepIn * 0.15})`,
+                    opacity: stepIn,
+                    transformStyle: 'preserve-3d',
+                  }}>
+                    <GlassCard x={0} y={0} w={410} h={380} border={i === 1 || i === 3 ? `${C.cyan}55` : `${C.gold}55`}>
+                      <div style={{ padding: 32, height: '100%', display: 'flex', flexDirection: 'column' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, letterSpacing: '0.3em', color: C.whiteDim }}>ÉTAPE</div>
+                          <div style={{ fontFamily: 'Inter', fontSize: 80, fontWeight: 100, color: i === 1 || i === 3 ? C.cyan : C.gold, lineHeight: 0.8, letterSpacing: '-0.05em' }}>
+                            0{i+1}
+                          </div>
+                        </div>
+                        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 100, color: i === 1 || i === 3 ? C.cyan : C.gold, opacity: 0.4, fontFamily: 'Inter' }}>
+                          {s.icon}
+                        </div>
+                        <div>
+                          <div style={{ fontFamily: 'Inter', fontSize: 26, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>{s.title}</div>
+                          <div style={{ fontSize: 13, color: C.whiteDim, marginTop: 8, lineHeight: 1.5 }}>{s.sub}</div>
+                        </div>
+                      </div>
+                    </GlassCard>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div style={{
+              position: 'absolute', left: 96, bottom: 60, right: 96,
+              opacity: clamp((t - 4.4) / 0.6, 0, 1),
+              fontFamily: 'Inter', fontSize: 22, fontWeight: 300,
+              color: C.whiteDim, textAlign: 'center',
+              borderTop: `1px solid ${C.line}`, paddingTop: 18,
+            }}>
+              <span style={{ color: C.gold }}>2 téléconsultations + rapport + certificats</span> — inclus dans le programme BSD
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// Scene 8 — Outro: « Le silence n'est plus une fatalité »
+function Scene8Outro({ start, end }) {
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime }) => {
+        const t = localTime;
+        const line1In = clamp((t - 0.4) / 1.0, 0, 1);
+        const line2In = clamp((t - 1.6) / 1.0, 0, 1);
+        const ctaIn = clamp((t - 3.0) / 0.8, 0, 1);
+        const creditsIn = clamp((t - 4.0) / 0.8, 0, 1);
+        return (
+          <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
+            <CosmicBackdrop hue="cyan" />
+            <PulseLine y={540} color={C.cyan} amp={100} opacity={0.4} />
+
+            <div style={{
+              position: 'absolute', left: '50%', top: '32%',
+              transform: `translate(-50%, -50%) translateY(${(1-line1In)*30}px)`,
+              opacity: line1In,
+              fontFamily: 'Inter', fontSize: 28, fontWeight: 300,
+              color: C.cyan, letterSpacing: '0.4em', textTransform: 'uppercase',
+              textAlign: 'center',
+            }}>
+              SilentCheck
+            </div>
+
+            <div style={{
+              position: 'absolute', left: '50%', top: '46%',
+              transform: `translate(-50%, -50%) translateY(${(1-line2In)*30}px)`,
+              opacity: line2In,
+              fontFamily: 'Inter', fontSize: 88, fontWeight: 200,
+              color: C.white, letterSpacing: '-0.04em', lineHeight: 1.05,
+              textAlign: 'center', maxWidth: 1500,
+            }}>
+              Le silence du corps<br/>
+              <span style={{ fontStyle: 'italic', background: `linear-gradient(135deg, ${C.cyan}, ${C.gold})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>n'est plus une fatalité.</span>
+            </div>
+
+            <div style={{
+              position: 'absolute', left: '50%', top: '68%',
+              transform: `translate(-50%, -50%)`,
+              opacity: ctaIn,
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16,
+            }}>
+              <div style={{
+                padding: '20px 48px',
+                border: `1px solid ${C.cyan}`,
+                borderRadius: 100,
+                fontFamily: 'JetBrains Mono, monospace', fontSize: 16,
+                letterSpacing: '0.3em', color: C.white, textTransform: 'uppercase',
+                background: 'rgba(34,211,238,0.05)',
+                boxShadow: `0 0 40px rgba(34,211,238,0.3)`,
+              }}>
+                Score BSD  →  SilentCheck
+              </div>
+              <div style={{ fontSize: 16, color: C.whiteDim, fontWeight: 300 }}>
+                Connaissez votre risque. Protégez votre avenir.
+              </div>
+            </div>
+
+            <div style={{
+              position: 'absolute', left: 0, right: 0, bottom: 70,
+              opacity: creditsIn,
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
+              fontFamily: 'Inter',
+            }}>
+              <div style={{ fontSize: 11, color: 'rgba(248,250,252,0.5)', letterSpacing: '0.25em', fontFamily: 'JetBrains Mono, monospace' }}>
+                © 2026 · Score BSD v5.0 · Validé par 53 références internationales
+              </div>
+            </div>
+
+            {/* Corner brand */}
+            <div style={{
+              position: 'absolute', left: 96, top: 64,
+              fontFamily: 'JetBrains Mono, monospace', fontSize: 13,
+              letterSpacing: '0.4em', color: C.whiteDim, textTransform: 'uppercase',
+            }}>
+              Score BSD v5.0
+            </div>
+            <div style={{
+              position: 'absolute', right: 96, top: 64,
+              fontFamily: 'JetBrains Mono, monospace', fontSize: 13,
+              letterSpacing: '0.3em', color: C.whiteDim,
+            }}>
+              Avril 2026
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+Object.assign(window, { Scene7Journey, Scene8Outro });
+
+</script>
+  <script type="text/babel" data-from="scenes/scenes-9-12.jsx">
+// Scene 9 — Mockups patient (3 phone screens in 3D perspective)
+function Scene9Mockups({ start, end }) {
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime }) => {
+        const t = localTime;
+        const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
+        const phones = [
+          {
+            label: 'Entrée SilentCheck',
+            tilt: -14, delay: 1.0,
+            content: (
+              <div style={{ padding: '40px 24px', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: C.whiteDim, letterSpacing: '0.2em' }}>SILENTCHECK</div>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 12 }}>
+                  <div style={{ width: 60, height: 60, borderRadius: '50%', background: `radial-gradient(circle, ${C.cyan}, ${C.blueDeep})`, boxShadow: `0 0 30px ${C.cyan}aa`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28 }}>♥</div>
+                  <div style={{ fontSize: 26, fontWeight: 200, color: C.white, letterSpacing: '-0.02em', lineHeight: 1.1 }}>Connaissez<br/>votre risque.</div>
+                  <div style={{ fontSize: 11, color: C.whiteDim, lineHeight: 1.4 }}>Stratification cardiovasculaire personnalisée</div>
+                </div>
+                <div style={{ padding: '14px', background: `linear-gradient(135deg, ${C.cyan}, ${C.blue})`, borderRadius: 12, textAlign: 'center', fontSize: 13, fontWeight: 600, color: C.bg0 }}>Commencer mon évaluation</div>
+                <div style={{ marginTop: 10, fontSize: 9, color: C.whiteDim, textAlign: 'center', fontFamily: 'JetBrains Mono, monospace' }}>15 min · médecin inclus</div>
+              </div>
+            )
+          },
+          {
+            label: 'Questionnaire',
+            tilt: 0, delay: 1.4,
+            content: (
+              <div style={{ padding: '40px 24px', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: C.whiteDim, letterSpacing: '0.2em' }}>
+                  <span>Q. 03 / ~40</span><span style={{ color: C.cyan }}>● ● ● ○ ○</span>
+                </div>
+                <div style={{ marginTop: 24, fontSize: 22, fontWeight: 300, color: C.white, lineHeight: 1.2 }}>Votre âge ?</div>
+                <div style={{ marginTop: 18, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {['18–29 ans','30–44 ans','45–59 ans','60–74 ans','75 ans et +'].map((opt, i) => (
+                    <div key={i} style={{
+                      padding: '12px 14px', fontSize: 12, color: i === 2 ? C.bg0 : C.white,
+                      background: i === 2 ? C.cyan : 'rgba(34,211,238,0.06)',
+                      border: `1px solid ${i === 2 ? C.cyan : C.line}`,
+                      borderRadius: 10, fontWeight: i === 2 ? 600 : 400,
+                    }}>{opt}</div>
+                  ))}
+                </div>
+                <div style={{ marginTop: 'auto', padding: '12px', background: 'rgba(34,211,238,0.1)', border: `1px solid ${C.line}`, borderRadius: 10, textAlign: 'center', fontSize: 12, color: C.cyan }}>Suivant →</div>
+              </div>
+            )
+          },
+          {
+            label: 'Score & restitution',
+            tilt: 14, delay: 1.8,
+            content: (
+              <div style={{ padding: '40px 24px', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: C.whiteDim, letterSpacing: '0.2em' }}>SCORE BSD</div>
+                <div style={{ marginTop: 14, alignSelf: 'center', position: 'relative' }}>
+                  <svg width="140" height="140" viewBox="0 0 140 140">
+                    <circle cx="70" cy="70" r="58" fill="none" stroke={C.line} strokeWidth="6" />
+                    <circle cx="70" cy="70" r="58" fill="none" stroke={C.gold} strokeWidth="6"
+                            strokeDasharray={`${0.42 * 2 * Math.PI * 58} ${2 * Math.PI * 58}`}
+                            transform="rotate(-90 70 70)" strokeLinecap="round" />
+                    <text x="70" y="78" textAnchor="middle" fill={C.white} fontFamily="Inter" fontSize="36" fontWeight="200">42</text>
+                    <text x="70" y="96" textAnchor="middle" fill={C.whiteDim} fontFamily="JetBrains Mono, monospace" fontSize="9">/ 100</text>
+                  </svg>
+                </div>
+                <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 8, fontSize: 11 }}>
+                  {[
+                    ['Risque', 'modéré', C.gold],
+                    ['Bilan', '10 analyses', C.cyan],
+                    ['Espérance de vie', '+3,2 ans', C.cyan],
+                    ['Téléconsultation', 'programmée', C.cyan],
+                  ].map(([k, v, col], i) => (
+                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', background: 'rgba(34,211,238,0.05)', border: `1px solid ${C.line}`, borderRadius: 8 }}>
+                      <span style={{ color: C.whiteDim }}>{k}</span>
+                      <span style={{ color: col, fontWeight: 500 }}>{v}</span>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ marginTop: 'auto', padding: '12px', background: `linear-gradient(135deg, ${C.cyan}, ${C.gold})`, borderRadius: 10, textAlign: 'center', fontSize: 12, color: C.bg0, fontWeight: 600 }}>Voir mon plan d'action</div>
+              </div>
+            )
+          },
+        ];
+
+        return (
+          <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
+            <CosmicBackdrop hue="cyan" />
+            <SectionTag index="07" label="Côté patient · trois écrans clés" color={C.cyan} />
+
+            <div style={{
+              position: 'absolute', left: 96, top: 180,
+              opacity: titleIn, transform: `translateY(${(1-titleIn)*20}px)`,
+              fontFamily: 'Inter', fontSize: 60, fontWeight: 200,
+              color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
+            }}>
+              L'expérience patient,<br/>
+              <span style={{ fontStyle: 'italic', color: C.cyan }}>du questionnaire au score.</span>
+            </div>
+
+            <div style={{ position: 'absolute', left: 0, right: 0, top: 460, display: 'flex', justifyContent: 'center', gap: 80, perspective: '1800px' }}>
+              {phones.map((p, i) => {
+                const phoneIn = clamp((t - p.delay) / 0.8, 0, 1);
+                const wob = Math.sin(t * 1.3 + i) * 6;
+                return (
+                  <div key={i} style={{
+                    width: 280, height: 560,
+                    transform: `rotateY(${p.tilt}deg) translateY(${(1-phoneIn)*60 + wob}px) scale(${0.85 + phoneIn * 0.15})`,
+                    opacity: phoneIn,
+                    transformStyle: 'preserve-3d',
+                  }}>
+                    {/* Phone bezel */}
+                    <div style={{
+                      width: '100%', height: '100%',
+                      background: 'linear-gradient(135deg, #1a2540, #0a1535)',
+                      borderRadius: 36,
+                      border: `2px solid ${C.lineStrong}`,
+                      boxShadow: `0 30px 80px rgba(0,0,0,0.6), 0 0 40px ${C.cyan}33`,
+                      padding: 8, position: 'relative',
+                    }}>
+                      <div style={{ position: 'absolute', top: 14, left: '50%', transform: 'translateX(-50%)', width: 80, height: 18, background: '#000', borderRadius: 12, zIndex: 2 }} />
+                      <div style={{
+                        width: '100%', height: '100%',
+                        background: C.bg0, borderRadius: 30,
+                        overflow: 'hidden', position: 'relative',
+                      }}>
+                        {p.content}
+                      </div>
+                    </div>
+                    <div style={{
+                      marginTop: 18, textAlign: 'center',
+                      fontFamily: 'JetBrains Mono, monospace', fontSize: 11,
+                      color: C.whiteDim, letterSpacing: '0.2em', textTransform: 'uppercase',
+                    }}>
+                      Écran {i+1} · {p.label}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// Scene 10 — Restitution IA · vrai programme de prévention
+function Scene10Bilan({ start, end }) {
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime }) => {
+        const t = localTime;
+        const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
+        const aiIn = clamp((t - 1.0) / 0.8, 0, 1);
+        const items = [
+          { title: 'Score SilentCheck', sub: '0–100 · 4 dimensions intégrées', desc: 'Clinique · Exposome · Occupationnel · Lifestyle. 15 biomarqueurs et ajustement ethnique automatisés par l\'IA.', icon: '◉', color: C.cyan },
+          { title: 'Stratégie de prévention sur-mesure', sub: 'Plan d\'action priorisé · 6 / 12 / 24 mois', desc: 'L\'IA hiérarchise vos risques et bâtit un vrai programme : objectifs, cibles biologiques, jalons de suivi datés.', icon: '∞', color: C.gold },
+          { title: 'Examens utiles uniquement', sub: 'Fini la prescription à l\'aveugle', desc: 'Le moteur cible les biomarqueurs pertinents pour VOTRE profil. Zéro examen inutile · zéro consultation redondante.', icon: '✦', color: C.cyan },
+          { title: 'Documents & dispositif de suivi', sub: '3 livrables bilingues FR / EN', desc: 'Plan de Route Longévité · Certificat Emprunteur · Certificat Engagement Santé. Suivi continu et réajusté par l\'IA.', icon: '◈', color: C.gold },
+        ];
+
+        return (
+          <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
+            <CosmicBackdrop hue="gold" />
+            <SectionTag index="08" label="Restitution assistée par IA · médecine de prévention 21ᵉ siècle" color={C.gold} />
+
+            <div style={{
+              position: 'absolute', left: 96, top: 160,
+              opacity: titleIn, transform: `translateY(${(1-titleIn)*20}px)`,
+              fontFamily: 'Inter', fontSize: 56, fontWeight: 200,
+              color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
+            }}>
+              Une vraie <span style={{ fontStyle: 'italic', color: C.gold }}>stratégie de prévention,</span><br/>
+              <span style={{ fontSize: 28, fontWeight: 300, color: C.cyan }}>
+                co-construite par l'IA et votre médecin — plus jamais d'examens à l'aveugle.
+              </span>
+            </div>
+
+            {/* AI badge */}
+            <div style={{
+              position: 'absolute', right: 96, top: 180,
+              opacity: aiIn, transform: `translateY(${(1-aiIn)*20}px)`,
+              padding: '14px 22px',
+              background: 'linear-gradient(135deg, rgba(34,211,238,0.15), rgba(251,191,36,0.1))',
+              border: `1px solid ${C.cyan}88`, borderRadius: 100,
+              display: 'flex', alignItems: 'center', gap: 12,
+              boxShadow: `0 0 30px ${C.cyan}44`,
+            }}>
+              <div style={{
+                width: 10, height: 10, borderRadius: 5, background: C.cyan,
+                boxShadow: `0 0 12px ${C.cyan}`,
+                opacity: 0.6 + Math.sin(t * 4) * 0.4,
+              }} />
+              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.white, letterSpacing: '0.25em' }}>
+                IA MÉDICALE · ANALYSE EN TEMPS RÉEL
+              </span>
+            </div>
+
+            <div style={{ position: 'absolute', left: 96, top: 440, right: 96, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+              {items.map((it, i) => {
+                const itemIn = clamp((t - 1.4 - i * 0.3) / 0.7, 0, 1);
+                const tilt = (i % 2 === 0 ? -1 : 1) * 4;
+                return (
+                  <div key={i} style={{
+                    transform: `perspective(1500px) rotateY(${tilt}deg) translateY(${(1-itemIn)*30}px) scale(${0.92 + itemIn * 0.08})`,
+                    opacity: itemIn, height: 220,
+                  }}>
+                    <GlassCard x={0} y={0} w="100%" h={220} border={`${it.color}55`}>
+                      <div style={{ padding: 24, height: '100%', display: 'flex', gap: 20 }}>
+                        <div style={{
+                          width: 60, height: 60, flexShrink: 0,
+                          borderRadius: 14,
+                          background: `linear-gradient(135deg, ${it.color}33, ${it.color}11)`,
+                          border: `1px solid ${it.color}66`,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          fontSize: 28, color: it.color,
+                        }}>{it.icon}</div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: it.color, letterSpacing: '0.2em', textTransform: 'uppercase' }}>{it.sub}</div>
+                          <div style={{ fontFamily: 'Inter', fontSize: 22, fontWeight: 500, color: C.white, marginTop: 6, letterSpacing: '-0.01em' }}>{it.title}</div>
+                          <div style={{ fontSize: 13, color: C.whiteDim, marginTop: 10, lineHeight: 1.5 }}>{it.desc}</div>
+                        </div>
+                      </div>
+                    </GlassCard>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Bottom manifesto strap */}
+            <div style={{
+              position: 'absolute', left: 96, right: 96, bottom: 40,
+              opacity: clamp((t - 4.5) / 0.7, 0, 1),
+              padding: '16px 28px', borderRadius: 12,
+              border: `1px solid ${C.gold}55`,
+              background: 'linear-gradient(90deg, rgba(251,191,36,0.08), rgba(34,211,238,0.05))',
+              fontFamily: 'Inter', fontSize: 18, color: C.white, fontWeight: 300,
+              textAlign: 'center', letterSpacing: '0.02em',
+            }}>
+              La médecine du <span style={{ color: C.gold, fontWeight: 500 }}>21ᵉ siècle</span> n'est plus seulement curative — elle est <span style={{ color: C.cyan, fontStyle: 'italic' }}>personnalisée et préventive.</span>
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// Scene 11 — Sécurité, consentement, conformité
+function Scene11Security({ start, end }) {
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime }) => {
+        const t = localTime;
+        const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
+        const shieldIn = clamp((t - 0.8) / 1.0, 0, 1);
+        const itemsIn = clamp((t - 2.0) / 0.6, 0, 1);
+
+        const commits = [
+          { title: 'Données anonymisées', desc: 'Aucune donnée nominative ne sort du périmètre médical. Données agrégées · jamais vendues.' },
+          { title: 'Conformité RGPD', desc: 'Pour les patients résidant ou voyageant dans l\'UE / Royaume-Uni.' },
+          { title: 'Médecins agréés', desc: 'Secret médical absolu · responsabilité professionnelle individuelle.' },
+          { title: 'Droit à l\'oubli', desc: 'Suppression sur demande, en moins de 30 jours.' },
+          { title: 'DPO désigné', desc: 'Registre des traitements à jour · serveurs sécurisés.' },
+          { title: 'Consentement explicite', desc: '8 articles détaillés · accessibles dans l\'app.' },
+        ];
+
+        return (
+          <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
+            <CosmicBackdrop hue="cyan" />
+            <SectionTag index="09" label="Confidentialité · consentement · conformité" color={C.cyan} />
+
+            <div style={{
+              position: 'absolute', left: 96, top: 180,
+              opacity: titleIn, transform: `translateY(${(1-titleIn)*20}px)`,
+              fontFamily: 'Inter', fontSize: 60, fontWeight: 200,
+              color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
+            }}>
+              Vos données,<br/>
+              <span style={{ fontStyle: 'italic', color: C.cyan }}>protégées comme un secret médical.</span>
+            </div>
+
+            {/* 3D shield */}
+            <div style={{
+              position: 'absolute', left: 240, top: 540,
+              opacity: shieldIn,
+              transform: `translate(-50%, -50%) perspective(1200px) rotateY(${Math.sin(t * 0.6) * 12}deg) scale(${0.6 + shieldIn * 0.4})`,
+              transformStyle: 'preserve-3d',
+            }}>
+              <svg width="380" height="440" viewBox="0 0 380 440" style={{ filter: `drop-shadow(0 0 50px ${C.cyan})` }}>
+                <defs>
+                  <linearGradient id="shieldGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor={C.cyan} stopOpacity="0.35" />
+                    <stop offset="100%" stopColor={C.blueDeep} stopOpacity="0.15" />
+                  </linearGradient>
+                  <linearGradient id="shieldShine" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="rgba(255,255,255,0.4)" />
+                    <stop offset="40%" stopColor="rgba(255,255,255,0)" />
+                  </linearGradient>
+                </defs>
+                <path d="M 190 20 L 60 70 L 60 220 Q 60 340 190 420 Q 320 340 320 220 L 320 70 Z"
+                      fill="url(#shieldGrad)" stroke={C.cyan} strokeWidth="2" />
+                <path d="M 190 20 L 60 70 L 60 220 Q 60 340 190 420"
+                      fill="url(#shieldShine)" />
+                {/* Lock */}
+                <g transform="translate(190 220)">
+                  <rect x="-40" y="-10" width="80" height="70" rx="8" fill="none" stroke={C.cyan} strokeWidth="2.5" />
+                  <path d="M -25 -10 L -25 -35 Q -25 -60 0 -60 Q 25 -60 25 -35 L 25 -10" fill="none" stroke={C.cyan} strokeWidth="2.5" />
+                  <circle cx="0" cy="22" r="6" fill={C.cyan} />
+                  <line x1="0" y1="22" x2="0" y2="40" stroke={C.cyan} strokeWidth="3" />
+                </g>
+                <text x="190" y="380" textAnchor="middle" fill={C.white} fontFamily="JetBrains Mono, monospace" fontSize="14" letterSpacing="6">RGPD · DPA</text>
+              </svg>
+            </div>
+
+            <div style={{
+              position: 'absolute', right: 96, top: 420, width: 1000,
+              display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18,
+            }}>
+              {commits.map((c, i) => {
+                const itIn = clamp((t - 2.0 - i * 0.15) / 0.5, 0, 1);
+                return (
+                  <div key={i} style={{
+                    opacity: itIn, transform: `translateX(${(1-itIn)*30}px)`,
+                    padding: '18px 22px',
+                    background: 'rgba(34,211,238,0.04)',
+                    border: `1px solid ${C.line}`,
+                    borderRadius: 12,
+                    display: 'flex', gap: 14,
+                  }}>
+                    <div style={{
+                      width: 24, height: 24, flexShrink: 0,
+                      borderRadius: '50%',
+                      background: C.cyan,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      color: C.bg0, fontWeight: 700, fontSize: 14,
+                    }}>✓</div>
+                    <div>
+                      <div style={{ fontSize: 16, fontWeight: 500, color: C.white }}>{c.title}</div>
+                      <div style={{ fontSize: 12, color: C.whiteDim, marginTop: 4, lineHeight: 1.5 }}>{c.desc}</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// Scene 12 — Auteurs scientifiques
+function Scene12Authors({ start, end }) {
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime }) => {
+        const t = localTime;
+        const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
+
+        const authors = [
+          {
+            initials: 'SB', name: 'Dr. Stéphane Bach',
+            role: 'Médecin · Fondateur',
+            desc: 'Spécialiste prévention cardiovasculaire et obésité. Entrepreneur santé numérique.',
+            tilt: -10,
+          },
+          {
+            initials: 'JS', name: 'Pr. José Sampol',
+            role: 'Hématologie & médecine vasculaire',
+            desc: 'Professeur émérite. Référent international pour la stratification des risques thrombo-vasculaires.',
+            tilt: 0,
+          },
+          {
+            initials: 'FD', name: 'Pr. Françoise Dignat-George',
+            role: 'Hématologie · Aix-Marseille Université',
+            desc: 'Présidente de la SFTH · membre du conseil scientifique INSERM. Référente cellules circulantes & inflammation.',
+            tilt: 10,
+          },
+        ];
+
+        return (
+          <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
+            <CosmicBackdrop hue="gold" />
+            <SectionTag index="10" label="Auteurs scientifiques & validation" color={C.gold} />
+
+            <div style={{
+              position: 'absolute', left: 96, top: 180,
+              opacity: titleIn, transform: `translateY(${(1-titleIn)*20}px)`,
+              fontFamily: 'Inter', fontSize: 60, fontWeight: 200,
+              color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
+            }}>
+              Trois signatures<br/>
+              <span style={{ fontStyle: 'italic', color: C.gold }}>derrière chaque score.</span>
+            </div>
+
+            <div style={{ position: 'absolute', left: 96, top: 460, display: 'flex', gap: 36 }}>
+              {authors.map((a, i) => {
+                const aIn = clamp((t - 1.0 - i * 0.4) / 0.7, 0, 1);
+                const wob = Math.sin(t * 1.2 + i) * 4;
+                return (
+                  <div key={i} style={{
+                    width: 540, height: 460,
+                    transform: `perspective(1500px) rotateY(${a.tilt}deg) translateY(${(1-aIn)*40 + wob}px) scale(${0.85 + aIn * 0.15})`,
+                    opacity: aIn, transformStyle: 'preserve-3d',
+                  }}>
+                    <GlassCard x={0} y={0} w={540} h={460} border={`${C.gold}55`}>
+                      <div style={{ padding: 36, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+                        <div style={{
+                          width: 130, height: 130,
+                          borderRadius: '50%',
+                          background: `radial-gradient(circle at 30% 30%, ${C.gold}, ${C.goldDim})`,
+                          border: `2px solid ${C.gold}`,
+                          boxShadow: `0 0 50px ${C.gold}66, inset 0 0 20px rgba(255,255,255,0.2)`,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          fontFamily: 'Inter', fontSize: 42, fontWeight: 300,
+                          color: C.bg0, letterSpacing: '0.05em',
+                          marginTop: 8, marginBottom: 28,
+                        }}>{a.initials}</div>
+                        <div style={{ fontFamily: 'Inter', fontSize: 24, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>{a.name}</div>
+                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.gold, letterSpacing: '0.2em', textTransform: 'uppercase', marginTop: 10 }}>{a.role}</div>
+                        <div style={{ fontSize: 14, color: C.whiteDim, marginTop: 22, lineHeight: 1.55, fontWeight: 300 }}>{a.desc}</div>
+                      </div>
+                    </GlassCard>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div style={{
+              position: 'absolute', left: 96, bottom: 50, right: 96,
+              opacity: clamp((t - 3.4) / 0.8, 0, 1),
+              fontFamily: 'JetBrains Mono, monospace', fontSize: 13,
+              color: C.whiteDim, letterSpacing: '0.15em',
+              borderTop: `1px solid ${C.line}`, paddingTop: 18,
+              display: 'flex', justifyContent: 'space-between',
+            }}>
+              <span><span style={{ color: C.gold }}>69 612</span> individus dans la cohorte de validation initiale</span>
+              <span>Article scientifique soumis · NHANES 1999–2018 · n = 59 204</span>
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// Scene12Authors is overridden by scenes/scene-12-pilot.jsx (loaded after this file)
+Object.assign(window, { Scene9Mockups, Scene10Bilan, Scene11Security });
+
+</script>
+  <script type="text/babel" data-from="scenes/scene-13.jsx">
+// Scene 13 — Exposome & connected biomarkers
+function Scene13Exposome({ start, end }) {
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime }) => {
+        const t = localTime;
+        const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
+        const exposomeIn = clamp((t - 1.0) / 0.8, 0, 1);
+        const connectedIn = clamp((t - 3.2) / 0.8, 0, 1);
+        const synthesisIn = clamp((t - 5.0) / 0.8, 0, 1);
+
+        // Exposome cards (left column)
+        const exposome = [
+          { label: 'Qualité de l\'air', metric: 'PM2.5 · NO₂ · O₃', detail: 'Pollution chronique → inflammation cardiovasculaire. Données géolocalisées intégrées au score.', icon: (
+            <svg viewBox="0 0 80 80" width="56" height="56">
+              <circle cx="40" cy="40" r="22" fill="none" stroke={C.cyan} strokeWidth="2" />
+              <circle cx="40" cy="40" r="3" fill={C.cyan} />
+              {[0,1,2,3,4,5].map(i => {
+                const a = (i / 6) * Math.PI * 2;
+                return <circle key={i} cx={40 + Math.cos(a) * 14} cy={40 + Math.sin(a) * 14} r="2" fill={C.cyan} opacity="0.7" />;
+              })}
+              <path d="M 18 60 Q 40 50 62 60" fill="none" stroke={C.cyan} strokeWidth="1.5" opacity="0.5" />
+            </svg>
+          )},
+          { label: 'Bruit & nuisance sonore', metric: 'dB(A) résidentiel · trafic', detail: 'Stress chronique cardiovasculaire mesurable. Adresse + environnement professionnel.', icon: (
+            <svg viewBox="0 0 80 80" width="56" height="56">
+              <path d="M 25 32 L 25 48 L 35 48 L 48 58 L 48 22 L 35 32 Z" fill={C.cyan} opacity="0.4" stroke={C.cyan} strokeWidth="1.5" />
+              {[0,1,2].map(i => (
+                <path key={i} d={`M ${54 + i*5} ${30 + i*2} Q ${60 + i*5} 40 ${54 + i*5} ${50 - i*2}`} fill="none" stroke={C.cyan} strokeWidth="1.5" opacity={0.8 - i * 0.25} />
+              ))}
+            </svg>
+          )},
+          { label: 'Chaleur & vagues thermiques', metric: '°C ambiant · épisodes', detail: 'Stress thermique → hospitalisations CV. Exposome climatique intégré au calcul actuariel.', icon: (
+            <svg viewBox="0 0 80 80" width="56" height="56">
+              <rect x="34" y="14" width="12" height="36" rx="6" fill="none" stroke={C.cyan} strokeWidth="2" />
+              <circle cx="40" cy="56" r="10" fill={C.cyan} />
+              <line x1="40" y1="22" x2="40" y2="46" stroke={C.cyan} strokeWidth="3" />
+              <line x1="50" y1="22" x2="58" y2="22" stroke={C.cyan} strokeWidth="1.5" />
+              <line x1="50" y1="32" x2="56" y2="32" stroke={C.cyan} strokeWidth="1.5" />
+              <line x1="50" y1="42" x2="58" y2="42" stroke={C.cyan} strokeWidth="1.5" />
+            </svg>
+          )},
+          { label: 'Activité & sommeil', metric: 'pas/jour · h sommeil · stress', detail: 'Lifestyle quantifié — synchronisable avec montre connectée ou auto-déclaré.', icon: (
+            <svg viewBox="0 0 80 80" width="56" height="56">
+              <circle cx="40" cy="40" r="24" fill="none" stroke={C.cyan} strokeWidth="2" />
+              <path d="M 40 24 L 40 40 L 52 46" fill="none" stroke={C.cyan} strokeWidth="2.5" strokeLinecap="round" />
+              <circle cx="40" cy="40" r="2" fill={C.cyan} />
+            </svg>
+          )},
+        ];
+
+        // Connected devices (right column)
+        const devices = [
+          { label: 'Tensiomètre connecté', metric: 'mmHg systolique / diastolique', detail: 'Lecture domestique transmise automatiquement — moyenne sur 7/14/28 jours intégrée au score.', icon: (
+            <svg viewBox="0 0 80 80" width="56" height="56">
+              <rect x="20" y="30" width="40" height="28" rx="4" fill="none" stroke={C.gold} strokeWidth="2" />
+              <text x="40" y="48" textAnchor="middle" fill={C.gold} fontFamily="JetBrains Mono, monospace" fontSize="10">128/82</text>
+              <path d="M 60 44 Q 70 44 70 34 Q 70 24 60 24" fill="none" stroke={C.gold} strokeWidth="2" />
+              <circle cx="60" cy="34" r="2" fill={C.gold} />
+            </svg>
+          )},
+          { label: 'Glucomètre / CGM', metric: 'glycémie temps réel', detail: 'Capteur continu (FreeStyle, Dexcom) — courbes journalières intégrées + variabilité glycémique.', icon: (
+            <svg viewBox="0 0 80 80" width="56" height="56">
+              <circle cx="40" cy="40" r="20" fill="none" stroke={C.gold} strokeWidth="2" />
+              <circle cx="40" cy="40" r="6" fill={C.gold} opacity="0.5" />
+              <path d="M 22 50 L 30 44 L 38 48 L 46 36 L 54 42 L 62 32" fill="none" stroke={C.gold} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
+            </svg>
+          )},
+          { label: 'Balance impédancemétrique', metric: 'IMC · masse grasse · viscérale', detail: 'Composition corporelle synchronisée. Évolution mesurée d\'une consultation à l\'autre.', icon: (
+            <svg viewBox="0 0 80 80" width="56" height="56">
+              <rect x="14" y="40" width="52" height="20" rx="3" fill="none" stroke={C.gold} strokeWidth="2" />
+              <rect x="32" y="22" width="16" height="18" rx="2" fill="none" stroke={C.gold} strokeWidth="2" />
+              <text x="40" y="56" textAnchor="middle" fill={C.gold} fontFamily="JetBrains Mono, monospace" fontSize="9">74,2</text>
+            </svg>
+          )},
+          { label: 'Montre & sommeil', metric: 'FC repos · VFC · SpO₂ · sommeil', detail: 'Apple Watch, Garmin, Fitbit, Oura. Variabilité cardiaque = signature du système nerveux autonome.', icon: (
+            <svg viewBox="0 0 80 80" width="56" height="56">
+              <rect x="26" y="22" width="28" height="36" rx="6" fill="none" stroke={C.gold} strokeWidth="2" />
+              <line x1="32" y1="18" x2="48" y2="18" stroke={C.gold} strokeWidth="2.5" />
+              <line x1="32" y1="62" x2="48" y2="62" stroke={C.gold} strokeWidth="2.5" />
+              <path d="M 32 40 L 36 40 L 38 34 L 42 46 L 44 38 L 48 40" fill="none" stroke={C.gold} strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          )},
+        ];
+
+        return (
+          <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
+            <CosmicBackdrop hue="cyan" />
+            <SectionTag index="11" label="Exposome × Capteurs · au-delà du sang" color={C.cyan} />
+
+            <div style={{
+              position: 'absolute', left: 96, top: 170, right: 96,
+              opacity: titleIn, transform: `translateY(${(1-titleIn)*20}px)`,
+              fontFamily: 'Inter', fontSize: 56, fontWeight: 200,
+              color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
+            }}>
+              Votre risque ne s'arrête pas au sang.<br/>
+              <span style={{ fontStyle: 'italic', fontSize: 32, fontWeight: 300, color: C.cyan }}>
+                Air, bruit, chaleur, capteurs — tout entre dans l'équation.
+              </span>
+            </div>
+
+            {/* Two-column header bar */}
+            <div style={{
+              position: 'absolute', left: 96, top: 360, right: 96,
+              display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 36,
+              opacity: titleIn,
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                <div style={{ width: 32, height: 1, background: C.cyan }} />
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, letterSpacing: '0.3em', color: C.cyan, textTransform: 'uppercase' }}>Exposome environnemental</div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                <div style={{ width: 32, height: 1, background: C.gold }} />
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, letterSpacing: '0.3em', color: C.gold, textTransform: 'uppercase' }}>Capteurs connectés</div>
+              </div>
+            </div>
+
+            {/* Two columns of cards */}
+            <div style={{
+              position: 'absolute', left: 96, top: 410, right: 96, bottom: 140,
+              display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 36,
+            }}>
+              {/* Left — exposome */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                {exposome.map((e, i) => {
+                  const itIn = clamp((t - 1.0 - i * 0.18) / 0.6, 0, 1);
+                  return (
+                    <div key={i} style={{
+                      opacity: itIn,
+                      transform: `perspective(1500px) rotateY(${(1-itIn)*-12}deg) translateX(${(1-itIn)*-30}px)`,
+                      transformStyle: 'preserve-3d',
+                      padding: '18px 22px',
+                      display: 'flex', gap: 18, alignItems: 'center',
+                      background: 'linear-gradient(135deg, rgba(34,211,238,0.06), rgba(34,211,238,0.02))',
+                      border: `1px solid ${C.lineStrong}`,
+                      borderRadius: 14,
+                      backdropFilter: 'blur(10px)',
+                    }}>
+                      <div style={{ flexShrink: 0, width: 64, height: 64, borderRadius: 12, background: 'rgba(34,211,238,0.08)', border: `1px solid ${C.lineStrong}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{e.icon}</div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontFamily: 'Inter', fontSize: 19, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>{e.label}</div>
+                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.cyan, letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: 3 }}>{e.metric}</div>
+                        <div style={{ fontSize: 12, color: C.whiteDim, marginTop: 6, lineHeight: 1.5 }}>{e.detail}</div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Right — devices */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 14, opacity: connectedIn }}>
+                {devices.map((d, i) => {
+                  const itIn = clamp((t - 3.2 - i * 0.18) / 0.6, 0, 1);
+                  return (
+                    <div key={i} style={{
+                      opacity: itIn,
+                      transform: `perspective(1500px) rotateY(${(1-itIn)*12}deg) translateX(${(1-itIn)*30}px)`,
+                      transformStyle: 'preserve-3d',
+                      padding: '18px 22px',
+                      display: 'flex', gap: 18, alignItems: 'center',
+                      background: 'linear-gradient(135deg, rgba(251,191,36,0.06), rgba(251,191,36,0.02))',
+                      border: `1px solid ${C.gold}55`,
+                      borderRadius: 14,
+                      backdropFilter: 'blur(10px)',
+                    }}>
+                      <div style={{ flexShrink: 0, width: 64, height: 64, borderRadius: 12, background: 'rgba(251,191,36,0.08)', border: `1px solid ${C.gold}55`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{d.icon}</div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontFamily: 'Inter', fontSize: 19, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>{d.label}</div>
+                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.gold, letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: 3 }}>{d.metric}</div>
+                        <div style={{ fontSize: 12, color: C.whiteDim, marginTop: 6, lineHeight: 1.5 }}>{d.detail}</div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Synthesis bar */}
+            <div style={{
+              position: 'absolute', left: 96, right: 96, bottom: 50,
+              opacity: synthesisIn,
+              transform: `translateY(${(1-synthesisIn)*20}px)`,
+              padding: '20px 32px',
+              borderRadius: 14,
+              background: `linear-gradient(90deg, rgba(34,211,238,0.1), rgba(244,63,94,0.1), rgba(251,191,36,0.1))`,
+              border: `1px solid ${C.gold}66`,
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 24,
+            }}>
+              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim, letterSpacing: '0.25em', textTransform: 'uppercase' }}>4 Dimensions intégrées</div>
+              <div style={{ display: 'flex', gap: 36, fontSize: 17, fontWeight: 400 }}>
+                <span style={{ color: C.cyan }}>● Clinique</span>
+                <span style={{ color: C.cyan }}>● Exposome</span>
+                <span style={{ color: C.gold }}>● Occupationnel</span>
+                <span style={{ color: C.gold }}>● Lifestyle</span>
+              </div>
+              <div style={{ fontFamily: 'Inter', fontSize: 17, fontWeight: 500, color: C.white }}>
+                = un seul score <span style={{ color: C.gold }}>BSD</span>
+              </div>
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+Object.assign(window, { Scene13Exposome });
+
+</script>
+  <script type="text/babel" data-from="scenes/scene-14.jsx">
+// Scene 14 — Connected app hub + dual delivery model
+function Scene14Hub({ start, end }) {
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime }) => {
+        const t = localTime;
+        const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
+        const phoneIn = clamp((t - 0.8) / 1.0, 0, 1);
+        const orbitsIn = clamp((t - 1.8) / 1.0, 0, 1);
+        const modesIn = clamp((t - 4.0) / 0.8, 0, 1);
+
+        // Live telemetry values that animate
+        const hr  = Math.round(68 + Math.sin(t * 1.4) * 6);
+        const bp1 = Math.round(126 + Math.sin(t * 0.7) * 4);
+        const bp2 = Math.round(82 + Math.sin(t * 0.9) * 3);
+        const glu = (1.02 + Math.sin(t * 0.6) * 0.08).toFixed(2);
+        const wt  = (74.2 + Math.sin(t * 0.4) * 0.3).toFixed(1);
+        const o2  = Math.round(97 + Math.sin(t * 1.1) * 1);
+
+        // Sensors orbiting the phone
+        const cx = 700, cy = 660;
+        const sensors = [
+          { a: -Math.PI/2,           label: 'Tensiomètre',   value: `${bp1}/${bp2}`,  unit: 'mmHg', color: C.gold },
+          { a: -Math.PI/2 + Math.PI*1/6, label: 'CGM glycémie', value: glu,             unit: 'g/L',  color: C.gold },
+          { a: -Math.PI/2 + Math.PI*2/6, label: 'Montre · pouls', value: hr,            unit: 'bpm',  color: C.gold },
+          { a: -Math.PI/2 + Math.PI*3/6, label: 'SpO₂',         value: o2,              unit: '%',    color: C.gold },
+          { a: -Math.PI/2 + Math.PI*4/6, label: 'Balance',      value: wt,              unit: 'kg',   color: C.gold },
+          { a: -Math.PI/2 + Math.PI*5/6, label: 'Sommeil',      value: '7h12',          unit: 'qual.', color: C.cyan },
+          { a: -Math.PI/2 + Math.PI*6/6, label: 'Pas',          value: '8 412',         unit: 'pas',  color: C.cyan },
+          { a: -Math.PI/2 + Math.PI*7/6, label: 'Air · PM2.5',  value: '23',            unit: 'µg/m³', color: C.cyan },
+          { a: -Math.PI/2 + Math.PI*8/6, label: 'Bruit',        value: '58',            unit: 'dB(A)', color: C.cyan },
+          { a: -Math.PI/2 + Math.PI*9/6, label: 'Chaleur',      value: '31',            unit: '°C',   color: C.cyan },
+          { a: -Math.PI/2 + Math.PI*10/6, label: 'Stress · VFC', value: '42',           unit: 'ms',   color: C.cyan },
+          { a: -Math.PI/2 + Math.PI*11/6, label: 'HbA1c',       value: '5,4',           unit: '%',    color: C.red },
+        ];
+
+        return (
+          <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
+            <CosmicBackdrop hue="cyan" />
+            <SectionTag index="12" label="Plateforme connectée · télémédecine augmentée" color={C.cyan} />
+
+            <div style={{
+              position: 'absolute', left: 96, top: 170,
+              opacity: titleIn, transform: `translateY(${(1-titleIn)*20}px)`,
+              fontFamily: 'Inter', fontSize: 56, fontWeight: 200,
+              color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
+            }}>
+              Une app, tous vos capteurs.<br/>
+              <span style={{ fontStyle: 'italic', fontSize: 32, fontWeight: 300, color: C.cyan }}>
+                Au laboratoire ou chez vous — toujours avec votre médecin.
+              </span>
+            </div>
+
+            {/* Streaming data lines from sensors → phone */}
+            <svg width="1920" height="1080" style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+              <defs>
+                <radialGradient id="hubGlow" cx="0.5" cy="0.5">
+                  <stop offset="0%" stopColor={C.cyan} stopOpacity="0.4" />
+                  <stop offset="100%" stopColor={C.cyan} stopOpacity="0" />
+                </radialGradient>
+              </defs>
+              <circle cx={cx} cy={cy} r="280" fill="url(#hubGlow)" opacity={orbitsIn * 0.8} />
+              {sensors.map((s, i) => {
+                const r = 320;
+                const sx = cx + Math.cos(s.a) * r;
+                const sy = cy + Math.sin(s.a) * r * 0.55;
+                const phoneEdgeX = cx;
+                const phoneEdgeY = cy;
+                const dashOffset = -(t * 60 + i * 8) % 24;
+                return (
+                  <line key={i} x1={sx} y1={sy} x2={phoneEdgeX} y2={phoneEdgeY}
+                        stroke={s.color} strokeWidth="1.2" opacity={orbitsIn * 0.4}
+                        strokeDasharray="3 6" strokeDashoffset={dashOffset} />
+                );
+              })}
+            </svg>
+
+            {/* Central phone */}
+            <div style={{
+              position: 'absolute', left: cx, top: cy,
+              transform: `translate(-50%, -50%) perspective(1500px) rotateY(${Math.sin(t * 0.5) * 6}deg) scale(${0.7 + phoneIn * 0.3})`,
+              opacity: phoneIn, transformStyle: 'preserve-3d',
+              zIndex: 10,
+            }}>
+              <div style={{
+                width: 240, height: 480,
+                background: 'linear-gradient(135deg, #1a2540, #0a1535)',
+                borderRadius: 32, padding: 8,
+                border: `2px solid ${C.lineStrong}`,
+                boxShadow: `0 30px 80px rgba(0,0,0,0.6), 0 0 60px ${C.cyan}55`,
+                position: 'relative',
+              }}>
+                <div style={{ position: 'absolute', top: 12, left: '50%', transform: 'translateX(-50%)', width: 70, height: 16, background: '#000', borderRadius: 10, zIndex: 2 }} />
+                <div style={{
+                  width: '100%', height: '100%', background: C.bg0,
+                  borderRadius: 26, overflow: 'hidden',
+                  padding: '36px 16px 16px',
+                  display: 'flex', flexDirection: 'column', gap: 8,
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: C.cyan, letterSpacing: '0.2em' }}>● LIVE</div>
+                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: C.whiteDim }}>SilentCheck</div>
+                  </div>
+                  <div style={{ fontSize: 14, color: C.white, fontWeight: 500, marginTop: 4 }}>Tableau de bord</div>
+                  {/* Mini metrics */}
+                  {[
+                    ['Pouls', `${hr} bpm`, C.red],
+                    ['Tension', `${bp1}/${bp2}`, C.gold],
+                    ['Glycémie', `${glu} g/L`, C.gold],
+                    ['Pas', '8 412', C.cyan],
+                    ['Sommeil', '7h12', C.cyan],
+                    ['Air PM2.5', '23 µg', C.cyan],
+                  ].map(([k, v, col], i) => (
+                    <div key={i} style={{
+                      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                      padding: '7px 10px',
+                      background: 'rgba(34,211,238,0.05)',
+                      border: `1px solid ${C.line}`,
+                      borderRadius: 6, fontSize: 10,
+                    }}>
+                      <span style={{ color: C.whiteDim }}>{k}</span>
+                      <span style={{ color: col, fontWeight: 600, fontFamily: 'JetBrains Mono, monospace' }}>{v}</span>
+                    </div>
+                  ))}
+                  <div style={{ marginTop: 'auto', padding: '8px', background: `linear-gradient(135deg, ${C.cyan}, ${C.gold})`, borderRadius: 6, textAlign: 'center', fontSize: 10, fontWeight: 700, color: C.bg0 }}>
+                    Score BSD : 42 / 100
+                  </div>
+                </div>
+              </div>
+              {/* Pulse halos */}
+              {[0,1,2].map(i => {
+                const phase = (t * 0.6 + i * 0.7) % 2;
+                if (phase > 1.4) return null;
+                return <div key={i} style={{
+                  position: 'absolute', inset: 0,
+                  border: `1px solid ${C.cyan}`, borderRadius: 36,
+                  transform: `scale(${1 + phase * 0.5})`,
+                  opacity: (1 - phase / 1.4) * 0.4,
+                }} />;
+              })}
+            </div>
+
+            {/* Sensor pills around phone */}
+            {sensors.map((s, i) => {
+              const r = 320;
+              const sx = cx + Math.cos(s.a) * r;
+              const sy = cy + Math.sin(s.a) * r * 0.55;
+              const sIn = clamp((t - 1.8 - i * 0.06) / 0.5, 0, 1);
+              const wob = Math.sin(t * 1.2 + i * 0.5) * 4;
+              return (
+                <div key={i} style={{
+                  position: 'absolute', left: sx, top: sy + wob,
+                  transform: `translate(-50%, -50%) scale(${0.6 + sIn * 0.4})`,
+                  opacity: sIn,
+                  padding: '8px 12px',
+                  background: 'rgba(8,15,40,0.85)',
+                  border: `1px solid ${s.color}88`,
+                  borderRadius: 10,
+                  boxShadow: `0 0 14px ${s.color}55`,
+                  backdropFilter: 'blur(8px)',
+                  minWidth: 110, textAlign: 'center',
+                  zIndex: 5,
+                }}>
+                  <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: s.color, letterSpacing: '0.15em', textTransform: 'uppercase' }}>{s.label}</div>
+                  <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 4, marginTop: 2 }}>
+                    <span style={{ fontFamily: 'Inter', fontSize: 16, fontWeight: 600, color: C.white }}>{s.value}</span>
+                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: C.whiteDim }}>{s.unit}</span>
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Right column — two delivery modes */}
+            <div style={{
+              position: 'absolute', right: 70, top: 380, width: 480,
+              opacity: modesIn,
+              display: 'flex', flexDirection: 'column', gap: 18,
+            }}>
+              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.gold, letterSpacing: '0.3em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ width: 24, height: 1, background: C.gold }} />
+                Deux modes · une seule expérience
+              </div>
+
+              {/* Mode 1: At home */}
+              <div style={{
+                transform: `perspective(1400px) rotateY(${(1-modesIn)*-12}deg) translateY(${(1-modesIn)*20}px)`,
+                padding: 24,
+                background: 'linear-gradient(135deg, rgba(34,211,238,0.1), rgba(34,211,238,0.03))',
+                border: `1px solid ${C.cyan}88`,
+                borderRadius: 14,
+                position: 'relative',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 8 }}>
+                  <svg width="32" height="32" viewBox="0 0 32 32">
+                    <path d="M 4 16 L 16 6 L 28 16 L 28 28 L 4 28 Z" fill="none" stroke={C.cyan} strokeWidth="2" strokeLinejoin="round" />
+                    <path d="M 12 28 L 12 20 L 20 20 L 20 28" fill="none" stroke={C.cyan} strokeWidth="2" />
+                  </svg>
+                  <div style={{ fontFamily: 'Inter', fontSize: 22, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>À domicile · 100 % distanciel</div>
+                </div>
+                <div style={{ fontSize: 13, color: C.whiteDim, lineHeight: 1.55, paddingLeft: 46 }}>
+                  Vidéo sécurisée · capteurs personnels synchronisés en temps réel · auto-prélèvement avec kit veineux livré · résultats restitués en téléconsultation.
+                </div>
+                <div style={{ marginTop: 12, paddingLeft: 46, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                  {['Vidéo HD','Capteurs perso','Kit prélèvement','Livraison'].map((tag, i) => (
+                    <span key={i} style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: C.cyan, padding: '4px 10px', border: `1px solid ${C.line}`, borderRadius: 100, background: 'rgba(34,211,238,0.05)' }}>{tag}</span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Mode 2: At lab assisted */}
+              <div style={{
+                transform: `perspective(1400px) rotateY(${(1-modesIn)*-12}deg) translateY(${(1-modesIn)*30}px)`,
+                padding: 24,
+                background: 'linear-gradient(135deg, rgba(251,191,36,0.1), rgba(251,191,36,0.03))',
+                border: `1px solid ${C.gold}88`,
+                borderRadius: 14,
+                position: 'relative',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 8 }}>
+                  <svg width="32" height="32" viewBox="0 0 32 32">
+                    <path d="M 12 4 L 12 12 L 6 26 Q 6 28 8 28 L 24 28 Q 26 28 26 26 L 20 12 L 20 4 Z" fill="none" stroke={C.gold} strokeWidth="2" strokeLinejoin="round" />
+                    <line x1="12" y1="4" x2="20" y2="4" stroke={C.gold} strokeWidth="2.5" />
+                    <circle cx="12" cy="22" r="1.5" fill={C.gold} />
+                    <circle cx="18" cy="20" r="1.5" fill={C.gold} />
+                  </svg>
+                  <div style={{ fontFamily: 'Inter', fontSize: 22, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>Laboratoire · médecin à distance</div>
+                </div>
+                <div style={{ fontSize: 13, color: C.whiteDim, lineHeight: 1.55, paddingLeft: 46 }}>
+                  Prélèvement sur place par un infirmier partenaire · médecin TiBok présent en visio · capteurs partenaires utilisés en cabine connectée · résultats poussés instantanément dans l'app.
+                </div>
+                <div style={{ marginTop: 12, paddingLeft: 46, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                  {['Cabine connectée','Infirmier sur place','Médecin en visio','Sync temps réel'].map((tag, i) => (
+                    <span key={i} style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: C.gold, padding: '4px 10px', border: `1px solid ${C.gold}55`, borderRadius: 100, background: 'rgba(251,191,36,0.05)' }}>{tag}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom strap */}
+            <div style={{
+              position: 'absolute', left: 96, right: 96, bottom: 50,
+              opacity: clamp((t - 5.4) / 0.6, 0, 1),
+              padding: '14px 24px', borderRadius: 12,
+              border: `1px solid ${C.line}`,
+              background: 'rgba(34,211,238,0.04)',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.whiteDim, letterSpacing: '0.15em',
+            }}>
+              <span>● Toutes les données chiffrées bout-en-bout</span>
+              <span style={{ color: C.cyan }}>● Médecin présent à chaque étape</span>
+              <span style={{ color: C.gold }}>● 1 score · 4 dimensions · zéro angle mort</span>
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+Object.assign(window, { Scene14Hub });
+
+</script>
+  <script type="text/babel" data-from="scenes/scene-12-pilot.jsx">
+// Scene 12 — Le biologiste, pilote de la médecine de prévention
+function Scene12Authors({ start, end }) {
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime }) => {
+        const t = localTime;
+        const titleIn = clamp((t - 0.2) / 0.9, 0, 1);
+        const oldRoleIn = clamp((t - 1.0) / 0.8, 0, 1);
+        // Phase 1 fully fades out by t=7.5; phase 2 doesn't start until t=8 (no overlap)
+        const oldRoleOut = clamp((t - 6.5) / 1.0, 0, 1);
+        const cockpitIn = clamp((t - 8.0) / 1.5, 0, 1);
+        const orbitIn = clamp((t - 10.0) / 1.5, 0, 1);
+        const manifestoIn = clamp((t - 16.0) / 1.0, 0, 1);
+
+        // 8 domains of preventive medicine orbiting the biologist
+        const domains = [
+          { label: 'Cardiovasculaire',     icon: '♥', color: C.red,  angle: 0 },
+          { label: 'Métabolique · Diabète', icon: '◈', color: C.gold, angle: 1 },
+          { label: 'Oncologie préventive',  icon: '✦', color: C.cyan, angle: 2 },
+          { label: 'Cognitif · Neuro',      icon: '⌬', color: C.gold, angle: 3 },
+          { label: 'Inflammation chronique', icon: '◉', color: C.red,  angle: 4 },
+          { label: 'Hormonal · Longévité',  icon: '∞', color: C.cyan, angle: 5 },
+          { label: 'Hépato-rénal',          icon: '⬡', color: C.gold, angle: 6 },
+          { label: 'Immuno-vasculaire',     icon: '◐', color: C.cyan, angle: 7 },
+        ];
+
+        // Tools the biologist orchestrates
+        const tools = [
+          { label: 'IA médicale',           icon: '◆' },
+          { label: 'Capteurs connectés',    icon: '◇' },
+          { label: 'Biomarqueurs ciblés',   icon: '◉' },
+          { label: 'Téléconsultation',      icon: '◎' },
+          { label: 'Score multi-dimensions', icon: '✦' },
+          { label: 'Plan de prévention',    icon: '⌖' },
+        ];
+
+        return (
+          <div style={{ position: 'absolute', inset: 0, background: C.bg0, overflow: 'hidden' }}>
+            <CosmicBackdrop hue="gold" />
+            <SectionTag index="11" label="Le biologiste · pilote de la médecine de prévention" color={C.gold} />
+
+            {/* Title */}
+            <div style={{
+              position: 'absolute', left: 96, top: 150,
+              opacity: titleIn, transform: `translateY(${(1-titleIn)*20}px)`,
+              fontFamily: 'Inter', fontSize: 56, fontWeight: 200,
+              color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
+              maxWidth: 1300,
+            }}>
+              D'acteur du système, à <span style={{ fontStyle: 'italic', color: C.gold }}>pilote</span> de la médecine de demain.
+            </div>
+
+            {/* PHASE 1 — "AVANT": biologist as one node among many (0–4.5s) */}
+            <div style={{
+              position: 'absolute', left: 0, right: 0, top: 320,
+              opacity: oldRoleIn * (1 - oldRoleOut),
+              transform: `translateY(${(1-oldRoleIn)*20 - oldRoleOut*40}px)`,
+              display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 40,
+            }}>
+              <div style={{
+                fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.whiteDim,
+                letterSpacing: '0.3em', textTransform: 'uppercase',
+                writingMode: 'vertical-rl', transform: 'rotate(180deg)',
+              }}>HIER · Acteur passif</div>
+              {['Patient', 'Généraliste', 'Spécialiste', 'BIOLOGISTE', 'Pharmacien', 'Hôpital'].map((label, i) => {
+                const isBio = label === 'BIOLOGISTE';
+                return (
+                  <div key={i} style={{
+                    padding: '20px 28px',
+                    background: isBio ? `rgba(251,191,36,0.12)` : 'rgba(248,250,252,0.04)',
+                    border: `1px solid ${isBio ? C.gold + '88' : C.line}`,
+                    borderRadius: 10,
+                    fontFamily: 'Inter', fontSize: 16, fontWeight: isBio ? 500 : 300,
+                    color: isBio ? C.gold : C.whiteDim, letterSpacing: '0.05em',
+                  }}>{label}</div>
+                );
+              })}
+            </div>
+            <div style={{
+              position: 'absolute', left: '50%', top: 640,
+              transform: `translate(-50%, ${(1 - clamp((t - 2.5) / 1.2, 0, 1)) * 30}px) scale(${0.92 + clamp((t - 2.5) / 1.2, 0, 1) * 0.08})`,
+              opacity: clamp((t - 2.5) / 1.2, 0, 1) * (1 - oldRoleOut),
+              fontFamily: 'Inter', fontSize: 22, color: C.whiteDim, fontStyle: 'italic',
+              padding: '14px 32px',
+              background: 'rgba(8,15,40,0.7)',
+              border: `1px solid ${C.line}`,
+              borderRadius: 100,
+              backdropFilter: 'blur(8px)',
+              boxShadow: `0 10px 30px rgba(0,0,0,0.4)`,
+              letterSpacing: '0.01em',
+              whiteSpace: 'nowrap',
+            }}>
+              Une analyse demandée. Un résultat rendu. <span style={{ color: C.gold, fontStyle: 'normal', fontWeight: 500 }}>Pas de stratégie.</span> <span style={{ color: C.gold, fontStyle: 'normal', fontWeight: 500 }}>Pas de pilotage.</span>
+            </div>
+
+            {/* PHASE 2 — "DEMAIN": biologist at center, tools and domains orbiting */}
+            {/* Central biologist cockpit */}
+            <div style={{
+              position: 'absolute', left: 960, top: 660,
+              transform: `translate(-50%, -50%) scale(${0.4 + cockpitIn * 0.6})`,
+              opacity: cockpitIn,
+              transformStyle: 'preserve-3d',
+            }}>
+              <svg width="500" height="500" viewBox="0 0 500 500" style={{ overflow: 'visible' }}>
+                <defs>
+                  <radialGradient id="bioCore" cx="0.5" cy="0.5">
+                    <stop offset="0%" stopColor={C.gold} stopOpacity="0.9" />
+                    <stop offset="60%" stopColor={C.gold} stopOpacity="0.3" />
+                    <stop offset="100%" stopColor={C.gold} stopOpacity="0" />
+                  </radialGradient>
+                  <linearGradient id="bioRing" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor={C.gold} />
+                    <stop offset="100%" stopColor={C.cyan} />
+                  </linearGradient>
+                </defs>
+                {/* Outer pulsing rings */}
+                {[0, 1, 2].map(i => {
+                  const phase = (t * 0.6 + i * 0.7) % 2;
+                  return (
+                    <circle key={i} cx="250" cy="250" r={150 + phase * 60}
+                            fill="none" stroke={C.gold} strokeWidth="1"
+                            opacity={(1 - phase / 2) * 0.4} />
+                  );
+                })}
+                {/* Core glow */}
+                <circle cx="250" cy="250" r="180" fill="url(#bioCore)" />
+                {/* Hexagonal frame (laboratory motif) */}
+                <polygon points="250,90 380,165 380,335 250,410 120,335 120,165"
+                         fill="none" stroke="url(#bioRing)" strokeWidth="2" opacity="0.9"
+                         transform={`rotate(${t * 6} 250 250)`} />
+                <polygon points="250,120 350,180 350,320 250,380 150,320 150,180"
+                         fill="rgba(8,15,40,0.7)" stroke={C.gold} strokeWidth="1.5"
+                         transform={`rotate(${-t * 4} 250 250)`} />
+                {/* Microscope / atom icon center */}
+                <g transform="translate(250 250)">
+                  {/* Atom orbits */}
+                  <ellipse cx="0" cy="0" rx="60" ry="22" fill="none" stroke={C.cyan} strokeWidth="1.5" opacity="0.7"
+                           transform={`rotate(${t * 30})`} />
+                  <ellipse cx="0" cy="0" rx="60" ry="22" fill="none" stroke={C.gold} strokeWidth="1.5" opacity="0.7"
+                           transform={`rotate(${60 + t * 30})`} />
+                  <ellipse cx="0" cy="0" rx="60" ry="22" fill="none" stroke={C.cyan} strokeWidth="1.5" opacity="0.7"
+                           transform={`rotate(${120 + t * 30})`} />
+                  <circle cx="0" cy="0" r="14" fill={C.gold} />
+                  <circle cx="0" cy="0" r="14" fill="none" stroke={C.white} strokeWidth="1" />
+                </g>
+              </svg>
+              {/* Label under */}
+              <div style={{
+                position: 'absolute', left: '50%', bottom: -30,
+                transform: 'translateX(-50%)', textAlign: 'center',
+                fontFamily: 'Inter', whiteSpace: 'nowrap',
+              }}>
+                <div style={{ fontSize: 28, fontWeight: 400, color: C.white, letterSpacing: '0.05em' }}>LE BIOLOGISTE</div>
+                <div style={{ fontSize: 11, fontFamily: 'JetBrains Mono, monospace', color: C.gold, letterSpacing: '0.4em', marginTop: 6 }}>· PILOTE ·</div>
+              </div>
+            </div>
+
+            {/* Tools — inner ring */}
+            {tools.map((tool, i) => {
+              const a = (i / tools.length) * Math.PI * 2 - Math.PI / 2 + t * 0.15;
+              const r = 280;
+              const cx = 960, cy = 660;
+              const x = cx + Math.cos(a) * r;
+              const y = cy + Math.sin(a) * r * 0.45;
+              const sIn = clamp((t - 10.0 - i * 0.2) / 0.7, 0, 1);
+              return (
+                <div key={i} style={{
+                  position: 'absolute', left: x, top: y,
+                  transform: `translate(-50%, -50%) scale(${0.6 + sIn * 0.4})`,
+                  opacity: sIn * orbitIn * 0.85,
+                  padding: '8px 14px',
+                  background: 'rgba(8,15,40,0.85)',
+                  border: `1px solid ${C.cyan}66`,
+                  borderRadius: 100,
+                  display: 'flex', alignItems: 'center', gap: 8,
+                  backdropFilter: 'blur(6px)',
+                  boxShadow: `0 0 16px ${C.cyan}33`,
+                }}>
+                  <span style={{ color: C.cyan, fontSize: 14 }}>{tool.icon}</span>
+                  <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: C.white, letterSpacing: '0.15em', textTransform: 'uppercase' }}>{tool.label}</span>
+                </div>
+              );
+            })}
+
+            {/* Domains — outer ring */}
+            <svg width="1920" height="1080" style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+              {domains.map((d, i) => {
+                const a = (d.angle / domains.length) * Math.PI * 2 - Math.PI / 2 - t * 0.1;
+                const r = 480;
+                const cx = 960, cy = 660;
+                const x = cx + Math.cos(a) * r;
+                const y = cy + Math.sin(a) * r * 0.5;
+                const dashOffset = -(t * 40 + i * 5) % 20;
+                return (
+                  <line key={i} x1={cx} y1={cy} x2={x} y2={y}
+                        stroke={d.color} strokeWidth="1" opacity={orbitIn * 0.3}
+                        strokeDasharray="2 6" strokeDashoffset={dashOffset} />
+                );
+              })}
+            </svg>
+
+            {domains.map((d, i) => {
+              const a = (d.angle / domains.length) * Math.PI * 2 - Math.PI / 2 - t * 0.1;
+              const r = 480;
+              const cx = 960, cy = 660;
+              const x = cx + Math.cos(a) * r;
+              const y = cy + Math.sin(a) * r * 0.5;
+              const sIn = clamp((t - 12.0 - i * 0.2) / 0.7, 0, 1);
+              const wob = Math.sin(t * 1.0 + i * 0.5) * 4;
+              return (
+                <div key={i} style={{
+                  position: 'absolute', left: x, top: y + wob,
+                  transform: `translate(-50%, -50%) scale(${0.6 + sIn * 0.4})`,
+                  opacity: sIn * orbitIn,
+                  padding: '10px 16px',
+                  background: 'rgba(8,15,40,0.92)',
+                  border: `1.5px solid ${d.color}aa`,
+                  borderRadius: 12,
+                  display: 'flex', alignItems: 'center', gap: 10,
+                  boxShadow: `0 0 24px ${d.color}55`,
+                  backdropFilter: 'blur(8px)',
+                  minWidth: 180,
+                }}>
+                  <div style={{
+                    width: 28, height: 28, borderRadius: 6,
+                    background: `${d.color}22`,
+                    border: `1px solid ${d.color}88`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: d.color, fontSize: 14,
+                  }}>{d.icon}</div>
+                  <span style={{
+                    fontFamily: 'Inter', fontSize: 13, fontWeight: 500, color: C.white,
+                    letterSpacing: '0.02em',
+                  }}>{d.label}</span>
+                </div>
+              );
+            })}
+
+            {/* DEMAIN label */}
+            <div style={{
+              position: 'absolute', left: 96, top: 320,
+              opacity: orbitIn,
+              fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.gold,
+              letterSpacing: '0.3em', textTransform: 'uppercase',
+              writingMode: 'vertical-rl', transform: 'rotate(180deg)',
+              border: `1px solid ${C.gold}55`, padding: '12px 8px',
+            }}>DEMAIN · PILOTE ACTIF</div>
+
+            {/* Bottom manifesto */}
+            <div style={{
+              position: 'absolute', left: 96, right: 96, bottom: 40,
+              opacity: manifestoIn,
+              padding: '18px 28px', borderRadius: 12,
+              border: `1px solid ${C.gold}55`,
+              background: 'linear-gradient(90deg, rgba(251,191,36,0.1), rgba(34,211,238,0.06))',
+              fontFamily: 'Inter', fontSize: 19, color: C.white, fontWeight: 300,
+              textAlign: 'center', letterSpacing: '0.02em', lineHeight: 1.4,
+            }}>
+              Au cœur de l'écosystème : <span style={{ color: C.gold, fontWeight: 500, fontStyle: 'italic' }}>le biologiste orchestre</span> · IA, capteurs, biomarqueurs, score, plan de prévention <span style={{ color: C.cyan }}>— bien au-delà du cardiovasculaire.</span>
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+Object.assign(window, { Scene12Authors });
+
+</script>
 
   <script type="text/babel">
     // Full presentation — Scene 12 (biologist as pilot) given 38s to breathe
