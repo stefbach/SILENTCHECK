@@ -289,10 +289,11 @@
   <script type="text/babel" src="scenes/scenes-9-12.jsx"></script>
   <script type="text/babel" src="scenes/scene-13.jsx"></script>
   <script type="text/babel" src="scenes/scene-14.jsx"></script>
+  <script type="text/babel" src="scenes/scene-12-pilot.jsx"></script>
 
   <script type="text/babel">
-    // Slowed-down timeline — each scene gets ~75% more breathing room
-    const TOTAL = 165;
+    // Full presentation — Scene 12 (biologist as pilot) given 38s to breathe
+    const TOTAL = 315;
 
     function TimestampLabel() {
       const t = useTime();
@@ -308,20 +309,20 @@
         <div data-video-root data-screen-label="t=0s" style={{ position: 'absolute', inset: 0 }}>
           <Stage width={1920} height={1080} duration={TOTAL} background="#020617" persistKey="silentcheck-anim">
             <TimestampLabel />
-            <Scene1Intro     start={0}     end={11}   />
-            <Scene2Crisis    start={11}    end={23}   />
-            <Scene3Heart     start={23}    end={35}   />
-            <Scene4Score     start={35}    end={48}   />
-            <Scene5Bilans    start={48}    end={59}   />
-            <Scene6Synergy   start={59}    end={71}   />
-            <Scene13Exposome start={71}    end={83}   />
-            <Scene14Hub      start={83}    end={96}   />
-            <Scene9Mockups   start={96}    end={107}  />
-            <Scene7Journey   start={107}   end={118}  />
-            <Scene10Bilan    start={118}   end={131}  />
-            <Scene11Security start={131}   end={143}  />
-            <Scene12Authors  start={143}   end={155}  />
-            <Scene8Outro     start={155}   end={165}  />
+            <Scene1Intro     start={0}     end={20}   />
+            <Scene2Crisis    start={20}    end={42}   />
+            <Scene3Heart     start={42}    end={64}   />
+            <Scene4Score     start={64}    end={88}   />
+            <Scene5Bilans    start={88}    end={108}  />
+            <Scene6Synergy   start={108}   end={130}  />
+            <Scene13Exposome start={130}   end={152}  />
+            <Scene14Hub      start={152}   end={176}  />
+            <Scene9Mockups   start={176}   end={196}  />
+            <Scene7Journey   start={196}   end={216}  />
+            <Scene10Bilan    start={216}   end={240}  />
+            <Scene11Security start={240}   end={262}  />
+            <Scene12Authors  start={262}   end={300}  />
+            <Scene8Outro     start={300}   end={315}  />
           </Stage>
         </div>
       );

@@ -77,9 +77,6 @@ function Scene1Intro({ start, end }) {
               <div style={{ fontSize: 14, color: C.whiteDim, letterSpacing: '0.3em', textTransform: 'uppercase' }}>
                 Powered by <span style={{ color: C.gold, fontWeight: 600 }}>Score BSD v5.0</span>
               </div>
-              <div style={{ fontSize: 13, color: 'rgba(248,250,252,0.4)', letterSpacing: '0.2em' }}>
-                Bach · Sampol · Dignat-George
-              </div>
             </div>
 
             {/* Top corner brand */}

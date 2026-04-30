@@ -443,4 +443,5 @@ function Scene12Authors({ start, end }) {
   );
 }
 
-Object.assign(window, { Scene9Mockups, Scene10Bilan, Scene11Security, Scene12Authors });
+// Scene12Authors is overridden by scenes/scene-12-pilot.jsx (loaded after this file)
+Object.assign(window, { Scene9Mockups, Scene10Bilan, Scene11Security });
