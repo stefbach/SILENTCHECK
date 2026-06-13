@@ -86,7 +86,7 @@ function Scene13Exposome({ start, end }) {
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
             <CosmicBackdrop hue="cyan" />
-            <SectionTag index="11" label="Exposome × Capteurs · au-delà du sang" color={C.cyan} />
+            <SectionTag index="07" label="Exposome × Capteurs · au-delà du sang" color={C.cyan} />
 
             <div style={{
               position: 'absolute', left: 96, top: 170, right: 96,

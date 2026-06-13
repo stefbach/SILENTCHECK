@@ -37,7 +37,7 @@ function Scene14Hub({ start, end }) {
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
             <CosmicBackdrop hue="cyan" />
-            <SectionTag index="12" label="Plateforme connectée · télémédecine augmentée" color={C.cyan} />
+            <SectionTag index="08" label="Plateforme connectée · télémédecine augmentée" color={C.cyan} />
 
             <div style={{
               position: 'absolute', left: 96, top: 170,

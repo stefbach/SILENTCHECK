@@ -1,4 +1,5 @@
-// Scene 12 — Le biologiste, pilote de la médecine de prévention
+// Scene — L'application pilote : tout est dans le téléphone.
+// (Remplace l'ancienne scène "le biologiste pilote".)
 function Scene12Authors({ start, end }) {
   return (
     <Sprite start={start} end={end}>
@@ -12,32 +13,32 @@ function Scene12Authors({ start, end }) {
         const orbitIn = clamp((t - 10.0) / 1.5, 0, 1);
         const manifestoIn = clamp((t - 16.0) / 1.0, 0, 1);
 
-        // 8 domains of preventive medicine orbiting the biologist
+        // What the app orchestrates — outer ring (cardiovascular-centric, no cancer)
         const domains = [
-          { label: 'Cardiovasculaire',     icon: '♥', color: C.red,  angle: 0 },
-          { label: 'Métabolique · Diabète', icon: '◈', color: C.gold, angle: 1 },
-          { label: 'Oncologie préventive',  icon: '✦', color: C.cyan, angle: 2 },
-          { label: 'Cognitif · Neuro',      icon: '⌬', color: C.gold, angle: 3 },
-          { label: 'Inflammation chronique', icon: '◉', color: C.red,  angle: 4 },
-          { label: 'Hormonal · Longévité',  icon: '∞', color: C.cyan, angle: 5 },
-          { label: 'Hépato-rénal',          icon: '⬡', color: C.gold, angle: 6 },
-          { label: 'Immuno-vasculaire',     icon: '◐', color: C.cyan, angle: 7 },
+          { label: 'Réseau international',   icon: '◍', color: C.gold, angle: 0 },
+          { label: 'RDV garantis',           icon: '◷', color: C.cyan, angle: 1 },
+          { label: 'Zéro liste d’attente',   icon: '✓', color: C.gold, angle: 2 },
+          { label: 'Second avis expert',     icon: '◈', color: C.cyan, angle: 3 },
+          { label: 'Prévention cardio',      icon: '♥', color: C.red,  angle: 4 },
+          { label: 'Obésité & métabolisme',  icon: '◐', color: C.gold, angle: 5 },
+          { label: 'Règles de vie',          icon: '∞', color: C.cyan, angle: 6 },
+          { label: 'Suivi continu',          icon: '◉', color: C.cyan, angle: 7 },
         ];
 
-        // Tools the biologist orchestrates
+        // Tools the app runs — inner ring
         const tools = [
-          { label: 'IA médicale',           icon: '◆' },
+          { label: 'IA bien-être',          icon: '◆' },
           { label: 'Capteurs connectés',    icon: '◇' },
           { label: 'Biomarqueurs ciblés',   icon: '◉' },
           { label: 'Téléconsultation',      icon: '◎' },
-          { label: 'Score multi-dimensions', icon: '✦' },
+          { label: 'Score BSD',             icon: '✦' },
           { label: 'Plan de prévention',    icon: '⌖' },
         ];
 
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0, overflow: 'hidden' }}>
             <CosmicBackdrop hue="gold" />
-            <SectionTag index="11" label="Le biologiste · pilote de la médecine de prévention" color={C.gold} />
+            <SectionTag index="16" label="L’application pilote · tout dans le téléphone" color={C.gold} />
 
             {/* Title */}
             <div style={{
@@ -45,39 +46,50 @@ function Scene12Authors({ start, end }) {
               opacity: titleIn, transform: `translateY(${(1-titleIn)*20}px)`,
               fontFamily: 'Inter', fontSize: 56, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
-              maxWidth: 1300,
+              maxWidth: 1400,
             }}>
-              D'acteur du système, à <span style={{ fontStyle: 'italic', color: C.gold }}>pilote</span> de la médecine de demain.
+              Ce n’est plus le système qui vous balade.<br/>
+              C’est <span style={{ fontStyle: 'italic', color: C.gold }}>l’application qui pilote.</span>
             </div>
 
-            {/* PHASE 1 — "AVANT": biologist as one node among many (0–4.5s) */}
+            {/* Scope / positioning line — persists through the scene */}
             <div style={{
-              position: 'absolute', left: 0, right: 0, top: 320,
+              position: 'absolute', left: 96, top: 282, right: 96,
+              opacity: titleIn,
+              fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.cyan,
+              letterSpacing: '0.1em',
+            }}>
+              Centrée prévention cardiovasculaire — obésité &amp; mode de vie compris · hors dépistage du cancer
+            </div>
+
+            {/* PHASE 1 — "HIER": un parcours éclaté, des délais (0–6.5s) */}
+            <div style={{
+              position: 'absolute', left: 0, right: 0, top: 360,
               opacity: oldRoleIn * (1 - oldRoleOut),
               transform: `translateY(${(1-oldRoleIn)*20 - oldRoleOut*40}px)`,
-              display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 40,
+              display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 36,
             }}>
               <div style={{
                 fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.whiteDim,
                 letterSpacing: '0.3em', textTransform: 'uppercase',
                 writingMode: 'vertical-rl', transform: 'rotate(180deg)',
-              }}>HIER · Acteur passif</div>
-              {['Patient', 'Généraliste', 'Spécialiste', 'BIOLOGISTE', 'Pharmacien', 'Hôpital'].map((label, i) => {
-                const isBio = label === 'BIOLOGISTE';
-                return (
-                  <div key={i} style={{
-                    padding: '20px 28px',
-                    background: isBio ? `rgba(251,191,36,0.12)` : 'rgba(248,250,252,0.04)',
-                    border: `1px solid ${isBio ? C.gold + '88' : C.line}`,
-                    borderRadius: 10,
-                    fontFamily: 'Inter', fontSize: 16, fontWeight: isBio ? 500 : 300,
-                    color: isBio ? C.gold : C.whiteDim, letterSpacing: '0.05em',
-                  }}>{label}</div>
-                );
-              })}
+              }}>HIER · Parcours éclaté</div>
+              {[
+                { label: 'Généraliste' }, { label: 'Spécialiste' }, { label: 'Laboratoire' },
+                { label: 'Hôpital' }, { label: 'Liste d’attente', pain: true }, { label: 'Délais', pain: true },
+              ].map((n, i) => (
+                <div key={i} style={{
+                  padding: '20px 26px',
+                  background: n.pain ? 'rgba(244,63,94,0.12)' : 'rgba(248,250,252,0.04)',
+                  border: `1px solid ${n.pain ? C.red + '88' : C.line}`,
+                  borderRadius: 10,
+                  fontFamily: 'Inter', fontSize: 16, fontWeight: n.pain ? 500 : 300,
+                  color: n.pain ? C.red : C.whiteDim, letterSpacing: '0.05em',
+                }}>{n.label}</div>
+              ))}
             </div>
             <div style={{
-              position: 'absolute', left: '50%', top: 640,
+              position: 'absolute', left: '50%', top: 660,
               transform: `translate(-50%, ${(1 - clamp((t - 2.5) / 1.2, 0, 1)) * 30}px) scale(${0.92 + clamp((t - 2.5) / 1.2, 0, 1) * 0.08})`,
               opacity: clamp((t - 2.5) / 1.2, 0, 1) * (1 - oldRoleOut),
               fontFamily: 'Inter', fontSize: 22, color: C.whiteDim, fontStyle: 'italic',
@@ -90,11 +102,11 @@ function Scene12Authors({ start, end }) {
               letterSpacing: '0.01em',
               whiteSpace: 'nowrap',
             }}>
-              Une analyse demandée. Un résultat rendu. <span style={{ color: C.gold, fontStyle: 'normal', fontWeight: 500 }}>Pas de stratégie.</span> <span style={{ color: C.gold, fontStyle: 'normal', fontWeight: 500 }}>Pas de pilotage.</span>
+              Un parcours éclaté. Des <span style={{ color: C.red, fontStyle: 'normal', fontWeight: 500 }}>délais.</span> Des <span style={{ color: C.red, fontStyle: 'normal', fontWeight: 500 }}>angles morts.</span>
             </div>
 
-            {/* PHASE 2 — "DEMAIN": biologist at center, tools and domains orbiting */}
-            {/* Central biologist cockpit */}
+            {/* PHASE 2 — "AUJOURD'HUI": the app at center, tools and services orbiting */}
+            {/* Central app cockpit */}
             <div style={{
               position: 'absolute', left: 960, top: 660,
               transform: `translate(-50%, -50%) scale(${0.4 + cockpitIn * 0.6})`,
@@ -103,12 +115,12 @@ function Scene12Authors({ start, end }) {
             }}>
               <svg width="500" height="500" viewBox="0 0 500 500" style={{ overflow: 'visible' }}>
                 <defs>
-                  <radialGradient id="bioCore" cx="0.5" cy="0.5">
+                  <radialGradient id="appCore" cx="0.5" cy="0.5">
                     <stop offset="0%" stopColor={C.gold} stopOpacity="0.9" />
                     <stop offset="60%" stopColor={C.gold} stopOpacity="0.3" />
                     <stop offset="100%" stopColor={C.gold} stopOpacity="0" />
                   </radialGradient>
-                  <linearGradient id="bioRing" x1="0" y1="0" x2="1" y2="1">
+                  <linearGradient id="appRing" x1="0" y1="0" x2="1" y2="1">
                     <stop offset="0%" stopColor={C.gold} />
                     <stop offset="100%" stopColor={C.cyan} />
                   </linearGradient>
@@ -123,25 +135,25 @@ function Scene12Authors({ start, end }) {
                   );
                 })}
                 {/* Core glow */}
-                <circle cx="250" cy="250" r="180" fill="url(#bioCore)" />
-                {/* Hexagonal frame (laboratory motif) */}
+                <circle cx="250" cy="250" r="180" fill="url(#appCore)" />
+                {/* Hexagonal command frame */}
                 <polygon points="250,90 380,165 380,335 250,410 120,335 120,165"
-                         fill="none" stroke="url(#bioRing)" strokeWidth="2" opacity="0.9"
+                         fill="none" stroke="url(#appRing)" strokeWidth="2" opacity="0.9"
                          transform={`rotate(${t * 6} 250 250)`} />
                 <polygon points="250,120 350,180 350,320 250,380 150,320 150,180"
                          fill="rgba(8,15,40,0.7)" stroke={C.gold} strokeWidth="1.5"
                          transform={`rotate(${-t * 4} 250 250)`} />
-                {/* Microscope / atom icon center */}
+                {/* Phone glyph at the center */}
                 <g transform="translate(250 250)">
-                  {/* Atom orbits */}
-                  <ellipse cx="0" cy="0" rx="60" ry="22" fill="none" stroke={C.cyan} strokeWidth="1.5" opacity="0.7"
-                           transform={`rotate(${t * 30})`} />
-                  <ellipse cx="0" cy="0" rx="60" ry="22" fill="none" stroke={C.gold} strokeWidth="1.5" opacity="0.7"
-                           transform={`rotate(${60 + t * 30})`} />
-                  <ellipse cx="0" cy="0" rx="60" ry="22" fill="none" stroke={C.cyan} strokeWidth="1.5" opacity="0.7"
-                           transform={`rotate(${120 + t * 30})`} />
-                  <circle cx="0" cy="0" r="14" fill={C.gold} />
-                  <circle cx="0" cy="0" r="14" fill="none" stroke={C.white} strokeWidth="1" />
+                  <rect x="-46" y="-78" width="92" height="156" rx="16" fill="rgba(8,15,40,0.92)" stroke={C.gold} strokeWidth="2.5" />
+                  <rect x="-46" y="-78" width="92" height="156" rx="16" fill="none" stroke={C.cyan} strokeWidth="1" opacity="0.5" />
+                  <line x1="-12" y1="-68" x2="12" y2="-68" stroke={C.gold} strokeWidth="3" strokeLinecap="round" />
+                  {/* heartbeat */}
+                  <path d="M -34 4 L -16 4 L -8 -20 L 2 28 L 10 -8 L 18 4 L 34 4"
+                        fill="none" stroke={C.red} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+                  {/* score chip */}
+                  <rect x="-32" y="40" width="64" height="22" rx="6" fill={C.gold} opacity="0.92" />
+                  <text x="0" y="55" textAnchor="middle" fill={C.bg0} fontFamily="JetBrains Mono, monospace" fontSize="11" fontWeight="700">BSD 42</text>
                 </g>
               </svg>
               {/* Label under */}
@@ -150,7 +162,7 @@ function Scene12Authors({ start, end }) {
                 transform: 'translateX(-50%)', textAlign: 'center',
                 fontFamily: 'Inter', whiteSpace: 'nowrap',
               }}>
-                <div style={{ fontSize: 28, fontWeight: 400, color: C.white, letterSpacing: '0.05em' }}>LE BIOLOGISTE</div>
+                <div style={{ fontSize: 28, fontWeight: 400, color: C.white, letterSpacing: '0.05em' }}>L’APPLICATION</div>
                 <div style={{ fontSize: 11, fontFamily: 'JetBrains Mono, monospace', color: C.gold, letterSpacing: '0.4em', marginTop: 6 }}>· PILOTE ·</div>
               </div>
             </div>
@@ -182,7 +194,7 @@ function Scene12Authors({ start, end }) {
               );
             })}
 
-            {/* Domains — outer ring */}
+            {/* Services orchestrated — outer ring connectors */}
             <svg width="1920" height="1080" style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
               {domains.map((d, i) => {
                 const a = (d.angle / domains.length) * Math.PI * 2 - Math.PI / 2 - t * 0.1;
@@ -236,15 +248,15 @@ function Scene12Authors({ start, end }) {
               );
             })}
 
-            {/* DEMAIN label */}
+            {/* AUJOURD'HUI label */}
             <div style={{
-              position: 'absolute', left: 96, top: 320,
+              position: 'absolute', left: 96, top: 360,
               opacity: orbitIn,
               fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.gold,
               letterSpacing: '0.3em', textTransform: 'uppercase',
               writingMode: 'vertical-rl', transform: 'rotate(180deg)',
               border: `1px solid ${C.gold}55`, padding: '12px 8px',
-            }}>DEMAIN · PILOTE ACTIF</div>
+            }}>AUJOURD’HUI · L’APP PILOTE</div>
 
             {/* Bottom manifesto */}
             <div style={{
@@ -256,7 +268,7 @@ function Scene12Authors({ start, end }) {
               fontFamily: 'Inter', fontSize: 19, color: C.white, fontWeight: 300,
               textAlign: 'center', letterSpacing: '0.02em', lineHeight: 1.4,
             }}>
-              Au cœur de l'écosystème : <span style={{ color: C.gold, fontWeight: 500, fontStyle: 'italic' }}>le biologiste orchestre</span> · IA, capteurs, biomarqueurs, score, plan de prévention <span style={{ color: C.cyan }}>— bien au-delà du cardiovasculaire.</span>
+              Au centre : <span style={{ color: C.gold, fontWeight: 500, fontStyle: 'italic' }}>l’application orchestre tout</span> · IA, capteurs, score, réseau d’experts de renommée internationale — <span style={{ color: C.cyan }}>RDV garantis, zéro liste d’attente, tout dans votre téléphone, validé par des médecins.</span>
             </div>
           </div>
         );

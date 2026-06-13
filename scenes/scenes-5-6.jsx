@@ -18,7 +18,7 @@ function Scene5Bilans({ start, end }) {
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
             <CosmicBackdrop hue="gold" />
-            <SectionTag index="04" label="3 bilans · médecine de précision" color={C.gold} />
+            <SectionTag index="05" label="3 bilans · médecine de précision" color={C.gold} />
 
             <div style={{
               position: 'absolute', left: 96, top: 180, right: 96,
@@ -85,7 +85,7 @@ function Scene6Synergy({ start, end }) {
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
             <CosmicBackdrop hue="red" />
-            <SectionTag index="05" label="Innovation propriétaire" color={C.red} />
+            <SectionTag index="06" label="Innovation propriétaire" color={C.red} />
 
             <div style={{
               position: 'absolute', left: 96, top: 180,

@@ -15,7 +15,7 @@ function Scene7Journey({ start, end }) {
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
             <CosmicBackdrop hue="cyan" />
-            <SectionTag index="06" label="Parcours utilisateur · 4 étapes" color={C.cyan} />
+            <SectionTag index="13" label="Parcours utilisateur · 4 étapes" color={C.cyan} />
 
             <div style={{
               position: 'absolute', left: 96, top: 180,
@@ -144,10 +144,10 @@ function Scene8Outro({ start, end }) {
                 background: 'rgba(34,211,238,0.05)',
                 boxShadow: `0 0 40px rgba(34,211,238,0.3)`,
               }}>
-                Score BSD  →  SilentCheck
+                Votre compagnon de suivi validé
               </div>
               <div style={{ fontSize: 16, color: C.whiteDim, fontWeight: 300 }}>
-                Connaissez votre risque. Protégez votre avenir.
+                Le score n'est que le début — l'app vous suit, vos médecins vous pilotent.
               </div>
             </div>
 
