@@ -49,7 +49,7 @@ function Scene1Intro({ start, end }) {
               color: C.cyan,
               textTransform: 'uppercase',
             }}>
-              Stratification du risque cardiovasculaire
+              Compagnon de suivi santé · piloté par des médecins
             </div>
 
             {/* Tagline */}

@@ -18,7 +18,7 @@ function Scene3Heart({ start, end }) {
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
             <CosmicBackdrop hue="cyan" />
-            <SectionTag index="02" label="15 biomarqueurs · tableau de bord intérieur" color={C.cyan} />
+            <SectionTag index="04" label="15 biomarqueurs · tableau de bord intérieur" color={C.cyan} />
 
             <div style={{
               position: 'absolute', left: 96, top: 180, right: 96,

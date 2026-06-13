@@ -83,7 +83,7 @@ function Scene9Mockups({ start, end }) {
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
             <CosmicBackdrop hue="cyan" />
-            <SectionTag index="07" label="Côté patient · trois écrans clés" color={C.cyan} />
+            <SectionTag index="12" label="Côté patient · trois écrans clés" color={C.cyan} />
 
             <div style={{
               position: 'absolute', left: 96, top: 180,
@@ -160,7 +160,7 @@ function Scene10Bilan({ start, end }) {
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
             <CosmicBackdrop hue="gold" />
-            <SectionTag index="08" label="Restitution assistée par IA · médecine de prévention 21ᵉ siècle" color={C.gold} />
+            <SectionTag index="14" label="IA bien-être · sous contrôle médical" color={C.gold} />
 
             <div style={{
               position: 'absolute', left: 96, top: 160,
@@ -190,7 +190,7 @@ function Scene10Bilan({ start, end }) {
                 opacity: 0.6 + Math.sin(t * 4) * 0.4,
               }} />
               <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.white, letterSpacing: '0.25em' }}>
-                IA MÉDICALE · ANALYSE EN TEMPS RÉEL
+                IA BIEN-ÊTRE · SOUS CONTRÔLE MÉDICAL
               </span>
             </div>
 
@@ -235,7 +235,7 @@ function Scene10Bilan({ start, end }) {
               fontFamily: 'Inter', fontSize: 18, color: C.white, fontWeight: 300,
               textAlign: 'center', letterSpacing: '0.02em',
             }}>
-              La médecine du <span style={{ color: C.gold, fontWeight: 500 }}>21ᵉ siècle</span> n'est plus seulement curative — elle est <span style={{ color: C.cyan, fontStyle: 'italic' }}>personnalisée et préventive.</span>
+              L'IA <span style={{ color: C.gold, fontWeight: 500 }}>assiste</span>, le médecin <span style={{ color: C.cyan, fontWeight: 500 }}>décide.</span> Périmètre strictement <span style={{ color: C.cyan, fontStyle: 'italic' }}>bien-être & prévention</span> — jamais de diagnostic autonome.
             </div>
           </div>
         );
@@ -266,7 +266,7 @@ function Scene11Security({ start, end }) {
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
             <CosmicBackdrop hue="cyan" />
-            <SectionTag index="09" label="Confidentialité · consentement · conformité" color={C.cyan} />
+            <SectionTag index="15" label="Confidentialité · consentement · conformité" color={C.cyan} />
 
             <div style={{
               position: 'absolute', left: 96, top: 180,

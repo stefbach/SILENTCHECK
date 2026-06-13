@@ -37,7 +37,7 @@ function Scene12Authors({ start, end }) {
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0, overflow: 'hidden' }}>
             <CosmicBackdrop hue="gold" />
-            <SectionTag index="11" label="Le biologiste · pilote de la médecine de prévention" color={C.gold} />
+            <SectionTag index="16" label="Le biologiste · pilote de la médecine de prévention" color={C.gold} />
 
             {/* Title */}
             <div style={{
