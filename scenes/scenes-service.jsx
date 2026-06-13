@@ -80,7 +80,7 @@ function SceneStart({ start, end }) {
               fontFamily: 'Inter', fontSize: 22, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
               borderTop: `1px solid ${C.line}`, paddingTop: 20,
             }}>
-              Le point de départ d’un <span style={{ color: C.cyan, fontWeight: 500 }}>suivi continu</span> — pas un examen ponctuel.
+              Un check-up, c’est d’abord de la <span style={{ color: C.cyan, fontWeight: 500 }}>prévention cardiovasculaire</span> — obésité et mode de vie compris, le début d’un suivi continu.
             </div>
           </div>
         );
@@ -227,7 +227,7 @@ function SceneServices({ start, end }) {
               fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.whiteDim, letterSpacing: '0.12em',
             }}>
               <span>● Prise de RDV en 2 clics</span>
-              <span style={{ color: C.gold }}>● Réseau de partenaires sélectionnés</span>
+              <span style={{ color: C.gold }}>● RDV garantis · zéro liste d’attente</span>
               <span style={{ color: C.cyan }}>● Orientation validée par votre médecin</span>
             </div>
           </div>
@@ -267,7 +267,7 @@ function SceneConcierge({ start, end }) {
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
               Pensé pour ceux qui n’ont pas le temps <span style={{ fontStyle: 'italic', color: C.gold }}>d’être malades.</span><br/>
-              <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>Un suivi concierge pour chefs d’entreprise et cadres pressés.</span>
+              <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>Stress, sédentarité, repas d’affaires, dette de sommeil — un cœur exposé, en silence.</span>
             </div>
 
             {/* Executive dashboard phone */}
@@ -361,7 +361,7 @@ function SceneConcierge({ start, end }) {
               fontFamily: 'Inter', fontSize: 20, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
               borderTop: `1px solid ${C.gold}33`, paddingTop: 18,
             }}>
-              Votre santé pilotée comme votre agenda — <span style={{ color: C.gold, fontWeight: 500 }}>sans friction, sans perte de temps.</span>
+              Votre santé pilotée comme votre agenda — <span style={{ color: C.gold, fontWeight: 500 }}>RDV garantis, zéro liste d’attente, zéro perte de temps.</span>
             </div>
           </div>
         );
@@ -399,8 +399,8 @@ function SceneSecondAvis({ start, end }) {
 
         const steps = [
           { n: '01', title: 'Dossier transmis', desc: 'Vos résultats, sécurisés et anonymisés, partagés en un clic depuis l’app.', color: C.cyan },
-          { n: '02', title: 'Avis d’un expert de référence', desc: 'Un spécialiste du réseau, choisi pour votre cas, rend un second avis argumenté.', color: C.gold },
-          { n: '03', title: 'Coordonné par votre médecin', desc: 'Votre médecin SilentCheck intègre l’avis au plan d’action. Réponse sous quelques jours.', color: C.red },
+          { n: '02', title: 'Un expert de renommée internationale', desc: 'Un spécialiste de référence, choisi pour votre cas, rend un second avis argumenté — sans liste d’attente.', color: C.gold },
+          { n: '03', title: 'Coordonné par votre médecin', desc: 'Votre médecin SilentCheck intègre l’avis au plan d’action. RDV garanti, réponse en quelques jours.', color: C.red },
         ];
 
         return (
@@ -415,7 +415,7 @@ function SceneSecondAvis({ start, end }) {
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
               Un doute ? Un <span style={{ fontStyle: 'italic', color: C.cyan }}>deuxième regard,</span> en quelques jours.<br/>
-              <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>Un réseau de correspondants experts, en France et en Europe.</span>
+              <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>Un réseau de correspondants de renommée internationale — France et Europe.</span>
             </div>
 
             {/* network constellation */}
@@ -531,7 +531,7 @@ function SceneSecondAvis({ start, end }) {
               fontFamily: 'Inter', fontSize: 20, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
               borderTop: `1px solid ${C.line}`, paddingTop: 16,
             }}>
-              L’expertise du bon spécialiste, où qu’il soit — <span style={{ color: C.cyan, fontWeight: 500 }}>intégrée à l’app.</span>
+              Le bon expert, de renommée internationale — <span style={{ color: C.cyan, fontWeight: 500 }}>RDV garanti, zéro liste d’attente, depuis votre téléphone.</span>
             </div>
           </div>
         );
