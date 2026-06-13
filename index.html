@@ -1237,7 +1237,7 @@ function Scene1Intro({ start, end }) {
               color: C.cyan,
               textTransform: 'uppercase',
             }}>
-              Compagnon de suivi santé · piloté par des médecins
+              Une clinique virtuelle dans votre téléphone
             </div>
 
             {/* Tagline */}
@@ -1254,6 +1254,29 @@ function Scene1Intro({ start, end }) {
               « Le silence du corps n'est plus une fatalité. »
             </div>
 
+            {/* Positioning strap — a science-validated virtual clinic, not a coach app */}
+            <div style={{
+              position: 'absolute', left: '50%', top: '72%',
+              transform: `translate(-50%, ${(1 - taglineAppear) * 16}px)`,
+              opacity: taglineAppear,
+              display: 'flex', alignItems: 'center', gap: 14,
+              padding: '12px 26px',
+              border: `1px solid ${C.cyan}66`,
+              borderRadius: 100,
+              background: 'rgba(34,211,238,0.05)',
+              backdropFilter: 'blur(8px)',
+              boxShadow: `0 0 30px rgba(34,211,238,0.18)`,
+              fontFamily: 'JetBrains Mono, monospace', fontSize: 13,
+              letterSpacing: '0.18em', textTransform: 'uppercase',
+              color: C.whiteDim, whiteSpace: 'nowrap',
+            }}>
+              <span style={{ color: C.cyan, fontWeight: 600 }}>Validée par la science</span>
+              <span style={{ opacity: 0.4 }}>·</span>
+              <span>Pas une appli de coaching</span>
+              <span style={{ opacity: 0.4 }}>·</span>
+              <span>Pilotée par des médecins</span>
+            </div>
+
             {/* Bottom credits */}
             <div style={{
               position: 'absolute', left: '50%', bottom: 80,
@@ -1263,7 +1286,7 @@ function Scene1Intro({ start, end }) {
               fontFamily: 'Inter, sans-serif',
             }}>
               <div style={{ fontSize: 14, color: C.whiteDim, letterSpacing: '0.3em', textTransform: 'uppercase' }}>
-                Powered by <span style={{ color: C.gold, fontWeight: 600 }}>Score BSD v5.0</span>
+                Powered by <span style={{ color: C.gold, fontWeight: 600 }}>Score BSD v5.0</span> · 53 références · 4M+ patients
               </div>
             </div>
 
