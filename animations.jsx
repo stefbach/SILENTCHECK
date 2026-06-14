@@ -364,7 +364,9 @@ function Stage({
       // If the viewport is portrait, rotating the 16:9 stage to landscape
       // fills the screen far better (e.g. on phones). Only do it when it helps.
       const rot = Math.min(cw / height, ch / width);
-      const useRotate = ch > cw && rot > normal * 1.15;
+      // Rotate purely on orientation (portrait) — avoids flip-flopping when
+      // the mobile browser chrome resizes the viewport height.
+      const useRotate = ch > cw;
       setRotated(useRotate);
       setScale(Math.max(0.05, useRotate ? rot : normal));
     };
@@ -388,7 +390,9 @@ function Stage({
     }
     const step = (ts) => {
       if (lastTsRef.current == null) lastTsRef.current = ts;
-      const dt = (ts - lastTsRef.current) / 1000;
+      // Clamp dt so a stalled frame (common on mobile) plays as brief
+      // slow-motion instead of a visible time jump ("ça saute").
+      const dt = Math.min(0.05, (ts - lastTsRef.current) / 1000);
       lastTsRef.current = ts;
       setTime((t) => {
         let next = t + dt;

@@ -12,6 +12,11 @@
   body { font-family: 'Inter', system-ui, sans-serif; color: #f8fafc; -webkit-font-smoothing: antialiased; }
   * { box-sizing: border-box; }
 
+  /* Mobile performance: drop GPU-expensive frosted-glass blur on phones/tablets
+     to keep playback smooth (backdrop-filter is very costly on mobile GPUs). */
+  @media (max-width: 920px), (pointer: coarse) {
+    * { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+  }
 </style>
 </head>
 <body>
