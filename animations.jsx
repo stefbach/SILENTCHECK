@@ -79,6 +79,11 @@ const Easing = {
 // Clamp a value to [min, max]
 const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
 
+// Lite mode: on small/touch devices, reduce per-frame work (lighter backdrop,
+// fewer particles, throttled fps) so playback stays smooth instead of stuttering.
+const LITE = typeof window !== 'undefined' && typeof window.matchMedia === 'function' &&
+  (window.matchMedia('(max-width: 920px)').matches || window.matchMedia('(pointer: coarse)').matches);
+
 // interpolate([0, 0.5, 1], [0, 100, 50], ease?) -> fn(t)
 // Popmotion-style: linearly maps t across input keyframes to output values,
 // with optional easing per segment (single fn or array of fns).
@@ -346,6 +351,7 @@ function Stage({
   const canvasRef = React.useRef(null);
   const rafRef = React.useRef(null);
   const lastTsRef = React.useRef(null);
+  const accRef = React.useRef(0);
 
   // Persist playhead
   React.useEffect(() => {
@@ -364,7 +370,9 @@ function Stage({
       // If the viewport is portrait, rotating the 16:9 stage to landscape
       // fills the screen far better (e.g. on phones). Only do it when it helps.
       const rot = Math.min(cw / height, ch / width);
-      const useRotate = ch > cw && rot > normal * 1.15;
+      // Rotate purely on orientation (portrait) — avoids flip-flopping when
+      // the mobile browser chrome resizes the viewport height.
+      const useRotate = ch > cw;
       setRotated(useRotate);
       setScale(Math.max(0.05, useRotate ? rot : normal));
     };
@@ -386,18 +394,26 @@ function Stage({
       lastTsRef.current = null;
       return;
     }
+    const minFrame = LITE ? 1 / 32 : 0; // cap renders to ~32fps on mobile
     const step = (ts) => {
       if (lastTsRef.current == null) lastTsRef.current = ts;
-      const dt = (ts - lastTsRef.current) / 1000;
+      // Clamp dt so a stalled frame (common on mobile) plays as brief
+      // slow-motion instead of a visible time jump ("ça saute").
+      const dt = Math.min(0.05, (ts - lastTsRef.current) / 1000);
       lastTsRef.current = ts;
-      setTime((t) => {
-        let next = t + dt;
-        if (next >= duration) {
-          if (loop) next = next % duration;
-          else { next = duration; setPlaying(false); }
-        }
-        return next;
-      });
+      accRef.current += dt;
+      if (accRef.current >= minFrame) {
+        const adv = accRef.current;
+        accRef.current = 0;
+        setTime((t) => {
+          let next = t + adv;
+          if (next >= duration) {
+            if (loop) next = next % duration;
+            else { next = duration; setPlaying(false); }
+          }
+          return next;
+        });
+      }
       rafRef.current = requestAnimationFrame(step);
     };
     rafRef.current = requestAnimationFrame(step);
@@ -671,7 +687,7 @@ function IconButton({ children, onClick, title }) {
 
 
 Object.assign(window, {
-  Easing, interpolate, animate, clamp,
+  Easing, interpolate, animate, clamp, LITE,
   TimelineContext, useTime, useTimeline,
   Sprite, SpriteContext, useSprite,
   TextSprite, ImageSprite, RectSprite,
