@@ -3851,17 +3851,21 @@ function SceneBusinessModel({ start, end }) {
       {({ localTime }) => {
         const t = localTime;
         const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
-        const tiers = [
-          { name: 'Essentiel', price: '39', color: C.cyan,
-            items: ['App & Score BSD', 'Suivi capteurs en continu', 'IA bien-être', 'Coordination médicale', 'Accès réseau partenaires'] },
-          { name: 'Premium · Dirigeant', price: '149', color: C.gold, featured: true,
-            items: ['Tout l\'Essentiel, et :', 'Médecin référent dédié', 'Créneaux prioritaires', 'Second avis international', 'Concierge sans friction'] },
+        const planIn = clamp((t - 1.0) / 0.8, 0, 1);
+        const included = [
+          'App & Score BSD — validé scientifiquement',
+          'Suivi des capteurs connectés en continu',
+          'IA d\'aide à la lecture · sous contrôle médical',
+          'Médecin référent & coordination du parcours',
+          'Réseau de partenaires privilégiés · zéro liste d\'attente',
+          'Second avis international intégré',
+          'Concierge santé · zéro friction',
         ];
         const actes = [
-          { label: 'Téléconsultation généraliste', price: '25 €' },
-          { label: 'Consultation spécialiste', sub: 'cardio · ophtalmo · gynéco…', price: '60 €' },
-          { label: 'Bilan biologique', sub: 'socle / intermédiaire / complet', price: '59 / 99 / 159 €' },
-          { label: 'Imagerie · paraclinique', sub: 'sur indication médicale', price: 'tarif réseau' },
+          { label: 'Consultation généraliste', sub: 'accès & rapidité garantis', price: 'Au-dessus du tarif Sécu', color: C.gold },
+          { label: 'Consultation spécialiste', sub: 'cardio · ophtalmo · gynéco…', price: 'Au-dessus du tarif Sécu', color: C.gold },
+          { label: 'Biologie', sub: 'bilans ciblés', price: 'Tarif Sécu · remboursé', color: C.green },
+          { label: 'Imagerie · paraclinique', sub: 'sur indication médicale', price: 'Tarif Sécu · remboursé', color: C.green },
         ];
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
@@ -3869,85 +3873,72 @@ function SceneBusinessModel({ start, end }) {
             <SectionTag index="" label="Modèle économique" color={C.gold} />
 
             <div style={{
-              position: 'absolute', left: 96, top: 162, right: 96,
+              position: 'absolute', left: 96, top: 160, right: 96,
               opacity: titleIn, transform: `translateY(${(1 - titleIn) * 20}px)`,
               fontFamily: 'Inter', fontSize: 56, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
-              Un modèle <span style={{ fontStyle: 'italic', color: C.gold }}>simple et transparent.</span><br/>
-              <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>Un abonnement mensuel pour le service — les actes au juste prix.</span>
+              Un seul abonnement. <span style={{ fontStyle: 'italic', color: C.gold }}>Tout le service.</span><br/>
+              <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>149 € / mois, pour tous — sans option, sans surprise.</span>
             </div>
 
-            {/* LEFT — abonnement mensuel */}
-            <div style={{ position: 'absolute', left: 96, top: 380, width: 800 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
-                <div style={{ width: 28, height: 1, background: C.gold }} />
-                <span style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12, letterSpacing: '0.28em', color: C.gold, textTransform: 'uppercase' }}>Abonnement mensuel · le service</span>
-              </div>
-              <div style={{ display: 'flex', gap: 24 }}>
-                {tiers.map((tier, i) => {
-                  const cIn = clamp((t - 1.0 - i * 0.3) / 0.7, 0, 1);
-                  return (
-                    <div key={i} style={{
-                      width: 388, height: 420,
-                      transform: `translateY(${(1 - cIn) * 40}px) scale(${0.92 + cIn * 0.08})`, opacity: cIn,
-                    }}>
-                      <GlassCard x={0} y={0} w={388} h={420} border={`${tier.color}${tier.featured ? 'aa' : '55'}`}>
-                        <div style={{ padding: 30, height: '100%', display: 'flex', flexDirection: 'column' }}>
-                          <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12, letterSpacing: '0.2em', color: tier.color, textTransform: 'uppercase' }}>{tier.name}</div>
-                          <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginTop: 14 }}>
-                            <span style={{ fontFamily: 'Inter', fontSize: 72, fontWeight: 200, color: C.white, letterSpacing: '-0.04em' }}>{tier.price}</span>
-                            <span style={{ fontSize: 20, color: C.whiteDim }}>€ / mois</span>
-                          </div>
-                          <div style={{ borderTop: `1px solid ${tier.color}33`, marginTop: 18, paddingTop: 16, display: 'flex', flexDirection: 'column', gap: 11 }}>
-                            {tier.items.map((it, j) => (
-                              <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: j === 0 && tier.featured ? tier.color : C.whiteDim }}>
-                                <span style={{ color: tier.color, fontSize: 13 }}>▸</span>{it}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </GlassCard>
-                    </div>
-                  );
-                })}
-              </div>
+            {/* LEFT — single subscription */}
+            <div style={{ position: 'absolute', left: 96, top: 392, width: 780, opacity: planIn, transform: `translateY(${(1 - planIn) * 30}px)` }}>
+              <GlassCard x={0} y={0} w={780} h={548} border={`${C.gold}aa`}>
+                <div style={{ padding: 36, height: '100%', display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12, letterSpacing: '0.24em', color: C.gold, textTransform: 'uppercase' }}>Abonnement unique · pour tous</div>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginTop: 12 }}>
+                    <span style={{ fontFamily: 'Inter', fontSize: 92, fontWeight: 200, color: C.white, letterSpacing: '-0.04em' }}>149</span>
+                    <span style={{ fontSize: 24, color: C.whiteDim }}>€ / mois</span>
+                  </div>
+                  <div style={{ borderTop: `1px solid ${C.gold}33`, marginTop: 18, paddingTop: 20, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px 24px' }}>
+                    {included.map((it, j) => (
+                      <div key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: 14.5, color: C.whiteDim, lineHeight: 1.35 }}>
+                        <span style={{ color: C.green, fontSize: 14, marginTop: 1 }}>✓</span>{it}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </GlassCard>
             </div>
 
-            {/* RIGHT — à l'acte */}
-            <div style={{ position: 'absolute', right: 96, top: 380, width: 760 }}>
+            {/* RIGHT — billing of care */}
+            <div style={{ position: 'absolute', right: 96, top: 392, width: 760 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
                 <div style={{ width: 28, height: 1, background: C.cyan }} />
-                <span style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12, letterSpacing: '0.28em', color: C.cyan, textTransform: 'uppercase' }}>À l'acte · au juste prix</span>
+                <span style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12, letterSpacing: '0.26em', color: C.cyan, textTransform: 'uppercase' }}>Les soins · facturation transparente</span>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 13 }}>
                 {actes.map((a, i) => {
                   const aIn = clamp((t - 1.6 - i * 0.22) / 0.6, 0, 1);
                   return (
                     <div key={i} style={{
                       opacity: aIn, transform: `translateX(${(1 - aIn) * 30}px)`,
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20,
-                      padding: '18px 24px', borderRadius: 12,
-                      background: 'rgba(34,211,238,0.04)', border: `1px solid ${C.line}`,
+                      padding: '17px 24px', borderRadius: 12,
+                      background: `${a.color}0c`, border: `1px solid ${a.color}44`,
                     }}>
                       <div>
                         <div style={{ fontFamily: 'Inter', fontSize: 19, fontWeight: 500, color: C.white }}>{a.label}</div>
-                        {a.sub && <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.whiteDim, letterSpacing: '0.06em', marginTop: 4 }}>{a.sub}</div>}
+                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.whiteDim, letterSpacing: '0.06em', marginTop: 4 }}>{a.sub}</div>
                       </div>
-                      <div style={{ fontFamily: 'Inter', fontSize: 24, fontWeight: 300, color: C.cyan, whiteSpace: 'nowrap' }}>{a.price}</div>
+                      <div style={{ fontFamily: 'Inter', fontSize: 16, fontWeight: 500, color: a.color, whiteSpace: 'nowrap', textAlign: 'right' }}>{a.price}</div>
                     </div>
                   );
                 })}
               </div>
+              <div style={{ marginTop: 16, fontSize: 13, color: C.whiteDim, lineHeight: 1.5 }}>
+                Le dépassement sur les consultations finance l'<span style={{ color: C.gold }}>accès garanti et la rapidité</span>. Biologie et imagerie restent au <span style={{ color: C.green }}>tarif Sécu, remboursées</span>.
+              </div>
             </div>
 
             <div style={{
-              position: 'absolute', left: 96, right: 96, bottom: 46,
+              position: 'absolute', left: 96, right: 96, bottom: 44,
               opacity: clamp((t - 3.6) / 0.7, 0, 1),
-              fontFamily: 'Inter', fontSize: 19, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
-              borderTop: `1px solid ${C.gold}33`, paddingTop: 18,
+              fontFamily: 'Inter', fontSize: 18, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
+              borderTop: `1px solid ${C.gold}33`, paddingTop: 16,
             }}>
-              Abonnement = <span style={{ color: C.gold, fontWeight: 500 }}>service, accès & suivi</span> · actes facturés à l'unité, <span style={{ color: C.cyan, fontWeight: 500 }}>tarifs réseau négociés, zéro liste d'attente.</span>
+              <span style={{ color: C.cyan, fontWeight: 500 }}>100 % fondé sur la science validée</span> — aucune pseudoscience, aucun gadget marketing.
               <span style={{ display: 'block', fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: 'rgba(248,250,252,0.4)', letterSpacing: '0.12em', marginTop: 8 }}>Tarifs indicatifs · à valider</span>
             </div>
           </div>
