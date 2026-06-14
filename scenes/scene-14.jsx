@@ -45,9 +45,9 @@ function Scene14Hub({ start, end }) {
               fontFamily: 'Inter', fontSize: 56, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
-              Une app, tous vos capteurs.<br/>
+              Tout pilotable à distance.<br/>
               <span style={{ fontStyle: 'italic', fontSize: 32, fontWeight: 300, color: C.cyan }}>
-                Au laboratoire ou chez vous — toujours avec votre médecin.
+                Le présentiel, seulement quand un examen l'exige.
               </span>
             </div>
 
@@ -178,7 +178,7 @@ function Scene14Hub({ start, end }) {
             }}>
               <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.gold, letterSpacing: '0.3em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 12 }}>
                 <div style={{ width: 24, height: 1, background: C.gold }} />
-                Deux modes · une seule expérience
+                Distanciel d'abord · présentiel à la demande
               </div>
 
               {/* Mode 1: At home */}
@@ -195,13 +195,13 @@ function Scene14Hub({ start, end }) {
                     <path d="M 4 16 L 16 6 L 28 16 L 28 28 L 4 28 Z" fill="none" stroke={C.cyan} strokeWidth="2" strokeLinejoin="round" />
                     <path d="M 12 28 L 12 20 L 20 20 L 20 28" fill="none" stroke={C.cyan} strokeWidth="2" />
                   </svg>
-                  <div style={{ fontFamily: 'Inter', fontSize: 22, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>À domicile · 100 % distanciel</div>
+                  <div style={{ fontFamily: 'Inter', fontSize: 22, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>Tout à distance · le défaut</div>
                 </div>
                 <div style={{ fontSize: 13, color: C.whiteDim, lineHeight: 1.55, paddingLeft: 46 }}>
-                  Vidéo sécurisée · capteurs personnels synchronisés en temps réel · auto-prélèvement avec kit veineux livré · résultats restitués en téléconsultation.
+                  Généraliste en visio · capteurs synchronisés en temps réel · biologie à domicile (prélèvement chez vous) · résultats restitués en téléconsultation. Piloté à 100 % depuis l'app.
                 </div>
                 <div style={{ marginTop: 12, paddingLeft: 46, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                  {['Vidéo HD','Capteurs perso','Kit prélèvement','Livraison'].map((tag, i) => (
+                  {['Visio HD','Capteurs perso','Prélèvement à domicile','Pilotage app'].map((tag, i) => (
                     <span key={i} style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: C.cyan, padding: '4px 10px', border: `1px solid ${C.line}`, borderRadius: 100, background: 'rgba(34,211,238,0.05)' }}>{tag}</span>
                   ))}
                 </div>
@@ -223,13 +223,13 @@ function Scene14Hub({ start, end }) {
                     <circle cx="12" cy="22" r="1.5" fill={C.gold} />
                     <circle cx="18" cy="20" r="1.5" fill={C.gold} />
                   </svg>
-                  <div style={{ fontFamily: 'Inter', fontSize: 22, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>Laboratoire · médecin à distance</div>
+                  <div style={{ fontFamily: 'Inter', fontSize: 22, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>Présentiel à la demande</div>
                 </div>
                 <div style={{ fontSize: 13, color: C.whiteDim, lineHeight: 1.55, paddingLeft: 46 }}>
-                  Prélèvement sur place par un infirmier partenaire · médecin TiBok présent en visio · capteurs partenaires utilisés en cabine connectée · résultats poussés instantanément dans l'app.
+                  Uniquement si un examen paraclinique est nécessaire. Réseau de médecins référents et de partenaires privilégiés — zéro liste d'attente, résultats poussés instantanément dans l'app.
                 </div>
                 <div style={{ marginTop: 12, paddingLeft: 46, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                  {['Cabine connectée','Infirmier sur place','Médecin en visio','Sync temps réel'].map((tag, i) => (
+                  {['Médecin référent','Partenaires privilégiés','Zéro liste d\'attente','Examen paraclinique'].map((tag, i) => (
                     <span key={i} style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: C.gold, padding: '4px 10px', border: `1px solid ${C.gold}55`, borderRadius: 100, background: 'rgba(251,191,36,0.05)' }}>{tag}</span>
                   ))}
                 </div>
@@ -247,8 +247,8 @@ function Scene14Hub({ start, end }) {
               fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.whiteDim, letterSpacing: '0.15em',
             }}>
               <span>● Toutes les données chiffrées bout-en-bout</span>
-              <span style={{ color: C.cyan }}>● Médecin présent à chaque étape</span>
-              <span style={{ color: C.gold }}>● 1 score · 4 dimensions · zéro angle mort</span>
+              <span style={{ color: C.cyan }}>● Tout piloté depuis l'application</span>
+              <span style={{ color: C.gold }}>● Présentiel uniquement si examen paraclinique</span>
             </div>
           </div>
         );

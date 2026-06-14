@@ -102,12 +102,12 @@ function SceneServices({ start, end }) {
 
         const cx = 760, cy = 660;
         const services = [
-          { label: 'Cardiologue',     sub: 'Consultation · ECG · écho',          icon: '♥', color: C.red,  slot: 'Mar. 14h30' },
-          { label: 'Laboratoire',     sub: 'Prélèvement · bilan complémentaire', icon: '⬡', color: C.cyan, slot: 'Dès demain' },
-          { label: 'Radiologie',      sub: 'Coro-scanner · IRM · écho-doppler',  icon: '◎', color: C.gold, slot: 'Jeu. 9h00' },
-          { label: 'Diététicienne',   sub: 'Nutrition · programme alimentaire',  icon: '✦', color: C.cyan, slot: 'Visio · 18h' },
-          { label: 'Spécialistes',    sub: 'Endocrino · néphro · vasculaire',    icon: '◈', color: C.gold, slot: 'Sous 72h' },
-          { label: 'Activité adaptée', sub: 'Coach · APA · réentraînement',      icon: '∞', color: C.red,  slot: 'Programme' },
+          { label: 'Généraliste',    sub: 'Point d\'entrée · visio',         icon: '◉', img: 'generaliste.png', color: C.cyan, slot: 'Aujourd\'hui' },
+          { label: 'Biologie',       sub: 'Prélèvement à domicile possible', icon: '⬡', color: C.cyan, slot: 'Dès demain' },
+          { label: 'Cardiologue',    sub: 'Consultation · ECG · écho',       icon: '♥', img: 'cardiologue.png', color: C.red,  slot: 'Mar. 14h30' },
+          { label: 'Ophtalmologue',  sub: 'Fond d\'œil · rétinopathie',      icon: '◐', color: C.gold, slot: 'Jeu. 9h00' },
+          { label: 'Gynécologue',    sub: 'Suivi · prévention',              icon: '✦', color: C.gold, slot: 'Sous 72h' },
+          { label: 'Radiologie',     sub: 'Imagerie · paraclinique',         icon: '◎', color: C.red,  slot: 'Sur indication' },
         ];
 
         return (
@@ -121,8 +121,8 @@ function SceneServices({ start, end }) {
               fontFamily: 'Inter', fontSize: 56, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
-              Selon vos résultats, l’app <span style={{ fontStyle: 'italic', color: C.gold }}>orchestre votre parcours.</span><br/>
-              <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>Un seul endroit. Tous les bons interlocuteurs. Zéro errance.</span>
+              Tout part du généraliste et de la biologie — <span style={{ fontStyle: 'italic', color: C.gold }}>puis on décline.</span><br/>
+              <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>Cardiologue, ophtalmologue, gynécologue… orchestrés selon vos résultats.</span>
             </div>
 
             {/* connector lines from core to each service */}
@@ -160,9 +160,9 @@ function SceneServices({ start, end }) {
                 boxShadow: `0 0 70px ${C.gold}88, inset 0 0 30px rgba(255,255,255,0.15)`,
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center',
               }}>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.bg0, letterSpacing: '0.25em', fontWeight: 600 }}>VOS RÉSULTATS</div>
-                <div style={{ fontFamily: 'Inter', fontSize: 30, fontWeight: 500, color: C.bg0, marginTop: 6, letterSpacing: '-0.01em' }}>L’app vous oriente</div>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: C.bg0, opacity: 0.75, letterSpacing: '0.2em', marginTop: 6, textTransform: 'uppercase' }}>piloté par votre médecin</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.bg0, letterSpacing: '0.25em', fontWeight: 600 }}>POINT D'ENTRÉE</div>
+                <div style={{ fontFamily: 'Inter', fontSize: 26, fontWeight: 500, color: C.bg0, marginTop: 6, letterSpacing: '-0.01em' }}>Généraliste + biologie</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: C.bg0, opacity: 0.75, letterSpacing: '0.2em', marginTop: 6, textTransform: 'uppercase' }}>puis on décline · piloté par l'app</div>
               </div>
               {[0, 1, 2].map(i => {
                 const phase = (t * 0.7 + i * 0.6) % 2;
@@ -195,11 +195,17 @@ function SceneServices({ start, end }) {
                   padding: 16, zIndex: 5,
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <div style={{
-                      width: 38, height: 38, borderRadius: 9, flexShrink: 0,
-                      background: `${s.color}22`, border: `1px solid ${s.color}88`,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', color: s.color, fontSize: 18,
-                    }}>{s.icon}</div>
+                    {s.img ? (
+                      <div style={{ width: 42, height: 42, borderRadius: '50%', flexShrink: 0, overflow: 'hidden', border: `1.5px solid ${s.color}`, boxShadow: `0 0 12px ${s.color}66` }}>
+                        <img src={'assets/faces/' + s.img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                      </div>
+                    ) : (
+                      <div style={{
+                        width: 38, height: 38, borderRadius: 9, flexShrink: 0,
+                        background: `${s.color}22`, border: `1px solid ${s.color}88`,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', color: s.color, fontSize: 18,
+                      }}>{s.icon}</div>
+                    )}
                     <div style={{ minWidth: 0 }}>
                       <div style={{ fontFamily: 'Inter', fontSize: 18, fontWeight: 600, color: C.white, letterSpacing: '-0.01em' }}>{s.label}</div>
                       <div style={{ fontFamily: 'Inter', fontSize: 11, color: C.whiteDim, marginTop: 2, lineHeight: 1.3 }}>{s.sub}</div>
@@ -226,9 +232,9 @@ function SceneServices({ start, end }) {
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.whiteDim, letterSpacing: '0.12em',
             }}>
-              <span>● Prise de RDV en 2 clics</span>
-              <span style={{ color: C.gold }}>● RDV garantis · zéro liste d’attente</span>
-              <span style={{ color: C.cyan }}>● Orientation validée par votre médecin</span>
+              <span>● RDV garantis en 2 clics</span>
+              <span style={{ color: C.gold }}>● Partenaires privilégiés · zéro liste d’attente</span>
+              <span style={{ color: C.cyan }}>● Déplacement uniquement si examen paraclinique</span>
             </div>
           </div>
         );
@@ -266,13 +272,20 @@ function SceneConcierge({ start, end }) {
               fontFamily: 'Inter', fontSize: 56, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
-              Pensé pour ceux qui n’ont pas le temps <span style={{ fontStyle: 'italic', color: C.gold }}>d’être malades.</span><br/>
+              La 1ʳᵉ plateforme de prévention pour dirigeants <span style={{ fontStyle: 'italic', color: C.gold }}>exigeants et pressés.</span><br/>
               <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>Stress, sédentarité, repas d’affaires, dette de sommeil — un cœur exposé, en silence.</span>
+            </div>
+
+            {/* Executive persona portrait + subscription tag */}
+            <div style={{ position: 'absolute', left: 90, top: 444, opacity: phoneIn, transform: `translateY(${(1 - phoneIn) * 30}px)` }}>
+              <PortraitFrame src="assets/faces/dirigeante.png" color={C.gold} w={280} h={360} />
+              <div style={{ textAlign: 'center', marginTop: 14, fontFamily: 'Inter', fontSize: 16, color: C.white, fontWeight: 500 }}>Vous, pilote de votre santé</div>
+              <div style={{ textAlign: 'center', marginTop: 6, fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 10, letterSpacing: '0.2em', color: C.gold, textTransform: 'uppercase' }}>Abonnement premium</div>
             </div>
 
             {/* Executive dashboard phone */}
             <div style={{
-              position: 'absolute', left: 360, top: 680,
+              position: 'absolute', left: 560, top: 680,
               transform: `translate(-50%, -50%) perspective(1500px) rotateY(${Math.sin(t * 0.5) * 6}deg) scale(${0.7 + phoneIn * 0.3})`,
               opacity: phoneIn, transformStyle: 'preserve-3d',
             }}>
@@ -361,7 +374,7 @@ function SceneConcierge({ start, end }) {
               fontFamily: 'Inter', fontSize: 20, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
               borderTop: `1px solid ${C.gold}33`, paddingTop: 18,
             }}>
-              Votre santé pilotée comme votre agenda — <span style={{ color: C.gold, fontWeight: 500 }}>RDV garantis, zéro liste d’attente, zéro perte de temps.</span>
+              Un abonnement, tout piloté à distance — <span style={{ color: C.gold, fontWeight: 500 }}>RDV garantis, zéro liste d’attente, zéro perte de temps.</span>
             </div>
           </div>
         );

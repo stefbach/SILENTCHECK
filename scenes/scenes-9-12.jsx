@@ -235,7 +235,7 @@ function Scene10Bilan({ start, end }) {
               fontFamily: 'Inter', fontSize: 18, color: C.white, fontWeight: 300,
               textAlign: 'center', letterSpacing: '0.02em',
             }}>
-              L'IA <span style={{ color: C.gold, fontWeight: 500 }}>assiste</span>, le médecin <span style={{ color: C.cyan, fontWeight: 500 }}>décide.</span> Périmètre strictement <span style={{ color: C.cyan, fontStyle: 'italic' }}>bien-être & prévention</span> — jamais de diagnostic autonome.
+              L'IA <span style={{ color: C.gold, fontWeight: 500 }}>facilite la lecture de vos résultats</span> · l'application est le <span style={{ color: C.cyan, fontWeight: 500 }}>vecteur</span>, l'algorithme mathématique la <span style={{ color: C.cyan, fontWeight: 500 }}>boussole</span> — périmètre bien-être & prévention, validé par des médecins.
             </div>
           </div>
         );
