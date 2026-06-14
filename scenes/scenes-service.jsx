@@ -307,7 +307,7 @@ function SceneConcierge({ start, end }) {
                     <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: C.gold, letterSpacing: '0.25em' }}>PREMIUM</div>
                     <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: C.whiteDim }}>SilentCheck</div>
                   </div>
-                  <div style={{ fontSize: 15, color: C.white, fontWeight: 500 }}>Bonjour, Dr Bach</div>
+                  <div style={{ fontSize: 15, color: C.white, fontWeight: 500 }}>Bonjour, Dr Durand</div>
                   {/* score ring */}
                   <div style={{ alignSelf: 'center', position: 'relative', marginTop: 4 }}>
                     <svg width="120" height="120" viewBox="0 0 120 120">
