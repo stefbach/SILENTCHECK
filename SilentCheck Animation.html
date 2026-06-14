@@ -296,7 +296,7 @@
     // Full presentation — app & service-first arc.
     // Act 1: le point de départ (score) · Act 2: le moteur (science) ·
     // Act 3: la plateforme de service · Act 4: intelligence & confiance.
-    const TOTAL = 380;
+    const TOTAL = 398;
 
     function TimestampLabel() {
       const t = useTime();
@@ -326,16 +326,17 @@
             <Scene14Hub      start={162}   end={186}  />
             <SceneServices   start={186}   end={208}  />
             <SceneConcierge  start={208}   end={230}  />
-            <SceneSecondAvis start={230}   end={252}  />
-            <Scene9Mockups   start={252}   end={270}  />
-            <Scene7Journey   start={270}   end={288}  />
+            <SceneHumans     start={230}   end={248}  />
+            <SceneSecondAvis start={248}   end={270}  />
+            <Scene9Mockups   start={270}   end={288}  />
+            <Scene7Journey   start={288}   end={306}  />
             {/* Act 4 — Intelligence & confiance */}
-            <Scene10Bilan    start={288}   end={310}  />
-            <Scene11Security start={310}   end={330}  />
-            <Scene12Authors  start={330}   end={364}  />
-            <Scene8Outro     start={364}   end={380}  />
+            <Scene10Bilan    start={306}   end={328}  />
+            <Scene11Security start={328}   end={348}  />
+            <Scene12Authors  start={348}   end={382}  />
+            <Scene8Outro     start={382}   end={398}  />
             {/* Global immersive HUD — rendered on top of every scene */}
-            <ImmersiveHUD boundaries={[18, 38, 58, 80, 100, 120, 140, 162, 186, 208, 230, 252, 270, 288, 310, 330, 364]} />
+            <ImmersiveHUD boundaries={[18, 38, 58, 80, 100, 120, 140, 162, 186, 208, 230, 248, 270, 288, 306, 328, 348, 382]} />
           </Stage>
         </div>
       );
