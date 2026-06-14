@@ -6,275 +6,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&family=Orbitron:wght@400;500;600;700;800&family=Exo+2:wght@300;400;500;600&display=swap" />
 <style>
   html, body, #root { margin: 0; padding: 0; height: 100%; background: #020617; overflow: hidden; }
   body { font-family: 'Inter', system-ui, sans-serif; color: #f8fafc; -webkit-font-smoothing: antialiased; }
   * { box-sizing: border-box; }
 
-  /* Audio controls floating above the scrubber */
-  .sc-audio {
-    position: fixed; top: 16px; right: 16px; z-index: 100;
-    display: flex; align-items: center; gap: 10px;
-    padding: 10px 14px;
-    background: rgba(2, 6, 23, 0.7);
-    border: 1px solid rgba(34, 211, 238, 0.3);
-    border-radius: 100px;
-    backdrop-filter: blur(12px);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; letter-spacing: 0.15em; color: #f8fafc;
-  }
-  .sc-audio button {
-    background: transparent; border: none; color: #22d3ee;
-    cursor: pointer; padding: 4px 8px; border-radius: 4px;
-    font-family: inherit; font-size: 14px;
-    transition: background 0.15s;
-  }
-  .sc-audio button:hover { background: rgba(34, 211, 238, 0.15); }
-  .sc-audio input[type="range"] {
-    width: 80px; accent-color: #22d3ee;
-  }
 </style>
 </head>
 <body>
   <div id="root"></div>
 
-  <!-- Ambient music: generated live via Web Audio API (no external deps) -->
-  <div class="sc-audio">
-    <button id="sc-music-toggle" aria-label="Lecture/pause musique">▶</button>
-    <span id="sc-music-label">AMBIANCE</span>
-    <input id="sc-music-vol" type="range" min="0" max="100" value="35" />
-  </div>
 
-  <script>
-    (function () {
-      const btn = document.getElementById('sc-music-toggle');
-      const vol = document.getElementById('sc-music-vol');
-      let ctx, masterGain, nodes = [], timers = [], playing = false;
-
-      // Note frequency helper (A4 = 440)
-      const N = (semisFromA4) => 440 * Math.pow(2, semisFromA4 / 12);
-      // Semitone offsets from A4 for note names we use
-      const NOTE = {
-        'C3': -21, 'D3': -19, 'E3': -17, 'F3': -16, 'G3': -14, 'A3': -12, 'B3': -10,
-        'C4': -9, 'D4': -7, 'E4': -5, 'F4': -4, 'G4': -2, 'A4': 0, 'B4': 2,
-        'C5': 3, 'D5': 5, 'E5': 7, 'F5': 8, 'G5': 10, 'A5': 12, 'B5': 14,
-        'C6': 15, 'D6': 17, 'E6': 19,
-      };
-      const f = (name) => N(NOTE[name]);
-
-      function start() {
-        if (playing) return;
-        ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
-        if (ctx.state === 'suspended') ctx.resume();
-
-        masterGain = ctx.createGain();
-        masterGain.gain.value = parseInt(vol.value, 10) / 100 * 0.45;
-        masterGain.connect(ctx.destination);
-
-        // Subtle reverb via convolver (impulse response built in code)
-        const convolver = ctx.createConvolver();
-        const irLen = ctx.sampleRate * 2.5;
-        const ir = ctx.createBuffer(2, irLen, ctx.sampleRate);
-        for (let ch = 0; ch < 2; ch++) {
-          const data = ir.getChannelData(ch);
-          for (let i = 0; i < irLen; i++) {
-            data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / irLen, 2.4);
-          }
-        }
-        convolver.buffer = ir;
-        const wet = ctx.createGain(); wet.gain.value = 0.5;
-        const dry = ctx.createGain(); dry.gain.value = 0.7;
-        convolver.connect(wet).connect(masterGain);
-        dry.connect(masterGain);
-
-        // Soft warm pad voice — slowly evolving chord
-        function startPad(note, level) {
-          const osc1 = ctx.createOscillator();
-          const osc2 = ctx.createOscillator();
-          osc1.type = 'sine';
-          osc2.type = 'triangle';
-          osc1.frequency.value = f(note);
-          osc2.frequency.value = f(note);
-          osc2.detune.value = 7;
-          // Lowpass for warmth
-          const lp = ctx.createBiquadFilter();
-          lp.type = 'lowpass'; lp.frequency.value = 1400; lp.Q.value = 0.6;
-          const g = ctx.createGain(); g.gain.value = 0;
-          osc1.connect(lp); osc2.connect(lp); lp.connect(g);
-          g.connect(dry); g.connect(convolver);
-          // Slow amp LFO for breathing
-          const lfo = ctx.createOscillator();
-          lfo.frequency.value = 0.07;
-          const lfoG = ctx.createGain();
-          lfoG.gain.value = level * 0.35;
-          lfo.connect(lfoG).connect(g.gain);
-          // Bias gain
-          const now = ctx.currentTime;
-          g.gain.setValueAtTime(0, now);
-          g.gain.linearRampToValueAtTime(level, now + 6);
-          osc1.start(); osc2.start(); lfo.start();
-          nodes.push(osc1, osc2, lfo);
-          return { osc1, osc2, g, lp };
-        }
-
-        // Chord progression in C major: I – V – vi – IV (Cmaj9 – Gadd9 – Am11 – Fmaj7)
-        // Voiced low for pad
-        const padChords = [
-          ['C3', 'G3', 'E4', 'D5'],   // Cmaj9
-          ['G3', 'D4', 'B4', 'A4'],   // Gadd9
-          ['A3', 'E4', 'C5', 'B4'],   // Am11
-          ['F3', 'C4', 'A4', 'E5'],   // Fmaj7
-        ];
-        // Higher voices for melody arpeggios — pentatonic-ish notes per chord
-        const arpNotes = [
-          ['C5', 'E5', 'G5', 'B5', 'D6', 'G5', 'E5', 'C5'],
-          ['G4', 'B4', 'D5', 'F5', 'A5', 'D5', 'B4', 'G4'],
-          ['A4', 'C5', 'E5', 'G5', 'B5', 'E5', 'C5', 'A4'],
-          ['F4', 'A4', 'C5', 'E5', 'G5', 'C5', 'A4', 'F4'],
-        ];
-        // Bass — root then 5th
-        const bassNotes = [['C3', 'G3'], ['G3', 'D4'], ['A3', 'E4'], ['F3', 'C4']];
-
-        const beat = 0.5;          // seconds per arp note (gentle, ~120 bpm 8ths)
-        const chordBars = 4;        // 4 beats per chord
-        const chordDur = beat * chordBars * 2;  // 4 seconds per chord
-        const cycleDur = chordDur * padChords.length;
-
-        let chordIndex = 0;
-        const padVoices = [];
-
-        function playChord(idx) {
-          const chord = padChords[idx];
-          // Fade out previous voices
-          padVoices.forEach(v => {
-            v.g.gain.cancelScheduledValues(ctx.currentTime);
-            v.g.gain.linearRampToValueAtTime(0, ctx.currentTime + 1.5);
-            setTimeout(() => { try { v.osc1.stop(); v.osc2.stop(); } catch(e){} }, 1700);
-          });
-          padVoices.length = 0;
-          // Start new pad voices
-          chord.forEach((note, i) => {
-            padVoices.push(startPad(note, 0.06 + (i === 0 ? 0.02 : 0)));
-          });
-
-          // Schedule arpeggio notes for this chord
-          const arps = arpNotes[idx];
-          arps.forEach((note, i) => {
-            const when = ctx.currentTime + i * beat;
-            playPluck(note, when, 0.09);
-          });
-
-          // Bass
-          const basses = bassNotes[idx];
-          basses.forEach((note, i) => {
-            const when = ctx.currentTime + i * (chordDur / 2);
-            playBass(note, when, 0.18);
-          });
-        }
-
-        // Soft pluck — sine with quick attack and decay (like a music box / harp)
-        function playPluck(note, when, level) {
-          const osc = ctx.createOscillator();
-          osc.type = 'sine';
-          osc.frequency.value = f(note);
-          // Tiny detuned partial for shimmer
-          const osc2 = ctx.createOscillator();
-          osc2.type = 'sine';
-          osc2.frequency.value = f(note) * 2;
-          const g = ctx.createGain();
-          const g2 = ctx.createGain();
-          g.gain.value = 0; g2.gain.value = 0;
-          osc.connect(g); osc2.connect(g2);
-          g.connect(dry); g.connect(convolver);
-          g2.connect(convolver);
-          g.gain.setValueAtTime(0, when);
-          g.gain.linearRampToValueAtTime(level, when + 0.01);
-          g.gain.exponentialRampToValueAtTime(0.0001, when + 2.2);
-          g2.gain.setValueAtTime(0, when);
-          g2.gain.linearRampToValueAtTime(level * 0.18, when + 0.01);
-          g2.gain.exponentialRampToValueAtTime(0.0001, when + 1.0);
-          osc.start(when); osc2.start(when);
-          osc.stop(when + 2.4); osc2.stop(when + 1.2);
-        }
-
-        // Soft bass — sine with slower envelope
-        function playBass(note, when, level) {
-          const osc = ctx.createOscillator();
-          osc.type = 'sine';
-          osc.frequency.value = f(note);
-          const lp = ctx.createBiquadFilter();
-          lp.type = 'lowpass'; lp.frequency.value = 600;
-          const g = ctx.createGain();
-          g.gain.value = 0;
-          osc.connect(lp).connect(g).connect(dry);
-          g.gain.setValueAtTime(0, when);
-          g.gain.linearRampToValueAtTime(level, when + 0.05);
-          g.gain.exponentialRampToValueAtTime(0.0001, when + 1.8);
-          osc.start(when); osc.stop(when + 2.0);
-        }
-
-        // Kick off progression and loop
-        playChord(0);
-        chordIndex = 1;
-        const progTimer = setInterval(() => {
-          if (!ctx) return;
-          playChord(chordIndex);
-          chordIndex = (chordIndex + 1) % padChords.length;
-        }, chordDur * 1000);
-        timers.push(progTimer);
-
-        // Occasional high shimmer bell — but rarer and gentler
-        const bellTimer = setInterval(() => {
-          if (!ctx) return;
-          const bell = ctx.createOscillator();
-          bell.type = 'sine';
-          const bellFreqs = [f('C6'), f('E6'), f('D6'), f('G5')];
-          bell.frequency.value = bellFreqs[Math.floor(Math.random() * bellFreqs.length)];
-          const bg = ctx.createGain();
-          bg.gain.value = 0;
-          bell.connect(bg).connect(convolver);
-          const now = ctx.currentTime;
-          bg.gain.setValueAtTime(0, now);
-          bg.gain.linearRampToValueAtTime(0.025, now + 0.6);
-          bg.gain.exponentialRampToValueAtTime(0.0001, now + 5);
-          bell.start(now);
-          bell.stop(now + 5.2);
-        }, 11000);
-        timers.push(bellTimer);
-
-        playing = true;
-        btn.textContent = '❚❚';
-      }
-
-      function stop() {
-        if (!playing) return;
-        timers.forEach(t => clearInterval(t)); timers = [];
-        nodes.forEach(n => { try { n.stop && n.stop(); } catch (e) {} });
-        nodes = [];
-        if (masterGain) {
-          masterGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.4);
-          setTimeout(() => { try { masterGain.disconnect(); } catch (e) {} }, 450);
-        }
-        playing = false;
-        btn.textContent = '▶';
-      }
-
-      btn.addEventListener('click', () => playing ? stop() : start());
-      vol.addEventListener('input', (e) => {
-        if (masterGain) masterGain.gain.value = parseInt(e.target.value, 10) / 100 * 0.45;
-      });
-
-      // Auto-start on first user gesture
-      const tryStart = () => {
-        if (!playing) start();
-        document.removeEventListener('click', tryStart);
-        document.removeEventListener('keydown', tryStart);
-      };
-      document.addEventListener('click', tryStart);
-      document.addEventListener('keydown', tryStart);
-    })();
-  </script>
 
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
@@ -296,7 +39,7 @@
     // Full presentation — app & service-first arc.
     // Act 1: le point de départ (score) · Act 2: le moteur (science) ·
     // Act 3: la plateforme de service · Act 4: intelligence & confiance.
-    const TOTAL = 380;
+    const TOTAL = 418;
 
     function TimestampLabel() {
       const t = useTime();
@@ -326,14 +69,18 @@
             <Scene14Hub      start={162}   end={186}  />
             <SceneServices   start={186}   end={208}  />
             <SceneConcierge  start={208}   end={230}  />
-            <SceneSecondAvis start={230}   end={252}  />
-            <Scene9Mockups   start={252}   end={270}  />
-            <Scene7Journey   start={270}   end={288}  />
+            <SceneHumans     start={230}   end={248}  />
+            <SceneSecondAvis start={248}   end={270}  />
+            <SceneBusinessModel start={270} end={290} />
+            <Scene9Mockups   start={290}   end={308}  />
+            <Scene7Journey   start={308}   end={326}  />
             {/* Act 4 — Intelligence & confiance */}
-            <Scene10Bilan    start={288}   end={310}  />
-            <Scene11Security start={310}   end={330}  />
-            <Scene12Authors  start={330}   end={364}  />
-            <Scene8Outro     start={364}   end={380}  />
+            <Scene10Bilan    start={326}   end={348}  />
+            <Scene11Security start={348}   end={368}  />
+            <Scene12Authors  start={368}   end={402}  />
+            <Scene8Outro     start={402}   end={418}  />
+            {/* Global immersive HUD — rendered on top of every scene */}
+            <ImmersiveHUD boundaries={[18, 38, 58, 80, 100, 120, 140, 162, 186, 208, 230, 248, 270, 290, 308, 326, 348, 368, 402]} />
           </Stage>
         </div>
       );

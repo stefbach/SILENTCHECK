@@ -102,12 +102,12 @@ function SceneServices({ start, end }) {
 
         const cx = 760, cy = 660;
         const services = [
-          { label: 'Cardiologue',     sub: 'Consultation · ECG · écho',          icon: '♥', color: C.red,  slot: 'Mar. 14h30' },
-          { label: 'Laboratoire',     sub: 'Prélèvement · bilan complémentaire', icon: '⬡', color: C.cyan, slot: 'Dès demain' },
-          { label: 'Radiologie',      sub: 'Coro-scanner · IRM · écho-doppler',  icon: '◎', color: C.gold, slot: 'Jeu. 9h00' },
-          { label: 'Diététicienne',   sub: 'Nutrition · programme alimentaire',  icon: '✦', color: C.cyan, slot: 'Visio · 18h' },
-          { label: 'Spécialistes',    sub: 'Endocrino · néphro · vasculaire',    icon: '◈', color: C.gold, slot: 'Sous 72h' },
-          { label: 'Activité adaptée', sub: 'Coach · APA · réentraînement',      icon: '∞', color: C.red,  slot: 'Programme' },
+          { label: 'Généraliste',    sub: 'Point d\'entrée · visio',         icon: '◉', img: 'generaliste.png', color: C.cyan, slot: 'Aujourd\'hui' },
+          { label: 'Biologie',       sub: 'Prélèvement à domicile possible', icon: '⬡', color: C.cyan, slot: 'Dès demain' },
+          { label: 'Cardiologue',    sub: 'Consultation · ECG · écho',       icon: '♥', img: 'cardiologue.png', color: C.red,  slot: 'Mar. 14h30' },
+          { label: 'Ophtalmologue',  sub: 'Fond d\'œil · rétinopathie',      icon: '◐', color: C.gold, slot: 'Jeu. 9h00' },
+          { label: 'Gynécologue',    sub: 'Suivi · prévention',              icon: '✦', color: C.gold, slot: 'Sous 72h' },
+          { label: 'Radiologie',     sub: 'Imagerie · paraclinique',         icon: '◎', color: C.red,  slot: 'Sur indication' },
         ];
 
         return (
@@ -121,8 +121,8 @@ function SceneServices({ start, end }) {
               fontFamily: 'Inter', fontSize: 56, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
-              Selon vos résultats, l’app <span style={{ fontStyle: 'italic', color: C.gold }}>orchestre votre parcours.</span><br/>
-              <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>Un seul endroit. Tous les bons interlocuteurs. Zéro errance.</span>
+              Tout part du généraliste et de la biologie — <span style={{ fontStyle: 'italic', color: C.gold }}>puis on décline.</span><br/>
+              <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>Cardiologue, ophtalmologue, gynécologue… orchestrés selon vos résultats.</span>
             </div>
 
             {/* connector lines from core to each service */}
@@ -160,9 +160,9 @@ function SceneServices({ start, end }) {
                 boxShadow: `0 0 70px ${C.gold}88, inset 0 0 30px rgba(255,255,255,0.15)`,
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center',
               }}>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.bg0, letterSpacing: '0.25em', fontWeight: 600 }}>VOS RÉSULTATS</div>
-                <div style={{ fontFamily: 'Inter', fontSize: 30, fontWeight: 500, color: C.bg0, marginTop: 6, letterSpacing: '-0.01em' }}>L’app vous oriente</div>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: C.bg0, opacity: 0.75, letterSpacing: '0.2em', marginTop: 6, textTransform: 'uppercase' }}>piloté par votre médecin</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.bg0, letterSpacing: '0.25em', fontWeight: 600 }}>POINT D'ENTRÉE</div>
+                <div style={{ fontFamily: 'Inter', fontSize: 26, fontWeight: 500, color: C.bg0, marginTop: 6, letterSpacing: '-0.01em' }}>Généraliste + biologie</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: C.bg0, opacity: 0.75, letterSpacing: '0.2em', marginTop: 6, textTransform: 'uppercase' }}>puis on décline · piloté par l'app</div>
               </div>
               {[0, 1, 2].map(i => {
                 const phase = (t * 0.7 + i * 0.6) % 2;
@@ -195,11 +195,17 @@ function SceneServices({ start, end }) {
                   padding: 16, zIndex: 5,
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <div style={{
-                      width: 38, height: 38, borderRadius: 9, flexShrink: 0,
-                      background: `${s.color}22`, border: `1px solid ${s.color}88`,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', color: s.color, fontSize: 18,
-                    }}>{s.icon}</div>
+                    {s.img ? (
+                      <div style={{ width: 42, height: 42, borderRadius: '50%', flexShrink: 0, overflow: 'hidden', border: `1.5px solid ${s.color}`, boxShadow: `0 0 12px ${s.color}66` }}>
+                        <img src={'assets/faces/' + s.img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                      </div>
+                    ) : (
+                      <div style={{
+                        width: 38, height: 38, borderRadius: 9, flexShrink: 0,
+                        background: `${s.color}22`, border: `1px solid ${s.color}88`,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', color: s.color, fontSize: 18,
+                      }}>{s.icon}</div>
+                    )}
                     <div style={{ minWidth: 0 }}>
                       <div style={{ fontFamily: 'Inter', fontSize: 18, fontWeight: 600, color: C.white, letterSpacing: '-0.01em' }}>{s.label}</div>
                       <div style={{ fontFamily: 'Inter', fontSize: 11, color: C.whiteDim, marginTop: 2, lineHeight: 1.3 }}>{s.sub}</div>
@@ -226,9 +232,9 @@ function SceneServices({ start, end }) {
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.whiteDim, letterSpacing: '0.12em',
             }}>
-              <span>● Prise de RDV en 2 clics</span>
-              <span style={{ color: C.gold }}>● RDV garantis · zéro liste d’attente</span>
-              <span style={{ color: C.cyan }}>● Orientation validée par votre médecin</span>
+              <span>● RDV garantis en 2 clics</span>
+              <span style={{ color: C.gold }}>● Partenaires privilégiés · zéro liste d’attente</span>
+              <span style={{ color: C.cyan }}>● Déplacement uniquement si examen paraclinique</span>
             </div>
           </div>
         );
@@ -266,13 +272,20 @@ function SceneConcierge({ start, end }) {
               fontFamily: 'Inter', fontSize: 56, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
-              Pensé pour ceux qui n’ont pas le temps <span style={{ fontStyle: 'italic', color: C.gold }}>d’être malades.</span><br/>
+              La 1ʳᵉ plateforme de prévention pour dirigeants <span style={{ fontStyle: 'italic', color: C.gold }}>exigeants et pressés.</span><br/>
               <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>Stress, sédentarité, repas d’affaires, dette de sommeil — un cœur exposé, en silence.</span>
+            </div>
+
+            {/* Executive persona portrait + subscription tag */}
+            <div style={{ position: 'absolute', left: 90, top: 444, opacity: phoneIn, transform: `translateY(${(1 - phoneIn) * 30}px)` }}>
+              <PortraitFrame src="assets/faces/dirigeante.png" color={C.gold} w={280} h={360} />
+              <div style={{ textAlign: 'center', marginTop: 14, fontFamily: 'Inter', fontSize: 16, color: C.white, fontWeight: 500 }}>Vous, pilote de votre santé</div>
+              <div style={{ textAlign: 'center', marginTop: 6, fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 10, letterSpacing: '0.2em', color: C.gold, textTransform: 'uppercase' }}>Abonnement premium</div>
             </div>
 
             {/* Executive dashboard phone */}
             <div style={{
-              position: 'absolute', left: 360, top: 680,
+              position: 'absolute', left: 560, top: 680,
               transform: `translate(-50%, -50%) perspective(1500px) rotateY(${Math.sin(t * 0.5) * 6}deg) scale(${0.7 + phoneIn * 0.3})`,
               opacity: phoneIn, transformStyle: 'preserve-3d',
             }}>
@@ -294,7 +307,7 @@ function SceneConcierge({ start, end }) {
                     <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: C.gold, letterSpacing: '0.25em' }}>PREMIUM</div>
                     <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: C.whiteDim }}>SilentCheck</div>
                   </div>
-                  <div style={{ fontSize: 15, color: C.white, fontWeight: 500 }}>Bonjour, Dr Bach</div>
+                  <div style={{ fontSize: 15, color: C.white, fontWeight: 500 }}>Bonjour, Dr Durand</div>
                   {/* score ring */}
                   <div style={{ alignSelf: 'center', position: 'relative', marginTop: 4 }}>
                     <svg width="120" height="120" viewBox="0 0 120 120">
@@ -361,7 +374,7 @@ function SceneConcierge({ start, end }) {
               fontFamily: 'Inter', fontSize: 20, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
               borderTop: `1px solid ${C.gold}33`, paddingTop: 18,
             }}>
-              Votre santé pilotée comme votre agenda — <span style={{ color: C.gold, fontWeight: 500 }}>RDV garantis, zéro liste d’attente, zéro perte de temps.</span>
+              Un abonnement, tout piloté à distance — <span style={{ color: C.gold, fontWeight: 500 }}>RDV garantis, zéro liste d’attente, zéro perte de temps.</span>
             </div>
           </div>
         );
@@ -540,4 +553,284 @@ function SceneSecondAvis({ start, end }) {
   );
 }
 
-Object.assign(window, { SceneStart, SceneServices, SceneConcierge, SceneSecondAvis });
+// ── Holographic human face (stylized HUD scan, no photo) ───────────────────
+function HoloFace({ color = C.cyan, variant = 'patient' }) {
+  const t = useTime();
+  const scanY = 46 + ((t * 46) % 152);
+  const ringRot = t * 28;
+  const facePath = 'M 110 46 C 70 46 56 78 56 110 C 56 150 78 186 110 196 C 142 186 164 150 164 110 C 164 78 150 46 110 46 Z';
+  const dots = [[110,52],[60,108],[160,108],[88,112],[132,112],[110,140],[96,162],[124,162],[110,194]];
+  return (
+    <svg width="220" height="292" viewBox="0 0 220 292" style={{ filter: `drop-shadow(0 0 16px ${color}aa)` }}>
+      <defs>
+        <clipPath id={'hc-' + variant}><path d={facePath} /></clipPath>
+        <radialGradient id={'hg-' + variant} cx="0.5" cy="0.42">
+          <stop offset="0%" stopColor={`${color}33`} />
+          <stop offset="100%" stopColor={`${color}00`} />
+        </radialGradient>
+      </defs>
+
+      {/* rotating reticle */}
+      <g transform={`rotate(${ringRot} 110 118)`} opacity="0.4">
+        <circle cx="110" cy="118" r="100" fill="none" stroke={color} strokeWidth="1" strokeDasharray="2 11" />
+      </g>
+      <circle cx="110" cy="118" r="104" fill="none" stroke={color} strokeWidth="1" opacity="0.22" />
+
+      {/* bust + collar variants */}
+      <path d="M 40 292 C 44 232 74 206 110 206 C 146 206 176 232 180 292 Z" fill={`url(#hg-${variant})`} stroke={color} strokeWidth="1.3" opacity="0.55" />
+      {variant === 'exec' && (
+        <g stroke={color} strokeWidth="1.4" fill="none" opacity="0.85">
+          <path d="M 92 210 L 110 230 L 128 210" />
+          <path d="M 110 230 L 104 264 L 116 264 Z" fill={`${color}33`} />
+        </g>
+      )}
+      {variant === 'doctor' && (
+        <g stroke={color} strokeWidth="1.4" fill="none" opacity="0.85">
+          <path d="M 96 210 L 110 226 L 124 210" />
+          <path d="M 100 214 C 96 242 92 254 84 260" />
+          <circle cx="84" cy="264" r="5" />
+        </g>
+      )}
+
+      {/* face */}
+      <path d={facePath} fill={`url(#hg-${variant})`} stroke={color} strokeWidth="1.6" />
+      {/* hair */}
+      <path d="M 58 100 C 56 56 86 36 110 36 C 134 36 164 56 162 100" fill="none" stroke={color} strokeWidth="1.6" opacity="0.85" />
+      {variant !== 'doctor' && <path d="M 64 92 C 70 70 90 58 110 58 C 130 58 150 70 156 92" fill="none" stroke={color} strokeWidth="1" opacity="0.5" />}
+
+      {/* features */}
+      <g stroke={color} fill="none" strokeWidth="1.5" strokeLinecap="round">
+        <path d="M 74 100 Q 88 95 100 100" />
+        <path d="M 120 100 Q 132 95 146 100" />
+        <path d="M 76 112 Q 88 105 100 112 Q 88 119 76 112 Z" />
+        <path d="M 120 112 Q 132 105 144 112 Q 132 119 120 112 Z" />
+        <path d="M 110 116 L 105 142 Q 110 147 117 142" />
+        <path d="M 95 162 Q 110 157 125 162 Q 110 171 95 162 Z" />
+      </g>
+      <circle cx="88" cy="112" r="2.4" fill={color} />
+      <circle cx="132" cy="112" r="2.4" fill={color} />
+      {variant === 'doctor' && (
+        <g stroke={color} strokeWidth="1.3" fill="none" opacity="0.85">
+          <circle cx="88" cy="112" r="13" /><circle cx="132" cy="112" r="13" /><line x1="101" y1="112" x2="119" y2="112" />
+        </g>
+      )}
+
+      {/* AI facial mesh */}
+      <g stroke={color} strokeWidth="0.7" opacity="0.45" fill="none">
+        <path d="M 110 52 L 60 108 L 110 140 L 160 108 Z" />
+        <path d="M 60 108 L 96 162 L 110 140 M 160 108 L 124 162 L 110 140 M 96 162 L 110 194 L 124 162" />
+        <path d="M 88 112 L 110 140 L 132 112" />
+      </g>
+      {dots.map((p, i) => <circle key={i} cx={p[0]} cy={p[1]} r="1.7" fill={color} />)}
+
+      {/* scanlines + sweeping scan bar (clipped to face) */}
+      <g clipPath={`url(#hc-${variant})`}>
+        {Array.from({ length: 20 }).map((_, i) => (
+          <line key={i} x1="46" y1={46 + i * 8} x2="174" y2={46 + i * 8} stroke={color} strokeWidth="0.5" opacity="0.14" />
+        ))}
+        <rect x="46" y={scanY} width="128" height="10" fill={color} opacity="0.25" />
+        <line x1="46" y1={scanY + 5} x2="174" y2={scanY + 5} stroke={color} strokeWidth="1.5" opacity="0.9" />
+      </g>
+    </svg>
+  );
+}
+
+// ── Real photo portrait in a holographic HUD frame ─────────────────────────
+function PortraitFrame({ src, color = C.cyan, w = 300, h = 386 }) {
+  const t = useTime();
+  const scanY = (t * 42) % (h + 24) - 12;
+  return (
+    <div style={{ position: 'relative', width: w, height: h, margin: '0 auto' }}>
+      <div style={{ position: 'absolute', inset: -2, borderRadius: 18, boxShadow: `0 0 55px ${color}55` }} />
+      <div style={{ position: 'absolute', inset: 0, borderRadius: 16, overflow: 'hidden', border: `1px solid ${color}66`, background: C.bg2 }}>
+        <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(180deg, ${color}12, transparent 28%, ${C.bg0}77 100%)` }} />
+        <div style={{ position: 'absolute', inset: 0, opacity: 0.22, backgroundImage: 'repeating-linear-gradient(0deg, rgba(34,211,238,0.09) 0px, rgba(34,211,238,0.09) 1px, transparent 1px, transparent 3px)' }} />
+        <div style={{ position: 'absolute', left: 0, right: 0, top: scanY, height: 16, background: `linear-gradient(180deg, transparent, ${color}66, transparent)` }} />
+      </div>
+      {['tl', 'tr', 'bl', 'br'].map(p => {
+        const isR = p[1] === 'r', isB = p[0] === 'b';
+        return <div key={p} style={{
+          position: 'absolute', width: 22, height: 22,
+          [isR ? 'right' : 'left']: -1, [isB ? 'bottom' : 'top']: -1,
+          borderTop: !isB ? `2px solid ${color}` : undefined,
+          borderBottom: isB ? `2px solid ${color}` : undefined,
+          borderLeft: !isR ? `2px solid ${color}` : undefined,
+          borderRight: isR ? `2px solid ${color}` : undefined,
+        }} />;
+      })}
+      <div style={{
+        position: 'absolute', top: 9, left: 11, display: 'flex', alignItems: 'center', gap: 6,
+        fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 8, letterSpacing: '0.22em', color,
+      }}>
+        <span style={{ width: 6, height: 6, borderRadius: 3, background: color, boxShadow: `0 0 8px ${color}`, opacity: 0.6 + Math.sin(t * 4) * 0.4 }} />SCAN
+      </div>
+    </div>
+  );
+}
+
+// ── Scene — À visage humain : patient · médecin · dirigeant ─────────────────
+function SceneHumans({ start, end }) {
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime }) => {
+        const t = localTime;
+        const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
+        const faces = [
+          { img: 'patient.png',   color: C.cyan,  name: 'Le patient',   role: 'Acteur de sa prévention', desc: 'Un score clair, un plan compris, un suivi qui le connaît.' },
+          { img: 'medecin.png',   color: C.green,  name: 'Le médecin',   role: 'Pilote médical',          desc: 'Décide, valide, accompagne — à chaque étape.' },
+          { img: 'dirigeant.png', color: C.gold,   name: 'Le dirigeant', role: 'Cadre pressé',            desc: 'Un cœur exposé, un suivi concierge sans friction.' },
+        ];
+        return (
+          <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
+            <CosmicBackdrop hue="cyan" />
+            <SectionTag index="" label="À visage humain" color={C.cyan} />
+
+            <div style={{
+              position: 'absolute', left: 96, top: 170, right: 96,
+              opacity: titleIn, transform: `translateY(${(1 - titleIn) * 20}px)`,
+              fontFamily: 'Inter', fontSize: 58, fontWeight: 200,
+              color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
+            }}>
+              Derrière la technologie, <span style={{ fontStyle: 'italic', color: C.cyan }}>des humains.</span><br/>
+              <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>Patients, médecins, experts — un suivi à visage humain.</span>
+            </div>
+
+            <div style={{ position: 'absolute', left: 0, right: 0, top: 400, display: 'flex', justifyContent: 'center', gap: 96 }}>
+              {faces.map((f, i) => {
+                const fIn = clamp((t - 1.0 - i * 0.45) / 0.8, 0, 1);
+                const wob = Math.sin(t * 1.1 + i) * 6;
+                return (
+                  <div key={i} style={{
+                    width: 320, textAlign: 'center',
+                    opacity: fIn, transform: `translateY(${(1 - fIn) * 50 + wob}px) scale(${0.85 + fIn * 0.15})`,
+                  }}>
+                    <PortraitFrame src={'assets/faces/' + f.img} color={f.color} />
+                    <div style={{ fontFamily: 'Inter', fontSize: 26, fontWeight: 500, color: C.white, marginTop: 14, letterSpacing: '-0.01em' }}>{f.name}</div>
+                    <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 11, color: f.color, letterSpacing: '0.22em', textTransform: 'uppercase', marginTop: 8 }}>{f.role}</div>
+                    <div style={{ fontSize: 14, color: C.whiteDim, marginTop: 12, lineHeight: 1.5, maxWidth: 280, marginLeft: 'auto', marginRight: 'auto' }}>{f.desc}</div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div style={{
+              position: 'absolute', left: 96, right: 96, bottom: 56,
+              opacity: clamp((t - 3.4) / 0.7, 0, 1),
+              fontFamily: 'Inter', fontSize: 22, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
+              borderTop: `1px solid ${C.line}`, paddingTop: 20,
+            }}>
+              La technologie au service de la <span style={{ color: C.cyan, fontWeight: 500 }}>relation médecin-patient</span> — jamais l'inverse.
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ── Scene — Modèle économique : abonnement mensuel + actes au juste prix ────
+function SceneBusinessModel({ start, end }) {
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime }) => {
+        const t = localTime;
+        const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
+        const planIn = clamp((t - 1.0) / 0.8, 0, 1);
+        const included = [
+          'App & Score BSD — validé scientifiquement',
+          'Suivi des capteurs connectés en continu',
+          'IA d\'aide à la lecture · sous contrôle médical',
+          'Médecin référent & coordination du parcours',
+          'Réseau de partenaires privilégiés · zéro liste d\'attente',
+          'Second avis international intégré',
+          'Concierge santé · zéro friction',
+        ];
+        const actes = [
+          { label: 'Consultation généraliste', sub: 'accès & rapidité garantis', price: 'Financé · Sécu + mutuelle', color: C.green },
+          { label: 'Consultation spécialiste', sub: 'cardio · ophtalmo · gynéco…', price: 'Financé · Sécu + mutuelle', color: C.green },
+          { label: 'Biologie', sub: 'bilans ciblés', price: 'Tarif Sécu · remboursé', color: C.green },
+          { label: 'Imagerie · paraclinique', sub: 'sur indication médicale', price: 'Tarif Sécu · remboursé', color: C.green },
+        ];
+        return (
+          <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
+            <CosmicBackdrop hue="gold" />
+            <SectionTag index="" label="Modèle économique" color={C.gold} />
+
+            <div style={{
+              position: 'absolute', left: 96, top: 160, right: 96,
+              opacity: titleIn, transform: `translateY(${(1 - titleIn) * 20}px)`,
+              fontFamily: 'Inter', fontSize: 56, fontWeight: 200,
+              color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
+            }}>
+              Un seul abonnement. <span style={{ fontStyle: 'italic', color: C.gold }}>Tout le service.</span><br/>
+              <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>149 € / mois, pour tous — sans option, sans surprise.</span>
+            </div>
+
+            {/* LEFT — single subscription */}
+            <div style={{ position: 'absolute', left: 96, top: 392, width: 780, opacity: planIn, transform: `translateY(${(1 - planIn) * 30}px)` }}>
+              <GlassCard x={0} y={0} w={780} h={548} border={`${C.gold}aa`}>
+                <div style={{ padding: 36, height: '100%', display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12, letterSpacing: '0.24em', color: C.gold, textTransform: 'uppercase' }}>Abonnement unique · pour tous</div>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginTop: 12 }}>
+                    <span style={{ fontFamily: 'Inter', fontSize: 92, fontWeight: 200, color: C.white, letterSpacing: '-0.04em' }}>149</span>
+                    <span style={{ fontSize: 24, color: C.whiteDim }}>€ / mois</span>
+                  </div>
+                  <div style={{ borderTop: `1px solid ${C.gold}33`, marginTop: 18, paddingTop: 20, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px 24px' }}>
+                    {included.map((it, j) => (
+                      <div key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: 14.5, color: C.whiteDim, lineHeight: 1.35 }}>
+                        <span style={{ color: C.green, fontSize: 14, marginTop: 1 }}>✓</span>{it}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </GlassCard>
+            </div>
+
+            {/* RIGHT — billing of care */}
+            <div style={{ position: 'absolute', right: 96, top: 392, width: 760 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
+                <div style={{ width: 28, height: 1, background: C.cyan }} />
+                <span style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12, letterSpacing: '0.26em', color: C.cyan, textTransform: 'uppercase' }}>Les soins · facturation transparente</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 13 }}>
+                {actes.map((a, i) => {
+                  const aIn = clamp((t - 1.6 - i * 0.22) / 0.6, 0, 1);
+                  return (
+                    <div key={i} style={{
+                      opacity: aIn, transform: `translateX(${(1 - aIn) * 30}px)`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20,
+                      padding: '17px 24px', borderRadius: 12,
+                      background: `${a.color}0c`, border: `1px solid ${a.color}44`,
+                    }}>
+                      <div>
+                        <div style={{ fontFamily: 'Inter', fontSize: 19, fontWeight: 500, color: C.white }}>{a.label}</div>
+                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.whiteDim, letterSpacing: '0.06em', marginTop: 4 }}>{a.sub}</div>
+                      </div>
+                      <div style={{ fontFamily: 'Inter', fontSize: 16, fontWeight: 500, color: a.color, whiteSpace: 'nowrap', textAlign: 'right' }}>{a.price}</div>
+                    </div>
+                  );
+                })}
+              </div>
+              <div style={{ marginTop: 16, fontSize: 13, color: C.whiteDim, lineHeight: 1.5 }}>
+                Consultations, biologie et imagerie sont <span style={{ color: C.green }}>financées par la Sécu et votre mutuelle</span>. L'abonnement couvre le <span style={{ color: C.gold }}>service : accès garanti, rapidité, suivi</span>.
+              </div>
+            </div>
+
+            <div style={{
+              position: 'absolute', left: 96, right: 96, bottom: 44,
+              opacity: clamp((t - 3.6) / 0.7, 0, 1),
+              fontFamily: 'Inter', fontSize: 18, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
+              borderTop: `1px solid ${C.gold}33`, paddingTop: 16,
+            }}>
+              <span style={{ color: C.cyan, fontWeight: 500 }}>100 % fondé sur la science validée</span> — aucune pseudoscience, aucun gadget marketing.
+              <span style={{ display: 'block', fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: 'rgba(248,250,252,0.4)', letterSpacing: '0.12em', marginTop: 8 }}>Tarifs indicatifs · à valider</span>
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+Object.assign(window, { SceneStart, SceneServices, SceneConcierge, SceneSecondAvis, SceneHumans, SceneBusinessModel });
