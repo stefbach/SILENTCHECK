@@ -12,6 +12,8 @@ const C = {
   redDim: '#9f1239',
   gold: '#fbbf24',
   goldDim: '#b45309',
+  green: '#22c55e',
+  greenDim: '#15803d',
   white: '#f8fafc',
   whiteDim: 'rgba(248,250,252,0.62)',
   line: 'rgba(34,211,238,0.18)',
@@ -202,7 +204,7 @@ function SectionTag({ index, label, x = 96, y = 96, color = C.cyan }) {
     <div style={{
       position: 'absolute', left: x, top: y,
       display: 'flex', alignItems: 'center', gap: 14,
-      fontFamily: 'JetBrains Mono, monospace',
+      fontFamily: 'Orbitron, JetBrains Mono, monospace',
       fontSize: 14,
       letterSpacing: '0.3em',
       color: color,
@@ -224,6 +226,79 @@ function AnimatedNumber({ from = 0, to = 100, duration = 1, suffix = '', prefix 
   return <>{prefix}{v.toFixed(decimals)}{suffix}</>;
 }
 
+// ── Immersive HUD overlay — global healthtech command-interface chrome ─────
+// Rendered above every scene. Cinematic vignette + scanlines + corner
+// brackets + live status + scene-transition light sweeps. Driven by the
+// global playhead so it stays in sync with the film.
+function ImmersiveHUD({ boundaries = [] }) {
+  const t = useTime();
+
+  // Scene-transition sweep: active for 0.6s after each boundary time
+  let sweepP = -1;
+  for (let i = 0; i < boundaries.length; i++) {
+    const d = t - boundaries[i];
+    if (d >= 0 && d < 0.6) { sweepP = d / 0.6; break; }
+  }
+  const flash = sweepP >= 0 ? (1 - sweepP) : 0;
+
+  // Slow scanning highlight along the top edge
+  const scanX = (t * 7) % 130 - 14;
+
+  const Bracket = ({ pos }) => {
+    const s = 46, w = 2, off = 26;
+    const isR = pos === 'tr' || pos === 'br';
+    const isB = pos === 'bl' || pos === 'br';
+    const corner = isR ? { right: off } : { left: off };
+    if (isB) corner.bottom = off; else corner.top = off;
+    const arm = { position: 'absolute', background: C.cyan, opacity: 0.5, boxShadow: `0 0 8px ${C.cyan}` };
+    return (
+      <div style={{ position: 'absolute', width: s, height: s, ...corner }}>
+        <div style={{ ...arm, width: w, height: s, [isR ? 'right' : 'left']: 0, [isB ? 'bottom' : 'top']: 0 }} />
+        <div style={{ ...arm, width: s, height: w, [isR ? 'right' : 'left']: 0, [isB ? 'bottom' : 'top']: 0 }} />
+      </div>
+    );
+  };
+
+  return (
+    <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 40, overflow: 'hidden' }}>
+      {/* Cinematic vignette for depth */}
+      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 45%, transparent 52%, rgba(2,6,23,0.55) 100%)' }} />
+      {/* CRT-style scanlines */}
+      <div style={{ position: 'absolute', inset: 0, opacity: 0.32, backgroundImage: 'repeating-linear-gradient(0deg, rgba(34,211,238,0.06) 0px, rgba(34,211,238,0.06) 1px, transparent 1px, transparent 4px)' }} />
+      {/* Top hairline + scanning node */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, transparent, ${C.cyan}55, transparent)` }} />
+      <div style={{ position: 'absolute', top: 0, left: `${scanX}%`, width: '12%', height: 2, background: `linear-gradient(90deg, transparent, ${C.cyan}, transparent)`, boxShadow: `0 0 12px ${C.cyan}` }} />
+
+      {/* Corner brackets */}
+      <Bracket pos="tl" /><Bracket pos="tr" /><Bracket pos="bl" /><Bracket pos="br" />
+
+      {/* Top-center live status chip */}
+      <div style={{
+        position: 'absolute', top: 18, left: '50%', transform: 'translateX(-50%)',
+        display: 'flex', alignItems: 'center', gap: 12,
+        fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 11,
+        letterSpacing: '0.3em', textTransform: 'uppercase',
+        color: 'rgba(248,250,252,0.55)', whiteSpace: 'nowrap',
+      }}>
+        <span style={{ width: 7, height: 7, borderRadius: 4, background: C.green, boxShadow: `0 0 10px ${C.green}`, opacity: 0.55 + Math.sin(t * 4) * 0.45 }} />
+        <span>SilentCheck</span>
+        <span style={{ opacity: 0.35 }}>·</span>
+        <span style={{ color: C.cyan }}>Clinique virtuelle</span>
+        <span style={{ opacity: 0.35 }}>·</span>
+        <span>Moteur BSD actif</span>
+      </div>
+
+      {/* Scene-transition light sweep + brief flash */}
+      {sweepP >= 0 && (
+        <React.Fragment>
+          <div style={{ position: 'absolute', top: 0, bottom: 0, left: `${sweepP * 100}%`, width: 4, marginLeft: -2, background: `linear-gradient(180deg, transparent, ${C.cyan}, transparent)`, boxShadow: `0 0 50px 8px ${C.cyan}`, opacity: 0.7 }} />
+          <div style={{ position: 'absolute', inset: 0, background: C.cyan, opacity: flash * 0.05 }} />
+        </React.Fragment>
+      )}
+    </div>
+  );
+}
+
 Object.assign(window, {
-  C, CosmicBackdrop, ParticleField, PulseLine, Heart3D, GlassCard, SectionTag, AnimatedNumber,
+  C, CosmicBackdrop, ParticleField, PulseLine, Heart3D, GlassCard, SectionTag, AnimatedNumber, ImmersiveHUD,
 });
