@@ -622,6 +622,40 @@ function HoloFace({ color = C.cyan, variant = 'patient' }) {
   );
 }
 
+// ── Real photo portrait in a holographic HUD frame ─────────────────────────
+function PortraitFrame({ src, color = C.cyan, w = 300, h = 386 }) {
+  const t = useTime();
+  const scanY = (t * 42) % (h + 24) - 12;
+  return (
+    <div style={{ position: 'relative', width: w, height: h, margin: '0 auto' }}>
+      <div style={{ position: 'absolute', inset: -2, borderRadius: 18, boxShadow: `0 0 55px ${color}55` }} />
+      <div style={{ position: 'absolute', inset: 0, borderRadius: 16, overflow: 'hidden', border: `1px solid ${color}66`, background: C.bg2 }}>
+        <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(180deg, ${color}12, transparent 28%, ${C.bg0}77 100%)` }} />
+        <div style={{ position: 'absolute', inset: 0, opacity: 0.22, backgroundImage: 'repeating-linear-gradient(0deg, rgba(34,211,238,0.09) 0px, rgba(34,211,238,0.09) 1px, transparent 1px, transparent 3px)' }} />
+        <div style={{ position: 'absolute', left: 0, right: 0, top: scanY, height: 16, background: `linear-gradient(180deg, transparent, ${color}66, transparent)` }} />
+      </div>
+      {['tl', 'tr', 'bl', 'br'].map(p => {
+        const isR = p[1] === 'r', isB = p[0] === 'b';
+        return <div key={p} style={{
+          position: 'absolute', width: 22, height: 22,
+          [isR ? 'right' : 'left']: -1, [isB ? 'bottom' : 'top']: -1,
+          borderTop: !isB ? `2px solid ${color}` : undefined,
+          borderBottom: isB ? `2px solid ${color}` : undefined,
+          borderLeft: !isR ? `2px solid ${color}` : undefined,
+          borderRight: isR ? `2px solid ${color}` : undefined,
+        }} />;
+      })}
+      <div style={{
+        position: 'absolute', top: 9, left: 11, display: 'flex', alignItems: 'center', gap: 6,
+        fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 8, letterSpacing: '0.22em', color,
+      }}>
+        <span style={{ width: 6, height: 6, borderRadius: 3, background: color, boxShadow: `0 0 8px ${color}`, opacity: 0.6 + Math.sin(t * 4) * 0.4 }} />SCAN
+      </div>
+    </div>
+  );
+}
+
 // ── Scene — À visage humain : patient · médecin · dirigeant ─────────────────
 function SceneHumans({ start, end }) {
   return (
@@ -630,9 +664,9 @@ function SceneHumans({ start, end }) {
         const t = localTime;
         const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
         const faces = [
-          { variant: 'patient', color: C.cyan,  name: 'Le patient',  role: 'Acteur de sa prévention', desc: 'Un score clair, un plan compris, un suivi qui le connaît.' },
-          { variant: 'doctor',  color: C.green,  name: 'Le médecin',  role: 'Pilote médical',          desc: 'Décide, valide, accompagne — à chaque étape.' },
-          { variant: 'exec',    color: C.gold,   name: 'Le dirigeant', role: 'Cadre pressé',            desc: 'Un cœur exposé, un suivi concierge sans friction.' },
+          { img: 'patient.png',   color: C.cyan,  name: 'Le patient',   role: 'Acteur de sa prévention', desc: 'Un score clair, un plan compris, un suivi qui le connaît.' },
+          { img: 'medecin.png',   color: C.green,  name: 'Le médecin',   role: 'Pilote médical',          desc: 'Décide, valide, accompagne — à chaque étape.' },
+          { img: 'dirigeant.png', color: C.gold,   name: 'Le dirigeant', role: 'Cadre pressé',            desc: 'Un cœur exposé, un suivi concierge sans friction.' },
         ];
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
@@ -658,7 +692,7 @@ function SceneHumans({ start, end }) {
                     width: 320, textAlign: 'center',
                     opacity: fIn, transform: `translateY(${(1 - fIn) * 50 + wob}px) scale(${0.85 + fIn * 0.15})`,
                   }}>
-                    <HoloFace color={f.color} variant={f.variant} />
+                    <PortraitFrame src={'assets/faces/' + f.img} color={f.color} />
                     <div style={{ fontFamily: 'Inter', fontSize: 26, fontWeight: 500, color: C.white, marginTop: 14, letterSpacing: '-0.01em' }}>{f.name}</div>
                     <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 11, color: f.color, letterSpacing: '0.22em', textTransform: 'uppercase', marginTop: 8 }}>{f.role}</div>
                     <div style={{ fontSize: 14, color: C.whiteDim, marginTop: 12, lineHeight: 1.5, maxWidth: 280, marginLeft: 'auto', marginRight: 'auto' }}>{f.desc}</div>
