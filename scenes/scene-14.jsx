@@ -37,7 +37,7 @@ function Scene14Hub({ start, end }) {
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
             <CosmicBackdrop hue="cyan" />
-            <SectionTag index="08" label="Plateforme connectée · télémédecine augmentée" color={C.cyan} />
+            <SectionTag index="08" label="Connecteurs · tous vos appareils dans l'app" color={C.cyan} />
 
             <div style={{
               position: 'absolute', left: 96, top: 170,
@@ -45,9 +45,9 @@ function Scene14Hub({ start, end }) {
               fontFamily: 'Inter', fontSize: 56, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
-              Tout pilotable à distance.<br/>
+              Tous vos appareils parlent à l'app.<br/>
               <span style={{ fontStyle: 'italic', fontSize: 32, fontWeight: 300, color: C.cyan }}>
-                Le présentiel, seulement quand un examen l'exige.
+                En temps réel — tout converge dans un seul score BSD.
               </span>
             </div>
 
@@ -246,9 +246,9 @@ function Scene14Hub({ start, end }) {
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.whiteDim, letterSpacing: '0.15em',
             }}>
-              <span>● Toutes les données chiffrées bout-en-bout</span>
-              <span style={{ color: C.cyan }}>● Tout piloté depuis l'application</span>
-              <span style={{ color: C.gold }}>● Présentiel uniquement si examen paraclinique</span>
+              <span>◉ Synchronisation automatique</span>
+              <span style={{ color: C.cyan }}>Apple Watch · Withings · Dexcom · FreeStyle · Omron · Oura · Garmin</span>
+              <span style={{ color: C.gold }}>● Vos données arrivent seules dans l'app</span>
             </div>
           </div>
         );

@@ -2608,7 +2608,7 @@ function Scene14Hub({ start, end }) {
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
             <CosmicBackdrop hue="cyan" />
-            <SectionTag index="08" label="Plateforme connectée · télémédecine augmentée" color={C.cyan} />
+            <SectionTag index="08" label="Connecteurs · tous vos appareils dans l'app" color={C.cyan} />
 
             <div style={{
               position: 'absolute', left: 96, top: 170,
@@ -2616,9 +2616,9 @@ function Scene14Hub({ start, end }) {
               fontFamily: 'Inter', fontSize: 56, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
-              Tout pilotable à distance.<br/>
+              Tous vos appareils parlent à l'app.<br/>
               <span style={{ fontStyle: 'italic', fontSize: 32, fontWeight: 300, color: C.cyan }}>
-                Le présentiel, seulement quand un examen l'exige.
+                En temps réel — tout converge dans un seul score BSD.
               </span>
             </div>
 
@@ -2817,9 +2817,9 @@ function Scene14Hub({ start, end }) {
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.whiteDim, letterSpacing: '0.15em',
             }}>
-              <span>● Toutes les données chiffrées bout-en-bout</span>
-              <span style={{ color: C.cyan }}>● Tout piloté depuis l'application</span>
-              <span style={{ color: C.gold }}>● Présentiel uniquement si examen paraclinique</span>
+              <span>◉ Synchronisation automatique</span>
+              <span style={{ color: C.cyan }}>Apple Watch · Withings · Dexcom · FreeStyle · Omron · Oura · Garmin</span>
+              <span style={{ color: C.gold }}>● Vos données arrivent seules dans l'app</span>
             </div>
           </div>
         );
@@ -3844,14 +3844,127 @@ function SceneHumans({ start, end }) {
   );
 }
 
-Object.assign(window, { SceneStart, SceneServices, SceneConcierge, SceneSecondAvis, SceneHumans });
+// ── Scene — Modèle économique : abonnement mensuel + actes au juste prix ────
+function SceneBusinessModel({ start, end }) {
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime }) => {
+        const t = localTime;
+        const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
+        const tiers = [
+          { name: 'Essentiel', price: '39', color: C.cyan,
+            items: ['App & Score BSD', 'Suivi capteurs en continu', 'IA bien-être', 'Coordination médicale', 'Accès réseau partenaires'] },
+          { name: 'Premium · Dirigeant', price: '149', color: C.gold, featured: true,
+            items: ['Tout l\'Essentiel, et :', 'Médecin référent dédié', 'Créneaux prioritaires', 'Second avis international', 'Concierge sans friction'] },
+        ];
+        const actes = [
+          { label: 'Téléconsultation généraliste', price: '25 €' },
+          { label: 'Consultation spécialiste', sub: 'cardio · ophtalmo · gynéco…', price: '60 €' },
+          { label: 'Bilan biologique', sub: 'socle / intermédiaire / complet', price: '59 / 99 / 159 €' },
+          { label: 'Imagerie · paraclinique', sub: 'sur indication médicale', price: 'tarif réseau' },
+        ];
+        return (
+          <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
+            <CosmicBackdrop hue="gold" />
+            <SectionTag index="" label="Modèle économique" color={C.gold} />
+
+            <div style={{
+              position: 'absolute', left: 96, top: 162, right: 96,
+              opacity: titleIn, transform: `translateY(${(1 - titleIn) * 20}px)`,
+              fontFamily: 'Inter', fontSize: 56, fontWeight: 200,
+              color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
+            }}>
+              Un modèle <span style={{ fontStyle: 'italic', color: C.gold }}>simple et transparent.</span><br/>
+              <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>Un abonnement mensuel pour le service — les actes au juste prix.</span>
+            </div>
+
+            {/* LEFT — abonnement mensuel */}
+            <div style={{ position: 'absolute', left: 96, top: 380, width: 800 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
+                <div style={{ width: 28, height: 1, background: C.gold }} />
+                <span style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12, letterSpacing: '0.28em', color: C.gold, textTransform: 'uppercase' }}>Abonnement mensuel · le service</span>
+              </div>
+              <div style={{ display: 'flex', gap: 24 }}>
+                {tiers.map((tier, i) => {
+                  const cIn = clamp((t - 1.0 - i * 0.3) / 0.7, 0, 1);
+                  return (
+                    <div key={i} style={{
+                      width: 388, height: 420,
+                      transform: `translateY(${(1 - cIn) * 40}px) scale(${0.92 + cIn * 0.08})`, opacity: cIn,
+                    }}>
+                      <GlassCard x={0} y={0} w={388} h={420} border={`${tier.color}${tier.featured ? 'aa' : '55'}`}>
+                        <div style={{ padding: 30, height: '100%', display: 'flex', flexDirection: 'column' }}>
+                          <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12, letterSpacing: '0.2em', color: tier.color, textTransform: 'uppercase' }}>{tier.name}</div>
+                          <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginTop: 14 }}>
+                            <span style={{ fontFamily: 'Inter', fontSize: 72, fontWeight: 200, color: C.white, letterSpacing: '-0.04em' }}>{tier.price}</span>
+                            <span style={{ fontSize: 20, color: C.whiteDim }}>€ / mois</span>
+                          </div>
+                          <div style={{ borderTop: `1px solid ${tier.color}33`, marginTop: 18, paddingTop: 16, display: 'flex', flexDirection: 'column', gap: 11 }}>
+                            {tier.items.map((it, j) => (
+                              <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: j === 0 && tier.featured ? tier.color : C.whiteDim }}>
+                                <span style={{ color: tier.color, fontSize: 13 }}>▸</span>{it}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </GlassCard>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* RIGHT — à l'acte */}
+            <div style={{ position: 'absolute', right: 96, top: 380, width: 760 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
+                <div style={{ width: 28, height: 1, background: C.cyan }} />
+                <span style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12, letterSpacing: '0.28em', color: C.cyan, textTransform: 'uppercase' }}>À l'acte · au juste prix</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                {actes.map((a, i) => {
+                  const aIn = clamp((t - 1.6 - i * 0.22) / 0.6, 0, 1);
+                  return (
+                    <div key={i} style={{
+                      opacity: aIn, transform: `translateX(${(1 - aIn) * 30}px)`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20,
+                      padding: '18px 24px', borderRadius: 12,
+                      background: 'rgba(34,211,238,0.04)', border: `1px solid ${C.line}`,
+                    }}>
+                      <div>
+                        <div style={{ fontFamily: 'Inter', fontSize: 19, fontWeight: 500, color: C.white }}>{a.label}</div>
+                        {a.sub && <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.whiteDim, letterSpacing: '0.06em', marginTop: 4 }}>{a.sub}</div>}
+                      </div>
+                      <div style={{ fontFamily: 'Inter', fontSize: 24, fontWeight: 300, color: C.cyan, whiteSpace: 'nowrap' }}>{a.price}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div style={{
+              position: 'absolute', left: 96, right: 96, bottom: 46,
+              opacity: clamp((t - 3.6) / 0.7, 0, 1),
+              fontFamily: 'Inter', fontSize: 19, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
+              borderTop: `1px solid ${C.gold}33`, paddingTop: 18,
+            }}>
+              Abonnement = <span style={{ color: C.gold, fontWeight: 500 }}>service, accès & suivi</span> · actes facturés à l'unité, <span style={{ color: C.cyan, fontWeight: 500 }}>tarifs réseau négociés, zéro liste d'attente.</span>
+              <span style={{ display: 'block', fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: 'rgba(248,250,252,0.4)', letterSpacing: '0.12em', marginTop: 8 }}>Tarifs indicatifs · à valider</span>
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+Object.assign(window, { SceneStart, SceneServices, SceneConcierge, SceneSecondAvis, SceneHumans, SceneBusinessModel });
 </script>
 
   <script type="text/babel">
     // Full presentation — app & service-first arc.
     // Act 1: le point de départ (score) · Act 2: le moteur (science) ·
     // Act 3: la plateforme de service · Act 4: intelligence & confiance.
-    const TOTAL = 398;
+    const TOTAL = 418;
 
     function TimestampLabel() {
       const t = useTime();
@@ -3883,15 +3996,16 @@ Object.assign(window, { SceneStart, SceneServices, SceneConcierge, SceneSecondAv
             <SceneConcierge  start={208}   end={230}  />
             <SceneHumans     start={230}   end={248}  />
             <SceneSecondAvis start={248}   end={270}  />
-            <Scene9Mockups   start={270}   end={288}  />
-            <Scene7Journey   start={288}   end={306}  />
+            <SceneBusinessModel start={270} end={290} />
+            <Scene9Mockups   start={290}   end={308}  />
+            <Scene7Journey   start={308}   end={326}  />
             {/* Act 4 — Intelligence & confiance */}
-            <Scene10Bilan    start={306}   end={328}  />
-            <Scene11Security start={328}   end={348}  />
-            <Scene12Authors  start={348}   end={382}  />
-            <Scene8Outro     start={382}   end={398}  />
+            <Scene10Bilan    start={326}   end={348}  />
+            <Scene11Security start={348}   end={368}  />
+            <Scene12Authors  start={368}   end={402}  />
+            <Scene8Outro     start={402}   end={418}  />
             {/* Global immersive HUD — rendered on top of every scene */}
-            <ImmersiveHUD boundaries={[18, 38, 58, 80, 100, 120, 140, 162, 186, 208, 230, 248, 270, 288, 306, 328, 348, 382]} />
+            <ImmersiveHUD boundaries={[18, 38, 58, 80, 100, 120, 140, 162, 186, 208, 230, 248, 270, 290, 308, 326, 348, 368, 402]} />
           </Stage>
         </div>
       );
