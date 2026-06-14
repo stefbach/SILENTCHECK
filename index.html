@@ -24,8 +24,8 @@
 
 
 
-  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 
   <script type="text/babel" data-from="animations.jsx">
@@ -109,6 +109,11 @@ const Easing = {
 
 // Clamp a value to [min, max]
 const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+
+// Lite mode: on small/touch devices, reduce per-frame work (lighter backdrop,
+// fewer particles, throttled fps) so playback stays smooth instead of stuttering.
+const LITE = typeof window !== 'undefined' && typeof window.matchMedia === 'function' &&
+  (window.matchMedia('(max-width: 920px)').matches || window.matchMedia('(pointer: coarse)').matches);
 
 // interpolate([0, 0.5, 1], [0, 100, 50], ease?) -> fn(t)
 // Popmotion-style: linearly maps t across input keyframes to output values,
@@ -377,6 +382,7 @@ function Stage({
   const canvasRef = React.useRef(null);
   const rafRef = React.useRef(null);
   const lastTsRef = React.useRef(null);
+  const accRef = React.useRef(0);
 
   // Persist playhead
   React.useEffect(() => {
@@ -419,20 +425,26 @@ function Stage({
       lastTsRef.current = null;
       return;
     }
+    const minFrame = LITE ? 1 / 32 : 0; // cap renders to ~32fps on mobile
     const step = (ts) => {
       if (lastTsRef.current == null) lastTsRef.current = ts;
       // Clamp dt so a stalled frame (common on mobile) plays as brief
       // slow-motion instead of a visible time jump ("ça saute").
       const dt = Math.min(0.05, (ts - lastTsRef.current) / 1000);
       lastTsRef.current = ts;
-      setTime((t) => {
-        let next = t + dt;
-        if (next >= duration) {
-          if (loop) next = next % duration;
-          else { next = duration; setPlaying(false); }
-        }
-        return next;
-      });
+      accRef.current += dt;
+      if (accRef.current >= minFrame) {
+        const adv = accRef.current;
+        accRef.current = 0;
+        setTime((t) => {
+          let next = t + adv;
+          if (next >= duration) {
+            if (loop) next = next % duration;
+            else { next = duration; setPlaying(false); }
+          }
+          return next;
+        });
+      }
       rafRef.current = requestAnimationFrame(step);
     };
     rafRef.current = requestAnimationFrame(step);
@@ -706,7 +718,7 @@ function IconButton({ children, onClick, title }) {
 
 
 Object.assign(window, {
-  Easing, interpolate, animate, clamp,
+  Easing, interpolate, animate, clamp, LITE,
   TimelineContext, useTime, useTimeline,
   Sprite, SpriteContext, useSprite,
   TextSprite, ImageSprite, RectSprite,
@@ -771,6 +783,7 @@ function CosmicBackdrop({ depth = 0, hue = 'cyan' }) {
       }} />
 
       {/* Rotating wireframe hologram globe */}
+      {!LITE && (
       <svg width="1920" height="1080" viewBox="0 0 1920 1080" style={{ position: 'absolute', inset: 0, opacity: 0.18 }}>
         <g transform="translate(960 560)" stroke={accent} fill="none" strokeWidth="1.2">
           <circle r={R} opacity="0.55" />
@@ -782,6 +795,7 @@ function CosmicBackdrop({ depth = 0, hue = 'cyan' }) {
           ))}
         </g>
       </svg>
+      )}
 
       {/* Neon perspective grid */}
       <div style={{ position: 'absolute', inset: '-20%', perspective: 900, opacity: 0.7 }}>
@@ -806,15 +820,17 @@ function CosmicBackdrop({ depth = 0, hue = 'cyan' }) {
       }} />
 
       {/* Sweeping volumetric light beam */}
+      {!LITE && (
       <div style={{
         position: 'absolute', top: '-30%', left: '50%', width: '36%', height: '160%',
         transform: `translateX(-50%) rotate(${18 + Math.sin(t * 0.3) * 6}deg)`,
         background: `linear-gradient(90deg, transparent, ${accent}16, transparent)`,
         filter: 'blur(22px)',
       }} />
+      )}
 
       {/* Drift particles */}
-      <ParticleField count={70} t={t} accent={accent} />
+      <ParticleField count={LITE ? 16 : 70} t={t} accent={accent} />
     </div>
   );
 }
@@ -1005,15 +1021,17 @@ function ImmersiveHUD({ boundaries = [] }) {
   const scanX = (t * 7) % 130 - 14;
   const rollY = (t * 14) % 124 - 12; // rolling scan band (% of height)
 
-  // Bottom ECG vitals trace
+  // Bottom ECG vitals trace (skipped in lite/mobile mode)
   const pts = [];
-  for (let x = 0; x <= 1920; x += 6) {
-    let y = 24;
-    const beat = ((x / 1920) * 6 + t * 1.2) % 1;
-    if (beat > 0.47 && beat < 0.53) { const k = (beat - 0.5) / 0.03; y -= Math.exp(-k * k * 3) * 20; }
-    else if (beat > 0.53 && beat < 0.58) y += 6;
-    else y += Math.sin(x * 0.05 + t * 3) * 1.4;
-    pts.push(x + ',' + y.toFixed(1));
+  if (!LITE) {
+    for (let x = 0; x <= 1920; x += 6) {
+      let y = 24;
+      const beat = ((x / 1920) * 6 + t * 1.2) % 1;
+      if (beat > 0.47 && beat < 0.53) { const k = (beat - 0.5) / 0.03; y -= Math.exp(-k * k * 3) * 20; }
+      else if (beat > 0.53 && beat < 0.58) y += 6;
+      else y += Math.sin(x * 0.05 + t * 3) * 1.4;
+      pts.push(x + ',' + y.toFixed(1));
+    }
   }
   const bpm = Math.round(64 + Math.sin(t * 1.1) * 5);
 
@@ -1039,7 +1057,7 @@ function ImmersiveHUD({ boundaries = [] }) {
       {/* CRT scanlines */}
       <div style={{ position: 'absolute', inset: 0, opacity: 0.4, backgroundImage: 'repeating-linear-gradient(0deg, rgba(34,211,238,0.07) 0px, rgba(34,211,238,0.07) 1px, transparent 1px, transparent 4px)' }} />
       {/* Rolling scan band */}
-      <div style={{ position: 'absolute', left: 0, right: 0, top: `${rollY}%`, height: '9%', background: `linear-gradient(180deg, transparent, ${C.cyan}14, transparent)` }} />
+      {!LITE && <div style={{ position: 'absolute', left: 0, right: 0, top: `${rollY}%`, height: '9%', background: `linear-gradient(180deg, transparent, ${C.cyan}14, transparent)` }} />}
       {/* Top hairline + scanning node */}
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, transparent, ${C.cyan}66, transparent)` }} />
       <div style={{ position: 'absolute', top: 0, left: `${scanX}%`, width: '12%', height: 2, background: `linear-gradient(90deg, transparent, ${C.cyan}, transparent)`, boxShadow: `0 0 14px ${C.cyan}` }} />
@@ -1064,15 +1082,19 @@ function ImmersiveHUD({ boundaries = [] }) {
       </div>
 
       {/* Bottom ECG vitals monitor */}
-      <svg width="1920" height="48" viewBox="0 0 1920 48" style={{ position: 'absolute', left: 0, bottom: 0, opacity: 0.75 }}>
-        <polyline points={pts.join(' ')} fill="none" stroke={C.red} strokeWidth="2"
-                  style={{ filter: `drop-shadow(0 0 6px ${C.red})` }} />
-      </svg>
-      <div style={{
-        position: 'absolute', bottom: 10, right: 28,
-        fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12,
-        color: C.red, letterSpacing: '0.15em', textShadow: `0 0 12px ${C.red}`,
-      }}>♥ {bpm} BPM</div>
+      {!LITE && (
+      <React.Fragment>
+        <svg width="1920" height="48" viewBox="0 0 1920 48" style={{ position: 'absolute', left: 0, bottom: 0, opacity: 0.75 }}>
+          <polyline points={pts.join(' ')} fill="none" stroke={C.red} strokeWidth="2"
+                    style={{ filter: `drop-shadow(0 0 6px ${C.red})` }} />
+        </svg>
+        <div style={{
+          position: 'absolute', bottom: 10, right: 28,
+          fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12,
+          color: C.red, letterSpacing: '0.15em', textShadow: `0 0 12px ${C.red}`,
+        }}>♥ {bpm} BPM</div>
+      </React.Fragment>
+      )}
 
       {/* Scene-transition diagonal light wipe + flash */}
       {sweepP >= 0 && (

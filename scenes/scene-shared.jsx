@@ -55,6 +55,7 @@ function CosmicBackdrop({ depth = 0, hue = 'cyan' }) {
       }} />
 
       {/* Rotating wireframe hologram globe */}
+      {!LITE && (
       <svg width="1920" height="1080" viewBox="0 0 1920 1080" style={{ position: 'absolute', inset: 0, opacity: 0.18 }}>
         <g transform="translate(960 560)" stroke={accent} fill="none" strokeWidth="1.2">
           <circle r={R} opacity="0.55" />
@@ -66,6 +67,7 @@ function CosmicBackdrop({ depth = 0, hue = 'cyan' }) {
           ))}
         </g>
       </svg>
+      )}
 
       {/* Neon perspective grid */}
       <div style={{ position: 'absolute', inset: '-20%', perspective: 900, opacity: 0.7 }}>
@@ -90,15 +92,17 @@ function CosmicBackdrop({ depth = 0, hue = 'cyan' }) {
       }} />
 
       {/* Sweeping volumetric light beam */}
+      {!LITE && (
       <div style={{
         position: 'absolute', top: '-30%', left: '50%', width: '36%', height: '160%',
         transform: `translateX(-50%) rotate(${18 + Math.sin(t * 0.3) * 6}deg)`,
         background: `linear-gradient(90deg, transparent, ${accent}16, transparent)`,
         filter: 'blur(22px)',
       }} />
+      )}
 
       {/* Drift particles */}
-      <ParticleField count={70} t={t} accent={accent} />
+      <ParticleField count={LITE ? 16 : 70} t={t} accent={accent} />
     </div>
   );
 }
@@ -289,15 +293,17 @@ function ImmersiveHUD({ boundaries = [] }) {
   const scanX = (t * 7) % 130 - 14;
   const rollY = (t * 14) % 124 - 12; // rolling scan band (% of height)
 
-  // Bottom ECG vitals trace
+  // Bottom ECG vitals trace (skipped in lite/mobile mode)
   const pts = [];
-  for (let x = 0; x <= 1920; x += 6) {
-    let y = 24;
-    const beat = ((x / 1920) * 6 + t * 1.2) % 1;
-    if (beat > 0.47 && beat < 0.53) { const k = (beat - 0.5) / 0.03; y -= Math.exp(-k * k * 3) * 20; }
-    else if (beat > 0.53 && beat < 0.58) y += 6;
-    else y += Math.sin(x * 0.05 + t * 3) * 1.4;
-    pts.push(x + ',' + y.toFixed(1));
+  if (!LITE) {
+    for (let x = 0; x <= 1920; x += 6) {
+      let y = 24;
+      const beat = ((x / 1920) * 6 + t * 1.2) % 1;
+      if (beat > 0.47 && beat < 0.53) { const k = (beat - 0.5) / 0.03; y -= Math.exp(-k * k * 3) * 20; }
+      else if (beat > 0.53 && beat < 0.58) y += 6;
+      else y += Math.sin(x * 0.05 + t * 3) * 1.4;
+      pts.push(x + ',' + y.toFixed(1));
+    }
   }
   const bpm = Math.round(64 + Math.sin(t * 1.1) * 5);
 
@@ -323,7 +329,7 @@ function ImmersiveHUD({ boundaries = [] }) {
       {/* CRT scanlines */}
       <div style={{ position: 'absolute', inset: 0, opacity: 0.4, backgroundImage: 'repeating-linear-gradient(0deg, rgba(34,211,238,0.07) 0px, rgba(34,211,238,0.07) 1px, transparent 1px, transparent 4px)' }} />
       {/* Rolling scan band */}
-      <div style={{ position: 'absolute', left: 0, right: 0, top: `${rollY}%`, height: '9%', background: `linear-gradient(180deg, transparent, ${C.cyan}14, transparent)` }} />
+      {!LITE && <div style={{ position: 'absolute', left: 0, right: 0, top: `${rollY}%`, height: '9%', background: `linear-gradient(180deg, transparent, ${C.cyan}14, transparent)` }} />}
       {/* Top hairline + scanning node */}
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, transparent, ${C.cyan}66, transparent)` }} />
       <div style={{ position: 'absolute', top: 0, left: `${scanX}%`, width: '12%', height: 2, background: `linear-gradient(90deg, transparent, ${C.cyan}, transparent)`, boxShadow: `0 0 14px ${C.cyan}` }} />
@@ -348,15 +354,19 @@ function ImmersiveHUD({ boundaries = [] }) {
       </div>
 
       {/* Bottom ECG vitals monitor */}
-      <svg width="1920" height="48" viewBox="0 0 1920 48" style={{ position: 'absolute', left: 0, bottom: 0, opacity: 0.75 }}>
-        <polyline points={pts.join(' ')} fill="none" stroke={C.red} strokeWidth="2"
-                  style={{ filter: `drop-shadow(0 0 6px ${C.red})` }} />
-      </svg>
-      <div style={{
-        position: 'absolute', bottom: 10, right: 28,
-        fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12,
-        color: C.red, letterSpacing: '0.15em', textShadow: `0 0 12px ${C.red}`,
-      }}>♥ {bpm} BPM</div>
+      {!LITE && (
+      <React.Fragment>
+        <svg width="1920" height="48" viewBox="0 0 1920 48" style={{ position: 'absolute', left: 0, bottom: 0, opacity: 0.75 }}>
+          <polyline points={pts.join(' ')} fill="none" stroke={C.red} strokeWidth="2"
+                    style={{ filter: `drop-shadow(0 0 6px ${C.red})` }} />
+        </svg>
+        <div style={{
+          position: 'absolute', bottom: 10, right: 28,
+          fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12,
+          color: C.red, letterSpacing: '0.15em', textShadow: `0 0 12px ${C.red}`,
+        }}>♥ {bpm} BPM</div>
+      </React.Fragment>
+      )}
 
       {/* Scene-transition diagonal light wipe + flash */}
       {sweepP >= 0 && (
