@@ -3,19 +3,35 @@
 <head>
 <meta charset="UTF-8" />
 <title>SilentCheck — Présentation animée</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&family=Orbitron:wght@400;500;600;700;800&family=Exo+2:wght@300;400;500;600&display=swap" />
 <style>
   html, body, #root { margin: 0; padding: 0; height: 100%; background: #020617; overflow: hidden; }
-  body { font-family: 'Inter', system-ui, sans-serif; color: #f8fafc; -webkit-font-smoothing: antialiased; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif; color: #f8fafc; -webkit-font-smoothing: antialiased;
+    /* Lock the viewport so the mobile browser chrome showing/hiding doesn't
+       resize the stage (which caused visible "jumps"). */
+    position: fixed; inset: 0; width: 100%; height: 100%;
+    overscroll-behavior: none; touch-action: none;
+    -webkit-user-select: none; user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
   * { box-sizing: border-box; }
 
-  /* Mobile performance: drop GPU-expensive frosted-glass blur on phones/tablets
-     to keep playback smooth (backdrop-filter is very costly on mobile GPUs). */
-  @media (max-width: 920px), (pointer: coarse) {
-    * { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+  /* Mobile/tablet: blur-based effects (backdrop-filter, box/text shadows,
+     SVG/CSS filters) are repainted every frame and overwhelm mobile GPUs,
+     causing the stutter ("ça saute"). Disable them on touch / small screens
+     to keep playback smooth — the layout and content stay intact. */
+  @media (max-width: 1100px), (pointer: coarse) {
+    * {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      box-shadow: none !important;
+      text-shadow: none !important;
+      filter: none !important;
+    }
   }
 </style>
 </head>
