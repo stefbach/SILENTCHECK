@@ -3,24 +3,67 @@
 <head>
 <meta charset="UTF-8" />
 <title>SilentCheck — Présentation animée</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&family=Orbitron:wght@400;500;600;700;800&family=Exo+2:wght@300;400;500;600&display=swap" />
 <style>
   html, body, #root { margin: 0; padding: 0; height: 100%; background: #020617; overflow: hidden; }
-  body { font-family: 'Inter', system-ui, sans-serif; color: #f8fafc; -webkit-font-smoothing: antialiased; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif; color: #f8fafc; -webkit-font-smoothing: antialiased;
+    /* Lock the viewport so the mobile browser chrome showing/hiding doesn't
+       resize the stage (which caused visible "jumps"). */
+    position: fixed; inset: 0; width: 100%; height: 100%;
+    overscroll-behavior: none; touch-action: none;
+    -webkit-user-select: none; user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
   * { box-sizing: border-box; }
 
-  /* Mobile performance: drop GPU-expensive frosted-glass blur on phones/tablets
-     to keep playback smooth (backdrop-filter is very costly on mobile GPUs). */
-  @media (max-width: 920px), (pointer: coarse) {
-    * { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+  /* Mobile/tablet: blur-based effects (backdrop-filter, box/text shadows,
+     SVG/CSS filters) are repainted every frame and overwhelm mobile GPUs,
+     causing the stutter ("ça saute"). Disable them on touch / small screens
+     to keep playback smooth — the layout and content stay intact. */
+  @media (max-width: 1100px), (pointer: coarse) {
+    * {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      box-shadow: none !important;
+      text-shadow: none !important;
+      filter: none !important;
+    }
   }
 </style>
 </head>
 <body>
   <div id="root"></div>
+
+  <!-- Mobile/tablet: play a pre-rendered video (smooth on any device) instead
+       of the live React animation. Desktop keeps the interactive version. -->
+  <video id="sc-video" autoplay loop muted playsinline preload="auto"
+         style="display:none; position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); background:#020617;"></video>
+  <script>
+    (function () {
+      var MOBILE = window.matchMedia('(max-width: 1100px)').matches || window.matchMedia('(pointer: coarse)').matches;
+      window.__SC_MOBILE__ = MOBILE;
+      if (!MOBILE) return;
+      var v = document.getElementById('sc-video');
+      v.src = 'assets/silentcheck.mp4';
+      v.style.display = 'block';
+      function fit() {
+        var w = window.innerWidth, h = window.innerHeight;
+        if (h > w) { v.style.width = h + 'px'; v.style.height = w + 'px'; v.style.transform = 'translate(-50%,-50%) rotate(90deg)'; }
+        else { v.style.width = w + 'px'; v.style.height = h + 'px'; v.style.transform = 'translate(-50%,-50%)'; }
+        v.style.objectFit = 'contain';
+      }
+      fit();
+      window.addEventListener('resize', fit);
+      window.addEventListener('orientationchange', fit);
+      var play = function () { if (v.play) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } };
+      document.addEventListener('touchstart', play, { once: true });
+      document.addEventListener('click', play, { once: true });
+    })();
+  </script>
 
 
 
@@ -113,7 +156,7 @@ const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
 // Lite mode: on small/touch devices, reduce per-frame work (lighter backdrop,
 // fewer particles, throttled fps) so playback stays smooth instead of stuttering.
 const LITE = typeof window !== 'undefined' && typeof window.matchMedia === 'function' &&
-  (window.matchMedia('(max-width: 920px)').matches || window.matchMedia('(pointer: coarse)').matches);
+  (window.matchMedia('(max-width: 1100px)').matches || window.matchMedia('(pointer: coarse)').matches);
 
 // interpolate([0, 0.5, 1], [0, 100, 50], ease?) -> fn(t)
 // Popmotion-style: linearly maps t across input keyframes to output values,
@@ -425,7 +468,7 @@ function Stage({
       lastTsRef.current = null;
       return;
     }
-    const minFrame = LITE ? 1 / 32 : 0; // cap renders to ~32fps on mobile
+    const minFrame = LITE ? 1 / 25 : 0; // stable ~25fps on mobile/tablet
     const step = (ts) => {
       if (lastTsRef.current == null) lastTsRef.current = ts;
       // Clamp dt so a stalled frame (common on mobile) plays as brief
@@ -507,6 +550,8 @@ function Stage({
             position: 'relative',
             transform: `${rotated ? 'rotate(90deg) ' : ''}scale(${scale})`,
             transformOrigin: 'center',
+            willChange: 'transform',
+            backfaceVisibility: 'hidden',
             flexShrink: 0,
             boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
             overflow: 'hidden',
@@ -4040,7 +4085,10 @@ Object.assign(window, { SceneStart, SceneServices, SceneConcierge, SceneSecondAv
       );
     }
 
-    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    // On mobile/tablet we show the pre-rendered video instead of the live app.
+    if (!window.__SC_MOBILE__) {
+      ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    }
   </script>
 </body>
 </html>

@@ -82,7 +82,7 @@ const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
 // Lite mode: on small/touch devices, reduce per-frame work (lighter backdrop,
 // fewer particles, throttled fps) so playback stays smooth instead of stuttering.
 const LITE = typeof window !== 'undefined' && typeof window.matchMedia === 'function' &&
-  (window.matchMedia('(max-width: 920px)').matches || window.matchMedia('(pointer: coarse)').matches);
+  (window.matchMedia('(max-width: 1100px)').matches || window.matchMedia('(pointer: coarse)').matches);
 
 // interpolate([0, 0.5, 1], [0, 100, 50], ease?) -> fn(t)
 // Popmotion-style: linearly maps t across input keyframes to output values,
@@ -394,7 +394,7 @@ function Stage({
       lastTsRef.current = null;
       return;
     }
-    const minFrame = LITE ? 1 / 32 : 0; // cap renders to ~32fps on mobile
+    const minFrame = LITE ? 1 / 25 : 0; // stable ~25fps on mobile/tablet
     const step = (ts) => {
       if (lastTsRef.current == null) lastTsRef.current = ts;
       // Clamp dt so a stalled frame (common on mobile) plays as brief
@@ -476,6 +476,8 @@ function Stage({
             position: 'relative',
             transform: `${rotated ? 'rotate(90deg) ' : ''}scale(${scale})`,
             transformOrigin: 'center',
+            willChange: 'transform',
+            backfaceVisibility: 'hidden',
             flexShrink: 0,
             boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
             overflow: 'hidden',
