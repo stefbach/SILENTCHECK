@@ -456,7 +456,7 @@ function Stage({
         position: 'absolute', inset: 0,
         display: 'flex', flexDirection: 'column',
         alignItems: 'center',
-        background: '#0a0a0a',
+        background: '#ddd5c2',
         fontFamily: 'Inter, system-ui, sans-serif',
       }}
     >
@@ -571,7 +571,7 @@ function PlaybackBar({ time, duration, playing, onPlayPause, onReset, onSeek, on
       display: 'flex', alignItems: 'center', gap: 12,
       padding: '8px 16px',
       background: 'rgba(20,20,20,0.92)',
-      borderTop: '1px solid rgba(255,255,255,0.08)',
+      borderTop: '1px solid rgba(35,41,58,0.08)',
       width: '100%',
       maxWidth: 680,
       alignSelf: 'center',
@@ -628,7 +628,7 @@ function PlaybackBar({ time, duration, playing, onPlayPause, onReset, onSeek, on
         <div style={{
           position: 'absolute',
           left: 0, right: 0, height: 4,
-          background: 'rgba(255,255,255,0.12)',
+          background: 'rgba(35,41,58,0.12)',
           borderRadius: 2,
         }}/>
         <div style={{
@@ -673,8 +673,8 @@ function IconButton({ children, onClick, title }) {
       style={{
         width: 28, height: 28,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: hover ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.04)',
-        border: '1px solid rgba(255,255,255,0.1)',
+        background: hover ? 'rgba(35,41,58,0.12)' : 'rgba(35,41,58,0.04)',
+        border: '1px solid rgba(35,41,58,0.1)',
         borderRadius: 6,
         color: '#f6f4ef',
         cursor: 'pointer',

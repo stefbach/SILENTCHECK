@@ -1,23 +1,24 @@
 // Shared visual primitives — 3D heart, particles, grid, glow.
 
 const C = {
-  bg0: '#020617',          // deep navy black
-  bg1: '#050a1f',
-  bg2: '#0a1535',
-  cyan: '#22d3ee',
-  cyanDim: '#0891b2',
-  blue: '#3b82f6',
+  bg0: '#efe7d4',          // light beige (page / scene background)
+  bg1: '#f4eede',
+  bg2: '#faf6ec',          // light card surface
+  ink: '#23293a',          // dark ink for text on bright chips
+  cyan: '#0e7490',         // teal — readable on beige
+  cyanDim: '#155e75',
+  blue: '#2563eb',
   blueDeep: '#1e3a8a',
-  red: '#f43f5e',
+  red: '#e11d48',
   redDim: '#9f1239',
-  gold: '#fbbf24',
-  goldDim: '#b45309',
-  green: '#22c55e',
-  greenDim: '#15803d',
-  white: '#f8fafc',
-  whiteDim: 'rgba(248,250,252,0.62)',
-  line: 'rgba(34,211,238,0.18)',
-  lineStrong: 'rgba(34,211,238,0.35)',
+  gold: '#b45309',         // amber — readable on beige
+  goldDim: '#92400e',
+  green: '#15803d',
+  greenDim: '#166534',
+  white: '#23293a',        // primary text = dark ink (key kept for reuse)
+  whiteDim: 'rgba(35,41,58,0.6)',
+  line: 'rgba(35,41,58,0.14)',
+  lineStrong: 'rgba(35,41,58,0.28)',
 };
 
 // ── 3D space backdrop with parallax grid + drifting particles ─────────────
@@ -191,12 +192,12 @@ function Heart3D({ x = 960, y = 540, size = 280, beat = true }) {
             <stop offset="100%" stopColor={C.redDim} />
           </radialGradient>
           <linearGradient id="heartShine" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="rgba(255,255,255,0.7)" />
-            <stop offset="60%" stopColor="rgba(255,255,255,0)" />
+            <stop offset="0%" stopColor="rgba(35,41,58,0.7)" />
+            <stop offset="60%" stopColor="rgba(35,41,58,0)" />
           </linearGradient>
         </defs>
         <path d="M 0,40 C -50,10 -90,-20 -90,-50 C -90,-80 -60,-95 -30,-80 C -10,-70 0,-50 0,-40 C 0,-50 10,-70 30,-80 C 60,-95 90,-80 90,-50 C 90,-20 50,10 0,40 Z"
-              fill="url(#heartGrad)" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+              fill="url(#heartGrad)" stroke="rgba(35,41,58,0.3)" strokeWidth="1" />
         <path d="M 0,30 C -42,4 -75,-18 -75,-44 C -75,-62 -55,-72 -32,-62"
               fill="none" stroke="url(#heartShine)" strokeWidth="3" opacity="0.7" />
       </svg>
@@ -228,12 +229,12 @@ function GlassCard({ x, y, w, h, children, tilt = 0, depth = 0, opacity = 1, bor
       width: w, height: h,
       transform: `perspective(1400px) rotateY(${tilt}deg) translateZ(${depth}px)`,
       transformStyle: 'preserve-3d',
-      background: 'linear-gradient(135deg, rgba(34,211,238,0.08) 0%, rgba(59,130,246,0.04) 100%)',
+      background: 'linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(250,244,232,0.62) 100%)',
       backdropFilter: 'blur(14px)',
       WebkitBackdropFilter: 'blur(14px)',
       border: `1px solid ${border}`,
       borderRadius: 18,
-      boxShadow: `0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08)`,
+      boxShadow: `0 20px 50px rgba(70,60,40,0.16), inset 0 1px 0 rgba(255,255,255,0.7)`,
       opacity,
       overflow: 'hidden',
     }}>
@@ -325,7 +326,7 @@ function ImmersiveHUD({ boundaries = [] }) {
   return (
     <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 40, overflow: 'hidden' }}>
       {/* Cinematic vignette */}
-      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 45%, transparent 50%, rgba(2,6,23,0.62) 100%)' }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 45%, transparent 50%, rgba(150,140,120,0.62) 100%)' }} />
       {/* CRT scanlines */}
       <div style={{ position: 'absolute', inset: 0, opacity: 0.4, backgroundImage: 'repeating-linear-gradient(0deg, rgba(34,211,238,0.07) 0px, rgba(34,211,238,0.07) 1px, transparent 1px, transparent 4px)' }} />
       {/* Rolling scan band */}
@@ -343,7 +344,7 @@ function ImmersiveHUD({ boundaries = [] }) {
         display: 'flex', alignItems: 'center', gap: 12,
         fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 11,
         letterSpacing: '0.3em', textTransform: 'uppercase',
-        color: 'rgba(248,250,252,0.6)', whiteSpace: 'nowrap',
+        color: 'rgba(35,41,58,0.6)', whiteSpace: 'nowrap',
       }}>
         <span style={{ width: 7, height: 7, borderRadius: 4, background: C.green, boxShadow: `0 0 10px ${C.green}`, opacity: 0.55 + Math.sin(t * 4) * 0.45 }} />
         <span>SilentCheck</span>
@@ -375,7 +376,7 @@ function ImmersiveHUD({ boundaries = [] }) {
             position: 'absolute', top: '-20%', bottom: '-20%',
             left: `${sweepP * 122 - 11}%`, width: '13%',
             transform: 'skewX(-12deg)',
-            background: `linear-gradient(90deg, transparent, ${C.cyan}cc, rgba(255,255,255,0.85), ${C.cyan}cc, transparent)`,
+            background: `linear-gradient(90deg, transparent, ${C.cyan}cc, rgba(35,41,58,0.85), ${C.cyan}cc, transparent)`,
             boxShadow: `0 0 90px 24px ${C.cyan}`, opacity: 0.85,
           }} />
           <div style={{ position: 'absolute', inset: 0, background: C.cyan, opacity: flash * 0.08 }} />

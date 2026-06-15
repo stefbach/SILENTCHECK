@@ -146,7 +146,7 @@ function Scene6Synergy({ start, end }) {
                     backdropFilter: 'blur(8px)',
                   }}>
                     <div style={{ fontFamily: 'Inter', fontSize: 22, fontWeight: 600, color: C.white }}>{n.name}</div>
-                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: 'rgba(255,255,255,0.85)', marginTop: 4, letterSpacing: '0.1em' }}>{n.sub}</div>
+                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: 'rgba(35,41,58,0.85)', marginTop: 4, letterSpacing: '0.1em' }}>{n.sub}</div>
                   </div>
                 </div>
               );

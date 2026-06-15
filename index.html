@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&family=Orbitron:wght@400;500;600;700;800&family=Exo+2:wght@300;400;500;600&display=swap" />
 <style>
-  html, body, #root { margin: 0; padding: 0; height: 100%; background: #020617; overflow: hidden; }
+  html, body, #root { margin: 0; padding: 0; height: 100%; background: #efe7d4; overflow: hidden; }
   body {
     font-family: 'Inter', system-ui, sans-serif; color: #f8fafc; -webkit-font-smoothing: antialiased;
     /* Lock the viewport so the mobile browser chrome showing/hiding doesn't
@@ -41,7 +41,7 @@
   <!-- Mobile/tablet: play a pre-rendered video (smooth on any device) instead
        of the live React animation. Desktop keeps the interactive version. -->
   <video id="sc-video" autoplay loop muted playsinline preload="auto"
-         style="display:none; position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); background:#020617;"></video>
+         style="display:none; position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); background:#efe7d4;"></video>
   <script>
     (function () {
       var MOBILE = window.matchMedia('(max-width: 1100px)').matches || window.matchMedia('(pointer: coarse)').matches;
@@ -530,7 +530,7 @@ function Stage({
         position: 'absolute', inset: 0,
         display: 'flex', flexDirection: 'column',
         alignItems: 'center',
-        background: '#0a0a0a',
+        background: '#ddd5c2',
         fontFamily: 'Inter, system-ui, sans-serif',
       }}
     >
@@ -645,7 +645,7 @@ function PlaybackBar({ time, duration, playing, onPlayPause, onReset, onSeek, on
       display: 'flex', alignItems: 'center', gap: 12,
       padding: '8px 16px',
       background: 'rgba(20,20,20,0.92)',
-      borderTop: '1px solid rgba(255,255,255,0.08)',
+      borderTop: '1px solid rgba(35,41,58,0.08)',
       width: '100%',
       maxWidth: 680,
       alignSelf: 'center',
@@ -702,7 +702,7 @@ function PlaybackBar({ time, duration, playing, onPlayPause, onReset, onSeek, on
         <div style={{
           position: 'absolute',
           left: 0, right: 0, height: 4,
-          background: 'rgba(255,255,255,0.12)',
+          background: 'rgba(35,41,58,0.12)',
           borderRadius: 2,
         }}/>
         <div style={{
@@ -747,8 +747,8 @@ function IconButton({ children, onClick, title }) {
       style={{
         width: 28, height: 28,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: hover ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.04)',
-        border: '1px solid rgba(255,255,255,0.1)',
+        background: hover ? 'rgba(35,41,58,0.12)' : 'rgba(35,41,58,0.04)',
+        border: '1px solid rgba(35,41,58,0.1)',
         borderRadius: 6,
         color: '#f6f4ef',
         cursor: 'pointer',
@@ -774,23 +774,24 @@ Object.assign(window, {
 // Shared visual primitives — 3D heart, particles, grid, glow.
 
 const C = {
-  bg0: '#020617',          // deep navy black
-  bg1: '#050a1f',
-  bg2: '#0a1535',
-  cyan: '#22d3ee',
-  cyanDim: '#0891b2',
-  blue: '#3b82f6',
+  bg0: '#efe7d4',          // light beige (page / scene background)
+  bg1: '#f4eede',
+  bg2: '#faf6ec',          // light card surface
+  ink: '#23293a',          // dark ink for text on bright chips
+  cyan: '#0e7490',         // teal — readable on beige
+  cyanDim: '#155e75',
+  blue: '#2563eb',
   blueDeep: '#1e3a8a',
-  red: '#f43f5e',
+  red: '#e11d48',
   redDim: '#9f1239',
-  gold: '#fbbf24',
-  goldDim: '#b45309',
-  green: '#22c55e',
-  greenDim: '#15803d',
-  white: '#f8fafc',
-  whiteDim: 'rgba(248,250,252,0.62)',
-  line: 'rgba(34,211,238,0.18)',
-  lineStrong: 'rgba(34,211,238,0.35)',
+  gold: '#b45309',         // amber — readable on beige
+  goldDim: '#92400e',
+  green: '#15803d',
+  greenDim: '#166534',
+  white: '#23293a',        // primary text = dark ink (key kept for reuse)
+  whiteDim: 'rgba(35,41,58,0.6)',
+  line: 'rgba(35,41,58,0.14)',
+  lineStrong: 'rgba(35,41,58,0.28)',
 };
 
 // ── 3D space backdrop with parallax grid + drifting particles ─────────────
@@ -964,12 +965,12 @@ function Heart3D({ x = 960, y = 540, size = 280, beat = true }) {
             <stop offset="100%" stopColor={C.redDim} />
           </radialGradient>
           <linearGradient id="heartShine" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="rgba(255,255,255,0.7)" />
-            <stop offset="60%" stopColor="rgba(255,255,255,0)" />
+            <stop offset="0%" stopColor="rgba(35,41,58,0.7)" />
+            <stop offset="60%" stopColor="rgba(35,41,58,0)" />
           </linearGradient>
         </defs>
         <path d="M 0,40 C -50,10 -90,-20 -90,-50 C -90,-80 -60,-95 -30,-80 C -10,-70 0,-50 0,-40 C 0,-50 10,-70 30,-80 C 60,-95 90,-80 90,-50 C 90,-20 50,10 0,40 Z"
-              fill="url(#heartGrad)" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+              fill="url(#heartGrad)" stroke="rgba(35,41,58,0.3)" strokeWidth="1" />
         <path d="M 0,30 C -42,4 -75,-18 -75,-44 C -75,-62 -55,-72 -32,-62"
               fill="none" stroke="url(#heartShine)" strokeWidth="3" opacity="0.7" />
       </svg>
@@ -1001,12 +1002,12 @@ function GlassCard({ x, y, w, h, children, tilt = 0, depth = 0, opacity = 1, bor
       width: w, height: h,
       transform: `perspective(1400px) rotateY(${tilt}deg) translateZ(${depth}px)`,
       transformStyle: 'preserve-3d',
-      background: 'linear-gradient(135deg, rgba(34,211,238,0.08) 0%, rgba(59,130,246,0.04) 100%)',
+      background: 'linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(250,244,232,0.62) 100%)',
       backdropFilter: 'blur(14px)',
       WebkitBackdropFilter: 'blur(14px)',
       border: `1px solid ${border}`,
       borderRadius: 18,
-      boxShadow: `0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08)`,
+      boxShadow: `0 20px 50px rgba(70,60,40,0.16), inset 0 1px 0 rgba(255,255,255,0.7)`,
       opacity,
       overflow: 'hidden',
     }}>
@@ -1098,7 +1099,7 @@ function ImmersiveHUD({ boundaries = [] }) {
   return (
     <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 40, overflow: 'hidden' }}>
       {/* Cinematic vignette */}
-      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 45%, transparent 50%, rgba(2,6,23,0.62) 100%)' }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 45%, transparent 50%, rgba(150,140,120,0.62) 100%)' }} />
       {/* CRT scanlines */}
       <div style={{ position: 'absolute', inset: 0, opacity: 0.4, backgroundImage: 'repeating-linear-gradient(0deg, rgba(34,211,238,0.07) 0px, rgba(34,211,238,0.07) 1px, transparent 1px, transparent 4px)' }} />
       {/* Rolling scan band */}
@@ -1116,7 +1117,7 @@ function ImmersiveHUD({ boundaries = [] }) {
         display: 'flex', alignItems: 'center', gap: 12,
         fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 11,
         letterSpacing: '0.3em', textTransform: 'uppercase',
-        color: 'rgba(248,250,252,0.6)', whiteSpace: 'nowrap',
+        color: 'rgba(35,41,58,0.6)', whiteSpace: 'nowrap',
       }}>
         <span style={{ width: 7, height: 7, borderRadius: 4, background: C.green, boxShadow: `0 0 10px ${C.green}`, opacity: 0.55 + Math.sin(t * 4) * 0.45 }} />
         <span>SilentCheck</span>
@@ -1148,7 +1149,7 @@ function ImmersiveHUD({ boundaries = [] }) {
             position: 'absolute', top: '-20%', bottom: '-20%',
             left: `${sweepP * 122 - 11}%`, width: '13%',
             transform: 'skewX(-12deg)',
-            background: `linear-gradient(90deg, transparent, ${C.cyan}cc, rgba(255,255,255,0.85), ${C.cyan}cc, transparent)`,
+            background: `linear-gradient(90deg, transparent, ${C.cyan}cc, rgba(35,41,58,0.85), ${C.cyan}cc, transparent)`,
             boxShadow: `0 0 90px 24px ${C.cyan}`, opacity: 0.85,
           }} />
           <div style={{ position: 'absolute', inset: 0, background: C.cyan, opacity: flash * 0.08 }} />
@@ -1737,7 +1738,7 @@ function Scene6Synergy({ start, end }) {
                     backdropFilter: 'blur(8px)',
                   }}>
                     <div style={{ fontFamily: 'Inter', fontSize: 22, fontWeight: 600, color: C.white }}>{n.name}</div>
-                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: 'rgba(255,255,255,0.85)', marginTop: 4, letterSpacing: '0.1em' }}>{n.sub}</div>
+                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: 'rgba(35,41,58,0.85)', marginTop: 4, letterSpacing: '0.1em' }}>{n.sub}</div>
                   </div>
                 </div>
               );
@@ -1963,7 +1964,7 @@ function Scene8Outro({ start, end }) {
               display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
               fontFamily: 'Inter',
             }}>
-              <div style={{ fontSize: 11, color: 'rgba(248,250,252,0.5)', letterSpacing: '0.25em', fontFamily: 'JetBrains Mono, monospace' }}>
+              <div style={{ fontSize: 11, color: 'rgba(35,41,58,0.5)', letterSpacing: '0.25em', fontFamily: 'JetBrains Mono, monospace' }}>
                 © 2026 · Score BSD v5.0 · Validé par 53 références internationales
               </div>
             </div>
@@ -2012,7 +2013,7 @@ function Scene9Mockups({ start, end }) {
                   <div style={{ fontSize: 26, fontWeight: 200, color: C.white, letterSpacing: '-0.02em', lineHeight: 1.1 }}>Connaissez<br/>votre risque.</div>
                   <div style={{ fontSize: 11, color: C.whiteDim, lineHeight: 1.4 }}>Stratification cardiovasculaire personnalisée</div>
                 </div>
-                <div style={{ padding: '14px', background: `linear-gradient(135deg, ${C.cyan}, ${C.blue})`, borderRadius: 12, textAlign: 'center', fontSize: 13, fontWeight: 600, color: C.bg0 }}>Commencer mon évaluation</div>
+                <div style={{ padding: '14px', background: `linear-gradient(135deg, ${C.cyan}, ${C.blue})`, borderRadius: 12, textAlign: 'center', fontSize: 13, fontWeight: 600, color: C.ink }}>Commencer mon évaluation</div>
                 <div style={{ marginTop: 10, fontSize: 9, color: C.whiteDim, textAlign: 'center', fontFamily: 'JetBrains Mono, monospace' }}>15 min · médecin inclus</div>
               </div>
             )
@@ -2069,7 +2070,7 @@ function Scene9Mockups({ start, end }) {
                     </div>
                   ))}
                 </div>
-                <div style={{ marginTop: 'auto', padding: '12px', background: `linear-gradient(135deg, ${C.cyan}, ${C.gold})`, borderRadius: 10, textAlign: 'center', fontSize: 12, color: C.bg0, fontWeight: 600 }}>Voir mon plan d'action</div>
+                <div style={{ marginTop: 'auto', padding: '12px', background: `linear-gradient(135deg, ${C.cyan}, ${C.gold})`, borderRadius: 10, textAlign: 'center', fontSize: 12, color: C.ink, fontWeight: 600 }}>Voir mon plan d'action</div>
               </div>
             )
           },
@@ -2287,8 +2288,8 @@ function Scene11Security({ start, end }) {
                     <stop offset="100%" stopColor={C.blueDeep} stopOpacity="0.15" />
                   </linearGradient>
                   <linearGradient id="shieldShine" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="rgba(255,255,255,0.4)" />
-                    <stop offset="40%" stopColor="rgba(255,255,255,0)" />
+                    <stop offset="0%" stopColor="rgba(35,41,58,0.4)" />
+                    <stop offset="40%" stopColor="rgba(35,41,58,0)" />
                   </linearGradient>
                 </defs>
                 <path d="M 190 20 L 60 70 L 60 220 Q 60 340 190 420 Q 320 340 320 220 L 320 70 Z"
@@ -2326,7 +2327,7 @@ function Scene11Security({ start, end }) {
                       borderRadius: '50%',
                       background: C.cyan,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      color: C.bg0, fontWeight: 700, fontSize: 14,
+                      color: C.ink, fontWeight: 700, fontSize: 14,
                     }}>✓</div>
                     <div>
                       <div style={{ fontSize: 16, fontWeight: 500, color: C.white }}>{c.title}</div>
@@ -2404,10 +2405,10 @@ function Scene12Authors({ start, end }) {
                           borderRadius: '50%',
                           background: `radial-gradient(circle at 30% 30%, ${C.gold}, ${C.goldDim})`,
                           border: `2px solid ${C.gold}`,
-                          boxShadow: `0 0 50px ${C.gold}66, inset 0 0 20px rgba(255,255,255,0.2)`,
+                          boxShadow: `0 0 50px ${C.gold}66, inset 0 0 20px rgba(35,41,58,0.2)`,
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                           fontFamily: 'Inter', fontSize: 42, fontWeight: 300,
-                          color: C.bg0, letterSpacing: '0.05em',
+                          color: C.ink, letterSpacing: '0.05em',
                           marginTop: 8, marginBottom: 28,
                         }}>{a.initials}</div>
                         <div style={{ fontFamily: 'Inter', fontSize: 24, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>{a.name}</div>
@@ -2776,7 +2777,7 @@ function Scene14Hub({ start, end }) {
                       <span style={{ color: col, fontWeight: 600, fontFamily: 'JetBrains Mono, monospace' }}>{v}</span>
                     </div>
                   ))}
-                  <div style={{ marginTop: 'auto', padding: '8px', background: `linear-gradient(135deg, ${C.cyan}, ${C.gold})`, borderRadius: 6, textAlign: 'center', fontSize: 10, fontWeight: 700, color: C.bg0 }}>
+                  <div style={{ marginTop: 'auto', padding: '8px', background: `linear-gradient(135deg, ${C.cyan}, ${C.gold})`, borderRadius: 6, textAlign: 'center', fontSize: 10, fontWeight: 700, color: C.ink }}>
                     Score BSD : 42 / 100
                   </div>
                 </div>
@@ -2807,7 +2808,7 @@ function Scene14Hub({ start, end }) {
                   transform: `translate(-50%, -50%) scale(${0.6 + sIn * 0.4})`,
                   opacity: sIn,
                   padding: '8px 12px',
-                  background: 'rgba(8,15,40,0.85)',
+                  background: 'rgba(252,248,238,0.85)',
                   border: `1px solid ${s.color}88`,
                   borderRadius: 10,
                   boxShadow: `0 0 14px ${s.color}55`,
@@ -2996,7 +2997,7 @@ function Scene12Authors({ start, end }) {
               ].map((n, i) => (
                 <div key={i} style={{
                   padding: '20px 26px',
-                  background: n.pain ? 'rgba(244,63,94,0.12)' : 'rgba(248,250,252,0.04)',
+                  background: n.pain ? 'rgba(244,63,94,0.12)' : 'rgba(35,41,58,0.04)',
                   border: `1px solid ${n.pain ? C.red + '88' : C.line}`,
                   borderRadius: 10,
                   fontFamily: 'Inter', fontSize: 16, fontWeight: n.pain ? 500 : 300,
@@ -3010,7 +3011,7 @@ function Scene12Authors({ start, end }) {
               opacity: clamp((t - 2.5) / 1.2, 0, 1) * (1 - oldRoleOut),
               fontFamily: 'Inter', fontSize: 22, color: C.whiteDim, fontStyle: 'italic',
               padding: '14px 32px',
-              background: 'rgba(8,15,40,0.7)',
+              background: 'rgba(252,248,238,0.7)',
               border: `1px solid ${C.line}`,
               borderRadius: 100,
               backdropFilter: 'blur(8px)',
@@ -3057,11 +3058,11 @@ function Scene12Authors({ start, end }) {
                          fill="none" stroke="url(#appRing)" strokeWidth="2" opacity="0.9"
                          transform={`rotate(${t * 6} 250 250)`} />
                 <polygon points="250,120 350,180 350,320 250,380 150,320 150,180"
-                         fill="rgba(8,15,40,0.7)" stroke={C.gold} strokeWidth="1.5"
+                         fill="rgba(252,248,238,0.7)" stroke={C.gold} strokeWidth="1.5"
                          transform={`rotate(${-t * 4} 250 250)`} />
                 {/* Phone glyph at the center */}
                 <g transform="translate(250 250)">
-                  <rect x="-46" y="-78" width="92" height="156" rx="16" fill="rgba(8,15,40,0.92)" stroke={C.gold} strokeWidth="2.5" />
+                  <rect x="-46" y="-78" width="92" height="156" rx="16" fill="rgba(252,248,238,0.92)" stroke={C.gold} strokeWidth="2.5" />
                   <rect x="-46" y="-78" width="92" height="156" rx="16" fill="none" stroke={C.cyan} strokeWidth="1" opacity="0.5" />
                   <line x1="-12" y1="-68" x2="12" y2="-68" stroke={C.gold} strokeWidth="3" strokeLinecap="round" />
                   {/* heartbeat */}
@@ -3097,7 +3098,7 @@ function Scene12Authors({ start, end }) {
                   transform: `translate(-50%, -50%) scale(${0.6 + sIn * 0.4})`,
                   opacity: sIn * orbitIn * 0.85,
                   padding: '8px 14px',
-                  background: 'rgba(8,15,40,0.85)',
+                  background: 'rgba(252,248,238,0.85)',
                   border: `1px solid ${C.cyan}66`,
                   borderRadius: 100,
                   display: 'flex', alignItems: 'center', gap: 8,
@@ -3141,7 +3142,7 @@ function Scene12Authors({ start, end }) {
                   transform: `translate(-50%, -50%) scale(${0.6 + sIn * 0.4})`,
                   opacity: sIn * orbitIn,
                   padding: '10px 16px',
-                  background: 'rgba(8,15,40,0.92)',
+                  background: 'rgba(252,248,238,0.92)',
                   border: `1.5px solid ${d.color}aa`,
                   borderRadius: 12,
                   display: 'flex', alignItems: 'center', gap: 10,
@@ -3355,12 +3356,12 @@ function SceneServices({ start, end }) {
                 width: 230, height: 230, borderRadius: '50%',
                 background: `radial-gradient(circle at 35% 30%, ${C.gold}cc, ${C.goldDim}55)`,
                 border: `3px solid ${C.gold}`,
-                boxShadow: `0 0 70px ${C.gold}88, inset 0 0 30px rgba(255,255,255,0.15)`,
+                boxShadow: `0 0 70px ${C.gold}88, inset 0 0 30px rgba(35,41,58,0.15)`,
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center',
               }}>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.bg0, letterSpacing: '0.25em', fontWeight: 600 }}>POINT D'ENTRÉE</div>
-                <div style={{ fontFamily: 'Inter', fontSize: 26, fontWeight: 500, color: C.bg0, marginTop: 6, letterSpacing: '-0.01em' }}>Généraliste + biologie</div>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: C.bg0, opacity: 0.75, letterSpacing: '0.2em', marginTop: 6, textTransform: 'uppercase' }}>puis on décline · piloté par l'app</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.ink, letterSpacing: '0.25em', fontWeight: 600 }}>POINT D'ENTRÉE</div>
+                <div style={{ fontFamily: 'Inter', fontSize: 26, fontWeight: 500, color: C.ink, marginTop: 6, letterSpacing: '-0.01em' }}>Généraliste + biologie</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: C.ink, opacity: 0.75, letterSpacing: '0.2em', marginTop: 6, textTransform: 'uppercase' }}>puis on décline · piloté par l'app</div>
               </div>
               {[0, 1, 2].map(i => {
                 const phase = (t * 0.7 + i * 0.6) % 2;
@@ -3385,7 +3386,7 @@ function SceneServices({ start, end }) {
                   transform: `translate(-50%, -50%) scale(${0.7 + sIn * 0.3})`,
                   opacity: sIn,
                   width: 250,
-                  background: 'rgba(8,15,40,0.92)',
+                  background: 'rgba(252,248,238,0.92)',
                   border: `1.5px solid ${s.color}aa`,
                   borderRadius: 14,
                   boxShadow: `0 0 26px ${s.color}44`,
@@ -3414,8 +3415,8 @@ function SceneServices({ start, end }) {
                     padding: '7px 12px', borderRadius: 8,
                     background: `linear-gradient(135deg, ${s.color}, ${s.color}aa)`,
                   }}>
-                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: C.bg0, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Réserver</span>
-                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.bg0, fontWeight: 600 }}>{s.slot}</span>
+                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: C.ink, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Réserver</span>
+                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.ink, fontWeight: 600 }}>{s.slot}</span>
                   </div>
                 </div>
               );
@@ -3528,7 +3529,7 @@ function SceneConcierge({ start, end }) {
                       <span style={{ color: col, fontWeight: 600 }}>{v}</span>
                     </div>
                   ))}
-                  <div style={{ marginTop: 'auto', padding: '11px', background: `linear-gradient(135deg, ${C.gold}, ${C.cyan})`, borderRadius: 10, textAlign: 'center', fontSize: 12, fontWeight: 700, color: C.bg0 }}>
+                  <div style={{ marginTop: 'auto', padding: '11px', background: `linear-gradient(135deg, ${C.gold}, ${C.cyan})`, borderRadius: 10, textAlign: 'center', fontSize: 12, fontWeight: 700, color: C.ink }}>
                     Contacter mon médecin référent
                   </div>
                 </div>
@@ -3659,11 +3660,11 @@ function SceneSecondAvis({ start, end }) {
                 width: 150, height: 150, borderRadius: '50%',
                 background: `radial-gradient(circle at 35% 30%, ${C.cyan}cc, ${C.cyanDim}44)`,
                 border: `3px solid ${C.cyan}`,
-                boxShadow: `0 0 60px ${C.cyan}88, inset 0 0 24px rgba(255,255,255,0.15)`,
+                boxShadow: `0 0 60px ${C.cyan}88, inset 0 0 24px rgba(35,41,58,0.15)`,
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               }}>
-                <div style={{ fontFamily: 'Inter', fontSize: 26, fontWeight: 400, color: C.bg0, letterSpacing: '0.04em' }}>VOTRE CAS</div>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: C.bg0, opacity: 0.75, letterSpacing: '0.2em', marginTop: 4 }}>SÉCURISÉ</div>
+                <div style={{ fontFamily: 'Inter', fontSize: 26, fontWeight: 400, color: C.ink, letterSpacing: '0.04em' }}>VOTRE CAS</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: C.ink, opacity: 0.75, letterSpacing: '0.2em', marginTop: 4 }}>SÉCURISÉ</div>
               </div>
               {[0, 1, 2].map(i => {
                 const phase = (t * 0.7 + i * 0.6) % 2;
@@ -3687,7 +3688,7 @@ function SceneSecondAvis({ start, end }) {
                   opacity: sIn, zIndex: 5,
                   display: 'flex', alignItems: 'center', gap: 8,
                   padding: '6px 12px',
-                  background: 'rgba(8,15,40,0.9)',
+                  background: 'rgba(252,248,238,0.9)',
                   border: `1px solid ${col}99`,
                   borderRadius: 100,
                   boxShadow: `0 0 16px ${col}44`,
@@ -3962,7 +3963,7 @@ function SceneBusinessModel({ start, end }) {
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
               Un seul abonnement. <span style={{ fontStyle: 'italic', color: C.gold }}>Tout le service.</span><br/>
-              <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>149 € / mois, pour tous — sans option, sans surprise.</span>
+              <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>Un seul périmètre, pour tous — mensuel ou annuel.</span>
             </div>
 
             {/* LEFT — single subscription */}
@@ -3970,9 +3971,10 @@ function SceneBusinessModel({ start, end }) {
               <GlassCard x={0} y={0} w={780} h={548} border={`${C.gold}aa`}>
                 <div style={{ padding: 36, height: '100%', display: 'flex', flexDirection: 'column' }}>
                   <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12, letterSpacing: '0.24em', color: C.gold, textTransform: 'uppercase' }}>Abonnement unique · pour tous</div>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginTop: 12 }}>
-                    <span style={{ fontFamily: 'Inter', fontSize: 92, fontWeight: 200, color: C.white, letterSpacing: '-0.04em' }}>149</span>
-                    <span style={{ fontSize: 24, color: C.whiteDim }}>€ / mois</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 18 }}>
+                    <span style={{ fontFamily: 'Inter', fontSize: 44, fontWeight: 300, color: C.white, letterSpacing: '-0.02em' }}>Mensuel</span>
+                    <span style={{ fontSize: 22, color: C.whiteDim }}>ou</span>
+                    <span style={{ fontFamily: 'Inter', fontSize: 44, fontWeight: 300, color: C.gold, letterSpacing: '-0.02em' }}>Annuel</span>
                   </div>
                   <div style={{ borderTop: `1px solid ${C.gold}33`, marginTop: 18, paddingTop: 20, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px 24px' }}>
                     {included.map((it, j) => (
@@ -4022,7 +4024,7 @@ function SceneBusinessModel({ start, end }) {
               borderTop: `1px solid ${C.gold}33`, paddingTop: 16,
             }}>
               <span style={{ color: C.cyan, fontWeight: 500 }}>100 % fondé sur la science validée</span> — aucune pseudoscience, aucun gadget marketing.
-              <span style={{ display: 'block', fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: 'rgba(248,250,252,0.4)', letterSpacing: '0.12em', marginTop: 8 }}>Tarifs indicatifs · à valider</span>
+              <span style={{ display: 'block', fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: 'rgba(35,41,58,0.4)', letterSpacing: '0.12em', marginTop: 8 }}>Sans engagement · mensuel ou annuel</span>
             </div>
           </div>
         );
@@ -4052,7 +4054,7 @@ Object.assign(window, { SceneStart, SceneServices, SceneConcierge, SceneSecondAv
     function App() {
       return (
         <div data-video-root data-screen-label="t=0s" style={{ position: 'absolute', inset: 0 }}>
-          <Stage width={1920} height={1080} duration={TOTAL} background="#020617" persistKey="silentcheck-anim">
+          <Stage width={1920} height={1080} duration={TOTAL} background="#efe7d4" persistKey="silentcheck-anim">
             <TimestampLabel />
             {/* Act 1 — Le point de départ */}
             <Scene1Intro     start={0}     end={18}   />

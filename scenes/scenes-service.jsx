@@ -157,12 +157,12 @@ function SceneServices({ start, end }) {
                 width: 230, height: 230, borderRadius: '50%',
                 background: `radial-gradient(circle at 35% 30%, ${C.gold}cc, ${C.goldDim}55)`,
                 border: `3px solid ${C.gold}`,
-                boxShadow: `0 0 70px ${C.gold}88, inset 0 0 30px rgba(255,255,255,0.15)`,
+                boxShadow: `0 0 70px ${C.gold}88, inset 0 0 30px rgba(35,41,58,0.15)`,
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center',
               }}>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.bg0, letterSpacing: '0.25em', fontWeight: 600 }}>POINT D'ENTRÉE</div>
-                <div style={{ fontFamily: 'Inter', fontSize: 26, fontWeight: 500, color: C.bg0, marginTop: 6, letterSpacing: '-0.01em' }}>Généraliste + biologie</div>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: C.bg0, opacity: 0.75, letterSpacing: '0.2em', marginTop: 6, textTransform: 'uppercase' }}>puis on décline · piloté par l'app</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.ink, letterSpacing: '0.25em', fontWeight: 600 }}>POINT D'ENTRÉE</div>
+                <div style={{ fontFamily: 'Inter', fontSize: 26, fontWeight: 500, color: C.ink, marginTop: 6, letterSpacing: '-0.01em' }}>Généraliste + biologie</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: C.ink, opacity: 0.75, letterSpacing: '0.2em', marginTop: 6, textTransform: 'uppercase' }}>puis on décline · piloté par l'app</div>
               </div>
               {[0, 1, 2].map(i => {
                 const phase = (t * 0.7 + i * 0.6) % 2;
@@ -187,7 +187,7 @@ function SceneServices({ start, end }) {
                   transform: `translate(-50%, -50%) scale(${0.7 + sIn * 0.3})`,
                   opacity: sIn,
                   width: 250,
-                  background: 'rgba(8,15,40,0.92)',
+                  background: 'rgba(252,248,238,0.92)',
                   border: `1.5px solid ${s.color}aa`,
                   borderRadius: 14,
                   boxShadow: `0 0 26px ${s.color}44`,
@@ -216,8 +216,8 @@ function SceneServices({ start, end }) {
                     padding: '7px 12px', borderRadius: 8,
                     background: `linear-gradient(135deg, ${s.color}, ${s.color}aa)`,
                   }}>
-                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: C.bg0, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Réserver</span>
-                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.bg0, fontWeight: 600 }}>{s.slot}</span>
+                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: C.ink, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Réserver</span>
+                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.ink, fontWeight: 600 }}>{s.slot}</span>
                   </div>
                 </div>
               );
@@ -330,7 +330,7 @@ function SceneConcierge({ start, end }) {
                       <span style={{ color: col, fontWeight: 600 }}>{v}</span>
                     </div>
                   ))}
-                  <div style={{ marginTop: 'auto', padding: '11px', background: `linear-gradient(135deg, ${C.gold}, ${C.cyan})`, borderRadius: 10, textAlign: 'center', fontSize: 12, fontWeight: 700, color: C.bg0 }}>
+                  <div style={{ marginTop: 'auto', padding: '11px', background: `linear-gradient(135deg, ${C.gold}, ${C.cyan})`, borderRadius: 10, textAlign: 'center', fontSize: 12, fontWeight: 700, color: C.ink }}>
                     Contacter mon médecin référent
                   </div>
                 </div>
@@ -461,11 +461,11 @@ function SceneSecondAvis({ start, end }) {
                 width: 150, height: 150, borderRadius: '50%',
                 background: `radial-gradient(circle at 35% 30%, ${C.cyan}cc, ${C.cyanDim}44)`,
                 border: `3px solid ${C.cyan}`,
-                boxShadow: `0 0 60px ${C.cyan}88, inset 0 0 24px rgba(255,255,255,0.15)`,
+                boxShadow: `0 0 60px ${C.cyan}88, inset 0 0 24px rgba(35,41,58,0.15)`,
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               }}>
-                <div style={{ fontFamily: 'Inter', fontSize: 26, fontWeight: 400, color: C.bg0, letterSpacing: '0.04em' }}>VOTRE CAS</div>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: C.bg0, opacity: 0.75, letterSpacing: '0.2em', marginTop: 4 }}>SÉCURISÉ</div>
+                <div style={{ fontFamily: 'Inter', fontSize: 26, fontWeight: 400, color: C.ink, letterSpacing: '0.04em' }}>VOTRE CAS</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: C.ink, opacity: 0.75, letterSpacing: '0.2em', marginTop: 4 }}>SÉCURISÉ</div>
               </div>
               {[0, 1, 2].map(i => {
                 const phase = (t * 0.7 + i * 0.6) % 2;
@@ -489,7 +489,7 @@ function SceneSecondAvis({ start, end }) {
                   opacity: sIn, zIndex: 5,
                   display: 'flex', alignItems: 'center', gap: 8,
                   padding: '6px 12px',
-                  background: 'rgba(8,15,40,0.9)',
+                  background: 'rgba(252,248,238,0.9)',
                   border: `1px solid ${col}99`,
                   borderRadius: 100,
                   boxShadow: `0 0 16px ${col}44`,
@@ -764,7 +764,7 @@ function SceneBusinessModel({ start, end }) {
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
               Un seul abonnement. <span style={{ fontStyle: 'italic', color: C.gold }}>Tout le service.</span><br/>
-              <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>149 € / mois, pour tous — sans option, sans surprise.</span>
+              <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>Un seul périmètre, pour tous — mensuel ou annuel.</span>
             </div>
 
             {/* LEFT — single subscription */}
@@ -772,9 +772,10 @@ function SceneBusinessModel({ start, end }) {
               <GlassCard x={0} y={0} w={780} h={548} border={`${C.gold}aa`}>
                 <div style={{ padding: 36, height: '100%', display: 'flex', flexDirection: 'column' }}>
                   <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12, letterSpacing: '0.24em', color: C.gold, textTransform: 'uppercase' }}>Abonnement unique · pour tous</div>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginTop: 12 }}>
-                    <span style={{ fontFamily: 'Inter', fontSize: 92, fontWeight: 200, color: C.white, letterSpacing: '-0.04em' }}>149</span>
-                    <span style={{ fontSize: 24, color: C.whiteDim }}>€ / mois</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 18 }}>
+                    <span style={{ fontFamily: 'Inter', fontSize: 44, fontWeight: 300, color: C.white, letterSpacing: '-0.02em' }}>Mensuel</span>
+                    <span style={{ fontSize: 22, color: C.whiteDim }}>ou</span>
+                    <span style={{ fontFamily: 'Inter', fontSize: 44, fontWeight: 300, color: C.gold, letterSpacing: '-0.02em' }}>Annuel</span>
                   </div>
                   <div style={{ borderTop: `1px solid ${C.gold}33`, marginTop: 18, paddingTop: 20, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px 24px' }}>
                     {included.map((it, j) => (
@@ -824,7 +825,7 @@ function SceneBusinessModel({ start, end }) {
               borderTop: `1px solid ${C.gold}33`, paddingTop: 16,
             }}>
               <span style={{ color: C.cyan, fontWeight: 500 }}>100 % fondé sur la science validée</span> — aucune pseudoscience, aucun gadget marketing.
-              <span style={{ display: 'block', fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: 'rgba(248,250,252,0.4)', letterSpacing: '0.12em', marginTop: 8 }}>Tarifs indicatifs · à valider</span>
+              <span style={{ display: 'block', fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: 'rgba(35,41,58,0.4)', letterSpacing: '0.12em', marginTop: 8 }}>Sans engagement · mensuel ou annuel</span>
             </div>
           </div>
         );

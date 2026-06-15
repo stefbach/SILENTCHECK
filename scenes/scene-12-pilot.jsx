@@ -80,7 +80,7 @@ function Scene12Authors({ start, end }) {
               ].map((n, i) => (
                 <div key={i} style={{
                   padding: '20px 26px',
-                  background: n.pain ? 'rgba(244,63,94,0.12)' : 'rgba(248,250,252,0.04)',
+                  background: n.pain ? 'rgba(244,63,94,0.12)' : 'rgba(35,41,58,0.04)',
                   border: `1px solid ${n.pain ? C.red + '88' : C.line}`,
                   borderRadius: 10,
                   fontFamily: 'Inter', fontSize: 16, fontWeight: n.pain ? 500 : 300,
@@ -94,7 +94,7 @@ function Scene12Authors({ start, end }) {
               opacity: clamp((t - 2.5) / 1.2, 0, 1) * (1 - oldRoleOut),
               fontFamily: 'Inter', fontSize: 22, color: C.whiteDim, fontStyle: 'italic',
               padding: '14px 32px',
-              background: 'rgba(8,15,40,0.7)',
+              background: 'rgba(252,248,238,0.7)',
               border: `1px solid ${C.line}`,
               borderRadius: 100,
               backdropFilter: 'blur(8px)',
@@ -141,11 +141,11 @@ function Scene12Authors({ start, end }) {
                          fill="none" stroke="url(#appRing)" strokeWidth="2" opacity="0.9"
                          transform={`rotate(${t * 6} 250 250)`} />
                 <polygon points="250,120 350,180 350,320 250,380 150,320 150,180"
-                         fill="rgba(8,15,40,0.7)" stroke={C.gold} strokeWidth="1.5"
+                         fill="rgba(252,248,238,0.7)" stroke={C.gold} strokeWidth="1.5"
                          transform={`rotate(${-t * 4} 250 250)`} />
                 {/* Phone glyph at the center */}
                 <g transform="translate(250 250)">
-                  <rect x="-46" y="-78" width="92" height="156" rx="16" fill="rgba(8,15,40,0.92)" stroke={C.gold} strokeWidth="2.5" />
+                  <rect x="-46" y="-78" width="92" height="156" rx="16" fill="rgba(252,248,238,0.92)" stroke={C.gold} strokeWidth="2.5" />
                   <rect x="-46" y="-78" width="92" height="156" rx="16" fill="none" stroke={C.cyan} strokeWidth="1" opacity="0.5" />
                   <line x1="-12" y1="-68" x2="12" y2="-68" stroke={C.gold} strokeWidth="3" strokeLinecap="round" />
                   {/* heartbeat */}
@@ -181,7 +181,7 @@ function Scene12Authors({ start, end }) {
                   transform: `translate(-50%, -50%) scale(${0.6 + sIn * 0.4})`,
                   opacity: sIn * orbitIn * 0.85,
                   padding: '8px 14px',
-                  background: 'rgba(8,15,40,0.85)',
+                  background: 'rgba(252,248,238,0.85)',
                   border: `1px solid ${C.cyan}66`,
                   borderRadius: 100,
                   display: 'flex', alignItems: 'center', gap: 8,
@@ -225,7 +225,7 @@ function Scene12Authors({ start, end }) {
                   transform: `translate(-50%, -50%) scale(${0.6 + sIn * 0.4})`,
                   opacity: sIn * orbitIn,
                   padding: '10px 16px',
-                  background: 'rgba(8,15,40,0.92)',
+                  background: 'rgba(252,248,238,0.92)',
                   border: `1.5px solid ${d.color}aa`,
                   borderRadius: 12,
                   display: 'flex', alignItems: 'center', gap: 10,
