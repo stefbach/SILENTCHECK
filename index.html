@@ -38,6 +38,33 @@
 <body>
   <div id="root"></div>
 
+  <!-- Mobile/tablet: play a pre-rendered video (smooth on any device) instead
+       of the live React animation. Desktop keeps the interactive version. -->
+  <video id="sc-video" autoplay loop muted playsinline preload="auto"
+         style="display:none; position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); background:#020617;"></video>
+  <script>
+    (function () {
+      var MOBILE = window.matchMedia('(max-width: 1100px)').matches || window.matchMedia('(pointer: coarse)').matches;
+      window.__SC_MOBILE__ = MOBILE;
+      if (!MOBILE) return;
+      var v = document.getElementById('sc-video');
+      v.src = 'assets/silentcheck.mp4';
+      v.style.display = 'block';
+      function fit() {
+        var w = window.innerWidth, h = window.innerHeight;
+        if (h > w) { v.style.width = h + 'px'; v.style.height = w + 'px'; v.style.transform = 'translate(-50%,-50%) rotate(90deg)'; }
+        else { v.style.width = w + 'px'; v.style.height = h + 'px'; v.style.transform = 'translate(-50%,-50%)'; }
+        v.style.objectFit = 'contain';
+      }
+      fit();
+      window.addEventListener('resize', fit);
+      window.addEventListener('orientationchange', fit);
+      var play = function () { if (v.play) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } };
+      document.addEventListener('touchstart', play, { once: true });
+      document.addEventListener('click', play, { once: true });
+    })();
+  </script>
+
 
 
   <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
@@ -4058,7 +4085,10 @@ Object.assign(window, { SceneStart, SceneServices, SceneConcierge, SceneSecondAv
       );
     }
 
-    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    // On mobile/tablet we show the pre-rendered video instead of the live app.
+    if (!window.__SC_MOBILE__) {
+      ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    }
   </script>
 </body>
 </html>
