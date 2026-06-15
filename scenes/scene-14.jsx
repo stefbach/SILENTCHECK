@@ -122,7 +122,7 @@ function Scene14Hub({ start, end }) {
                       <span style={{ color: col, fontWeight: 600, fontFamily: 'JetBrains Mono, monospace' }}>{v}</span>
                     </div>
                   ))}
-                  <div style={{ marginTop: 'auto', padding: '8px', background: `linear-gradient(135deg, ${C.cyan}, ${C.gold})`, borderRadius: 6, textAlign: 'center', fontSize: 10, fontWeight: 700, color: C.bg0 }}>
+                  <div style={{ marginTop: 'auto', padding: '8px', background: `linear-gradient(135deg, ${C.cyan}, ${C.gold})`, borderRadius: 6, textAlign: 'center', fontSize: 10, fontWeight: 700, color: C.ink }}>
                     Score BSD : 42 / 100
                   </div>
                 </div>
@@ -153,7 +153,7 @@ function Scene14Hub({ start, end }) {
                   transform: `translate(-50%, -50%) scale(${0.6 + sIn * 0.4})`,
                   opacity: sIn,
                   padding: '8px 12px',
-                  background: 'rgba(8,15,40,0.85)',
+                  background: 'rgba(252,248,238,0.85)',
                   border: `1px solid ${s.color}88`,
                   borderRadius: 10,
                   boxShadow: `0 0 14px ${s.color}55`,

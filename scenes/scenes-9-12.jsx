@@ -17,7 +17,7 @@ function Scene9Mockups({ start, end }) {
                   <div style={{ fontSize: 26, fontWeight: 200, color: C.white, letterSpacing: '-0.02em', lineHeight: 1.1 }}>Connaissez<br/>votre risque.</div>
                   <div style={{ fontSize: 11, color: C.whiteDim, lineHeight: 1.4 }}>Stratification cardiovasculaire personnalisée</div>
                 </div>
-                <div style={{ padding: '14px', background: `linear-gradient(135deg, ${C.cyan}, ${C.blue})`, borderRadius: 12, textAlign: 'center', fontSize: 13, fontWeight: 600, color: C.bg0 }}>Commencer mon évaluation</div>
+                <div style={{ padding: '14px', background: `linear-gradient(135deg, ${C.cyan}, ${C.blue})`, borderRadius: 12, textAlign: 'center', fontSize: 13, fontWeight: 600, color: C.ink }}>Commencer mon évaluation</div>
                 <div style={{ marginTop: 10, fontSize: 9, color: C.whiteDim, textAlign: 'center', fontFamily: 'JetBrains Mono, monospace' }}>15 min · médecin inclus</div>
               </div>
             )
@@ -74,7 +74,7 @@ function Scene9Mockups({ start, end }) {
                     </div>
                   ))}
                 </div>
-                <div style={{ marginTop: 'auto', padding: '12px', background: `linear-gradient(135deg, ${C.cyan}, ${C.gold})`, borderRadius: 10, textAlign: 'center', fontSize: 12, color: C.bg0, fontWeight: 600 }}>Voir mon plan d'action</div>
+                <div style={{ marginTop: 'auto', padding: '12px', background: `linear-gradient(135deg, ${C.cyan}, ${C.gold})`, borderRadius: 10, textAlign: 'center', fontSize: 12, color: C.ink, fontWeight: 600 }}>Voir mon plan d'action</div>
               </div>
             )
           },
@@ -292,8 +292,8 @@ function Scene11Security({ start, end }) {
                     <stop offset="100%" stopColor={C.blueDeep} stopOpacity="0.15" />
                   </linearGradient>
                   <linearGradient id="shieldShine" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="rgba(255,255,255,0.4)" />
-                    <stop offset="40%" stopColor="rgba(255,255,255,0)" />
+                    <stop offset="0%" stopColor="rgba(35,41,58,0.4)" />
+                    <stop offset="40%" stopColor="rgba(35,41,58,0)" />
                   </linearGradient>
                 </defs>
                 <path d="M 190 20 L 60 70 L 60 220 Q 60 340 190 420 Q 320 340 320 220 L 320 70 Z"
@@ -331,7 +331,7 @@ function Scene11Security({ start, end }) {
                       borderRadius: '50%',
                       background: C.cyan,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      color: C.bg0, fontWeight: 700, fontSize: 14,
+                      color: C.ink, fontWeight: 700, fontSize: 14,
                     }}>✓</div>
                     <div>
                       <div style={{ fontSize: 16, fontWeight: 500, color: C.white }}>{c.title}</div>
@@ -409,10 +409,10 @@ function Scene12Authors({ start, end }) {
                           borderRadius: '50%',
                           background: `radial-gradient(circle at 30% 30%, ${C.gold}, ${C.goldDim})`,
                           border: `2px solid ${C.gold}`,
-                          boxShadow: `0 0 50px ${C.gold}66, inset 0 0 20px rgba(255,255,255,0.2)`,
+                          boxShadow: `0 0 50px ${C.gold}66, inset 0 0 20px rgba(35,41,58,0.2)`,
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                           fontFamily: 'Inter', fontSize: 42, fontWeight: 300,
-                          color: C.bg0, letterSpacing: '0.05em',
+                          color: C.ink, letterSpacing: '0.05em',
                           marginTop: 8, marginBottom: 28,
                         }}>{a.initials}</div>
                         <div style={{ fontFamily: 'Inter', fontSize: 24, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>{a.name}</div>
