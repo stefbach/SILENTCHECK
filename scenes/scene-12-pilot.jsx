@@ -44,7 +44,7 @@ function Scene12Authors({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, top: 150,
               opacity: titleIn, transform: `translateY(${(1-titleIn)*20}px)`,
-              fontFamily: 'Inter', fontSize: 56, fontWeight: 200,
+              fontFamily: 'Inter', fontSize: 60, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
               maxWidth: 1400,
             }}>
@@ -56,7 +56,7 @@ function Scene12Authors({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, top: 282, right: 96,
               opacity: titleIn,
-              fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.cyan,
+              fontFamily: 'JetBrains Mono, monospace', fontSize: 18, color: C.cyan,
               letterSpacing: '0.1em',
             }}>
               Centrée prévention cardiovasculaire — obésité &amp; mode de vie compris · hors dépistage du cancer
@@ -70,7 +70,7 @@ function Scene12Authors({ start, end }) {
               display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 36,
             }}>
               <div style={{
-                fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.whiteDim,
+                fontFamily: 'JetBrains Mono, monospace', fontSize: 17, color: C.whiteDim,
                 letterSpacing: '0.3em', textTransform: 'uppercase',
                 writingMode: 'vertical-rl', transform: 'rotate(180deg)',
               }}>HIER · Parcours éclaté</div>
@@ -83,7 +83,7 @@ function Scene12Authors({ start, end }) {
                   background: n.pain ? 'rgba(244,63,94,0.12)' : 'rgba(35,41,58,0.04)',
                   border: `1px solid ${n.pain ? C.red + '88' : C.line}`,
                   borderRadius: 10,
-                  fontFamily: 'Inter', fontSize: 16, fontWeight: n.pain ? 500 : 300,
+                  fontFamily: 'Inter', fontSize: 20, fontWeight: n.pain ? 500 : 300,
                   color: n.pain ? C.red : C.whiteDim, letterSpacing: '0.05em',
                 }}>{n.label}</div>
               ))}
@@ -92,7 +92,7 @@ function Scene12Authors({ start, end }) {
               position: 'absolute', left: '50%', top: 660,
               transform: `translate(-50%, ${(1 - clamp((t - 2.5) / 1.2, 0, 1)) * 30}px) scale(${0.92 + clamp((t - 2.5) / 1.2, 0, 1) * 0.08})`,
               opacity: clamp((t - 2.5) / 1.2, 0, 1) * (1 - oldRoleOut),
-              fontFamily: 'Inter', fontSize: 22, color: C.whiteDim, fontStyle: 'italic',
+              fontFamily: 'Inter', fontSize: 28, color: C.whiteDim, fontStyle: 'italic',
               padding: '14px 32px',
               background: 'rgba(252,248,238,0.7)',
               border: `1px solid ${C.line}`,
@@ -153,7 +153,7 @@ function Scene12Authors({ start, end }) {
                         fill="none" stroke={C.red} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
                   {/* score chip */}
                   <rect x="-32" y="40" width="64" height="22" rx="6" fill={C.gold} opacity="0.92" />
-                  <text x="0" y="55" textAnchor="middle" fill={C.bg0} fontFamily="JetBrains Mono, monospace" fontSize="11" fontWeight="700">BSD 42</text>
+                  <text x="0" y="55" textAnchor="middle" fill={C.bg0} fontFamily="JetBrains Mono, monospace" fontSize="14" fontWeight="700">BSD 42</text>
                 </g>
               </svg>
               {/* Label under */}
@@ -162,8 +162,8 @@ function Scene12Authors({ start, end }) {
                 transform: 'translateX(-50%)', textAlign: 'center',
                 fontFamily: 'Inter', whiteSpace: 'nowrap',
               }}>
-                <div style={{ fontSize: 28, fontWeight: 400, color: C.white, letterSpacing: '0.05em' }}>L’APPLICATION</div>
-                <div style={{ fontSize: 11, fontFamily: 'JetBrains Mono, monospace', color: C.gold, letterSpacing: '0.4em', marginTop: 6 }}>· PILOTE ·</div>
+                <div style={{ fontSize: 33, fontWeight: 400, color: C.white, letterSpacing: '0.05em' }}>L’APPLICATION</div>
+                <div style={{ fontSize: 14, fontFamily: 'JetBrains Mono, monospace', color: C.gold, letterSpacing: '0.4em', marginTop: 6 }}>· PILOTE ·</div>
               </div>
             </div>
 
@@ -188,8 +188,8 @@ function Scene12Authors({ start, end }) {
                   backdropFilter: 'blur(6px)',
                   boxShadow: `0 0 16px ${C.cyan}33`,
                 }}>
-                  <span style={{ color: C.cyan, fontSize: 14 }}>{tool.icon}</span>
-                  <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: C.white, letterSpacing: '0.15em', textTransform: 'uppercase' }}>{tool.label}</span>
+                  <span style={{ color: C.cyan, fontSize: 18 }}>{tool.icon}</span>
+                  <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.white, letterSpacing: '0.15em', textTransform: 'uppercase' }}>{tool.label}</span>
                 </div>
               );
             })}
@@ -238,10 +238,10 @@ function Scene12Authors({ start, end }) {
                     background: `${d.color}22`,
                     border: `1px solid ${d.color}88`,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: d.color, fontSize: 14,
+                    color: d.color, fontSize: 18,
                   }}>{d.icon}</div>
                   <span style={{
-                    fontFamily: 'Inter', fontSize: 13, fontWeight: 500, color: C.white,
+                    fontFamily: 'Inter', fontSize: 17, fontWeight: 500, color: C.white,
                     letterSpacing: '0.02em',
                   }}>{d.label}</span>
                 </div>
@@ -252,7 +252,7 @@ function Scene12Authors({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, top: 360,
               opacity: orbitIn,
-              fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.gold,
+              fontFamily: 'JetBrains Mono, monospace', fontSize: 17, color: C.gold,
               letterSpacing: '0.3em', textTransform: 'uppercase',
               writingMode: 'vertical-rl', transform: 'rotate(180deg)',
               border: `1px solid ${C.gold}55`, padding: '12px 8px',
@@ -265,7 +265,7 @@ function Scene12Authors({ start, end }) {
               padding: '18px 28px', borderRadius: 12,
               border: `1px solid ${C.gold}55`,
               background: 'linear-gradient(90deg, rgba(251,191,36,0.1), rgba(34,211,238,0.06))',
-              fontFamily: 'Inter', fontSize: 19, color: C.white, fontWeight: 300,
+              fontFamily: 'Inter', fontSize: 24, color: C.white, fontWeight: 300,
               textAlign: 'center', letterSpacing: '0.02em', lineHeight: 1.4,
             }}>
               Au centre : <span style={{ color: C.gold, fontWeight: 500, fontStyle: 'italic' }}>l’application orchestre tout</span> · IA, capteurs, score, réseau d’experts de renommée internationale — <span style={{ color: C.cyan }}>RDV garantis, zéro liste d’attente, tout dans votre téléphone, validé par des médecins.</span>

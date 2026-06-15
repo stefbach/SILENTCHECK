@@ -42,11 +42,11 @@ function Scene14Hub({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, top: 170,
               opacity: titleIn, transform: `translateY(${(1-titleIn)*20}px)`,
-              fontFamily: 'Inter', fontSize: 56, fontWeight: 200,
+              fontFamily: 'Inter', fontSize: 60, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
               Tous vos appareils parlent à l'app.<br/>
-              <span style={{ fontStyle: 'italic', fontSize: 32, fontWeight: 300, color: C.cyan }}>
+              <span style={{ fontStyle: 'italic', fontSize: 38, fontWeight: 300, color: C.cyan }}>
                 En temps réel — tout converge dans un seul score BSD.
               </span>
             </div>
@@ -98,10 +98,10 @@ function Scene14Hub({ start, end }) {
                   display: 'flex', flexDirection: 'column', gap: 8,
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: C.cyan, letterSpacing: '0.2em' }}>● LIVE</div>
-                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: C.whiteDim }}>SilentCheck</div>
+                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.cyan, letterSpacing: '0.2em' }}>● LIVE</div>
+                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim }}>SilentCheck</div>
                   </div>
-                  <div style={{ fontSize: 14, color: C.white, fontWeight: 500, marginTop: 4 }}>Tableau de bord</div>
+                  <div style={{ fontSize: 18, color: C.white, fontWeight: 500, marginTop: 4 }}>Tableau de bord</div>
                   {/* Mini metrics */}
                   {[
                     ['Pouls', `${hr} bpm`, C.red],
@@ -116,13 +116,13 @@ function Scene14Hub({ start, end }) {
                       padding: '7px 10px',
                       background: 'rgba(34,211,238,0.05)',
                       border: `1px solid ${C.line}`,
-                      borderRadius: 6, fontSize: 10,
+                      borderRadius: 6, fontSize: 13,
                     }}>
                       <span style={{ color: C.whiteDim }}>{k}</span>
                       <span style={{ color: col, fontWeight: 600, fontFamily: 'JetBrains Mono, monospace' }}>{v}</span>
                     </div>
                   ))}
-                  <div style={{ marginTop: 'auto', padding: '8px', background: `linear-gradient(135deg, ${C.cyan}, ${C.gold})`, borderRadius: 6, textAlign: 'center', fontSize: 10, fontWeight: 700, color: C.ink }}>
+                  <div style={{ marginTop: 'auto', padding: '8px', background: `linear-gradient(135deg, ${C.cyan}, ${C.gold})`, borderRadius: 6, textAlign: 'center', fontSize: 13, fontWeight: 700, color: C.ink }}>
                     Score BSD : 42 / 100
                   </div>
                 </div>
@@ -161,10 +161,10 @@ function Scene14Hub({ start, end }) {
                   minWidth: 110, textAlign: 'center',
                   zIndex: 5,
                 }}>
-                  <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: s.color, letterSpacing: '0.15em', textTransform: 'uppercase' }}>{s.label}</div>
+                  <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: s.color, letterSpacing: '0.15em', textTransform: 'uppercase' }}>{s.label}</div>
                   <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 4, marginTop: 2 }}>
-                    <span style={{ fontFamily: 'Inter', fontSize: 16, fontWeight: 600, color: C.white }}>{s.value}</span>
-                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: C.whiteDim }}>{s.unit}</span>
+                    <span style={{ fontFamily: 'Inter', fontSize: 20, fontWeight: 600, color: C.white }}>{s.value}</span>
+                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim }}>{s.unit}</span>
                   </div>
                 </div>
               );
@@ -176,7 +176,7 @@ function Scene14Hub({ start, end }) {
               opacity: modesIn,
               display: 'flex', flexDirection: 'column', gap: 18,
             }}>
-              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.gold, letterSpacing: '0.3em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 15, color: C.gold, letterSpacing: '0.3em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 12 }}>
                 <div style={{ width: 24, height: 1, background: C.gold }} />
                 Distanciel d'abord · présentiel à la demande
               </div>
@@ -195,14 +195,14 @@ function Scene14Hub({ start, end }) {
                     <path d="M 4 16 L 16 6 L 28 16 L 28 28 L 4 28 Z" fill="none" stroke={C.cyan} strokeWidth="2" strokeLinejoin="round" />
                     <path d="M 12 28 L 12 20 L 20 20 L 20 28" fill="none" stroke={C.cyan} strokeWidth="2" />
                   </svg>
-                  <div style={{ fontFamily: 'Inter', fontSize: 22, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>Tout à distance · le défaut</div>
+                  <div style={{ fontFamily: 'Inter', fontSize: 28, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>Tout à distance · le défaut</div>
                 </div>
-                <div style={{ fontSize: 13, color: C.whiteDim, lineHeight: 1.55, paddingLeft: 46 }}>
+                <div style={{ fontSize: 17, color: C.whiteDim, lineHeight: 1.55, paddingLeft: 46 }}>
                   Généraliste en visio · capteurs synchronisés en temps réel · biologie à domicile (prélèvement chez vous) · résultats restitués en téléconsultation. Piloté à 100 % depuis l'app.
                 </div>
                 <div style={{ marginTop: 12, paddingLeft: 46, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                   {['Visio HD','Capteurs perso','Prélèvement à domicile','Pilotage app'].map((tag, i) => (
-                    <span key={i} style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: C.cyan, padding: '4px 10px', border: `1px solid ${C.line}`, borderRadius: 100, background: 'rgba(34,211,238,0.05)' }}>{tag}</span>
+                    <span key={i} style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.cyan, padding: '4px 10px', border: `1px solid ${C.line}`, borderRadius: 100, background: 'rgba(34,211,238,0.05)' }}>{tag}</span>
                   ))}
                 </div>
               </div>
@@ -223,14 +223,14 @@ function Scene14Hub({ start, end }) {
                     <circle cx="12" cy="22" r="1.5" fill={C.gold} />
                     <circle cx="18" cy="20" r="1.5" fill={C.gold} />
                   </svg>
-                  <div style={{ fontFamily: 'Inter', fontSize: 22, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>Présentiel à la demande</div>
+                  <div style={{ fontFamily: 'Inter', fontSize: 28, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>Présentiel à la demande</div>
                 </div>
-                <div style={{ fontSize: 13, color: C.whiteDim, lineHeight: 1.55, paddingLeft: 46 }}>
+                <div style={{ fontSize: 17, color: C.whiteDim, lineHeight: 1.55, paddingLeft: 46 }}>
                   Uniquement si un examen paraclinique est nécessaire. Réseau de médecins référents et de partenaires privilégiés — zéro liste d'attente, résultats poussés instantanément dans l'app.
                 </div>
                 <div style={{ marginTop: 12, paddingLeft: 46, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                   {['Médecin référent','Partenaires privilégiés','Zéro liste d\'attente','Examen paraclinique'].map((tag, i) => (
-                    <span key={i} style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: C.gold, padding: '4px 10px', border: `1px solid ${C.gold}55`, borderRadius: 100, background: 'rgba(251,191,36,0.05)' }}>{tag}</span>
+                    <span key={i} style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.gold, padding: '4px 10px', border: `1px solid ${C.gold}55`, borderRadius: 100, background: 'rgba(251,191,36,0.05)' }}>{tag}</span>
                   ))}
                 </div>
               </div>
@@ -244,7 +244,7 @@ function Scene14Hub({ start, end }) {
               border: `1px solid ${C.line}`,
               background: 'rgba(34,211,238,0.04)',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.whiteDim, letterSpacing: '0.15em',
+              fontFamily: 'JetBrains Mono, monospace', fontSize: 17, color: C.whiteDim, letterSpacing: '0.15em',
             }}>
               <span>◉ Synchronisation automatique</span>
               <span style={{ color: C.cyan }}>Apple Watch · Withings · Dexcom · FreeStyle · Omron · Oura · Garmin</span>

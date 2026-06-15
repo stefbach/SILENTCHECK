@@ -24,7 +24,7 @@ function Scene3Heart({ start, end }) {
               position: 'absolute', left: 96, top: 180, right: 96,
               opacity: titleIn,
               transform: `translateY(${(1-titleIn)*20}px)`,
-              fontFamily: 'Inter, sans-serif', fontSize: 64, fontWeight: 200,
+              fontFamily: 'Inter, sans-serif', fontSize: 69, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
               Votre voiture a un tableau de bord.<br/>
@@ -54,7 +54,7 @@ function Scene3Heart({ start, end }) {
                   opacity: opa,
                   padding: '8px 16px',
                   fontFamily: 'JetBrains Mono, monospace',
-                  fontSize: 14, fontWeight: 500,
+                  fontSize: 18, fontWeight: 500,
                   color: C.cyan,
                   background: 'rgba(8,145,178,0.12)',
                   border: `1px solid ${C.lineStrong}`,
@@ -82,12 +82,12 @@ function Scene3Heart({ start, end }) {
                 WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
                 lineHeight: 0.9, letterSpacing: '-0.06em',
               }}>80%</div>
-              <div style={{ fontSize: 22, color: C.whiteDim, fontWeight: 300, maxWidth: 480, marginLeft: 'auto' }}>
+              <div style={{ fontSize: 28, color: C.whiteDim, fontWeight: 300, maxWidth: 480, marginLeft: 'auto' }}>
                 des maladies cardiaques se développent <span style={{ color: C.white, fontStyle: 'italic' }}>sans symptôme</span> pendant 10 à 20 ans.
               </div>
               <div style={{
                 marginTop: 18,
-                fontFamily: 'JetBrains Mono, monospace', fontSize: 13,
+                fontFamily: 'JetBrains Mono, monospace', fontSize: 17,
                 letterSpacing: '0.25em', color: C.gold, textTransform: 'uppercase',
               }}>
                 ↳ Détection 5 à 10 ans à l'avance
@@ -123,7 +123,7 @@ function Scene4Score({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, top: 180,
               opacity: titleIn,
-              fontFamily: 'Inter, sans-serif', fontSize: 64, fontWeight: 200,
+              fontFamily: 'Inter, sans-serif', fontSize: 69, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
               Une science fondée sur<br/>
@@ -170,9 +170,9 @@ function Scene4Score({ start, end }) {
                 <circle cx="270" cy="270" r="200" fill="none" stroke="url(#gaugegrad)" strokeWidth="14"
                         strokeDasharray={`${dash} ${arcLen}`} transform="rotate(135 270 270)" strokeLinecap="round" />
                 {/* center text */}
-                <text x="270" y="240" textAnchor="middle" fill={C.whiteDim} fontFamily="JetBrains Mono, monospace" fontSize="14" letterSpacing="6">SCORE BSD</text>
+                <text x="270" y="240" textAnchor="middle" fill={C.whiteDim} fontFamily="JetBrains Mono, monospace" fontSize="18" letterSpacing="6">SCORE BSD</text>
                 <text x="270" y="320" textAnchor="middle" fill={C.white} fontFamily="Inter" fontSize="140" fontWeight="200" letterSpacing="-0.04em">{score}</text>
-                <text x="270" y="360" textAnchor="middle" fill={C.cyan} fontFamily="JetBrains Mono, monospace" fontSize="14" letterSpacing="3">/ 100</text>
+                <text x="270" y="360" textAnchor="middle" fill={C.cyan} fontFamily="JetBrains Mono, monospace" fontSize="18" letterSpacing="3">/ 100</text>
               </svg>
             </div>
 
@@ -190,13 +190,13 @@ function Scene4Score({ start, end }) {
                   borderBottom: i < 3 ? `1px solid ${C.line}` : 'none',
                 }}>
                   <div style={{
-                    fontFamily: 'Inter, sans-serif', fontSize: 44, fontWeight: 300,
+                    fontFamily: 'Inter, sans-serif', fontSize: 48, fontWeight: 300,
                     color: C.gold, letterSpacing: '-0.02em',
                     minWidth: 160,
                   }}>{row.num}</div>
                   <div>
-                    <div style={{ fontSize: 18, color: C.white, fontWeight: 500 }}>{row.label}</div>
-                    <div style={{ fontSize: 13, color: C.whiteDim, fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.05em', marginTop: 4 }}>{row.sub}</div>
+                    <div style={{ fontSize: 23, color: C.white, fontWeight: 500 }}>{row.label}</div>
+                    <div style={{ fontSize: 17, color: C.whiteDim, fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.05em', marginTop: 4 }}>{row.sub}</div>
                   </div>
                 </div>
               ))}

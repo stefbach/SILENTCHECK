@@ -40,11 +40,11 @@ function SceneStart({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, top: 170, right: 96,
               opacity: titleIn, transform: `translateY(${(1 - titleIn) * 20}px)`,
-              fontFamily: 'Inter', fontSize: 60, fontWeight: 200,
+              fontFamily: 'Inter', fontSize: 65, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
               Tout commence par <span style={{ fontStyle: 'italic', color: C.cyan }}>trois choses.</span><br/>
-              <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>Un score. Deux consultations. Une biologie ciblée.</span>
+              <span style={{ fontSize: 35, fontWeight: 300, color: C.whiteDim }}>Un score. Deux consultations. Une biologie ciblée.</span>
             </div>
 
             <div style={{ position: 'absolute', left: 96, top: 440, display: 'flex', gap: 36 }}>
@@ -60,13 +60,13 @@ function SceneStart({ start, end }) {
                     <GlassCard x={0} y={0} w={540} h={470} border={`${p.color}55`}>
                       <div style={{ padding: 36, height: '100%', display: 'flex', flexDirection: 'column' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, letterSpacing: '0.3em', color: p.color, textTransform: 'uppercase' }}>{p.tag}</div>
-                          <div style={{ width: 54, height: 54, borderRadius: 14, background: `linear-gradient(135deg, ${p.color}33, ${p.color}11)`, border: `1px solid ${p.color}66`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26, color: p.color }}>{p.icon}</div>
+                          <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 15, letterSpacing: '0.3em', color: p.color, textTransform: 'uppercase' }}>{p.tag}</div>
+                          <div style={{ width: 54, height: 54, borderRadius: 14, background: `linear-gradient(135deg, ${p.color}33, ${p.color}11)`, border: `1px solid ${p.color}66`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 31, color: p.color }}>{p.icon}</div>
                         </div>
-                        <div style={{ fontFamily: 'Inter', fontSize: 34, fontWeight: 400, color: C.white, marginTop: 14, letterSpacing: '-0.02em' }}>{p.name}</div>
-                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim, marginTop: 6, letterSpacing: '0.1em' }}>{p.sub}</div>
+                        <div style={{ fontFamily: 'Inter', fontSize: 40, fontWeight: 400, color: C.white, marginTop: 14, letterSpacing: '-0.02em' }}>{p.name}</div>
+                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 15, color: C.whiteDim, marginTop: 6, letterSpacing: '0.1em' }}>{p.sub}</div>
                         <div style={{ fontFamily: 'Inter', fontSize: 92, fontWeight: 100, color: p.color, lineHeight: 1, letterSpacing: '-0.05em', marginTop: 16 }}>{p.big}</div>
-                        <div style={{ borderTop: `1px solid ${p.color}33`, marginTop: 'auto', paddingTop: 18, fontSize: 14, color: C.whiteDim, lineHeight: 1.55 }}>{p.desc}</div>
+                        <div style={{ borderTop: `1px solid ${p.color}33`, marginTop: 'auto', paddingTop: 18, fontSize: 18, color: C.whiteDim, lineHeight: 1.55 }}>{p.desc}</div>
                       </div>
                     </GlassCard>
                   </div>
@@ -77,7 +77,7 @@ function SceneStart({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, right: 96, bottom: 50,
               opacity: clamp((t - 3.2) / 0.7, 0, 1),
-              fontFamily: 'Inter', fontSize: 22, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
+              fontFamily: 'Inter', fontSize: 28, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
               borderTop: `1px solid ${C.line}`, paddingTop: 20,
             }}>
               Un check-up, c’est d’abord de la <span style={{ color: C.cyan, fontWeight: 500 }}>prévention cardiovasculaire</span> — obésité et mode de vie compris, le début d’un suivi continu.
@@ -118,11 +118,11 @@ function SceneServices({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, top: 170, right: 96,
               opacity: titleIn, transform: `translateY(${(1 - titleIn) * 20}px)`,
-              fontFamily: 'Inter', fontSize: 56, fontWeight: 200,
+              fontFamily: 'Inter', fontSize: 60, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
               Tout part du généraliste et de la biologie — <span style={{ fontStyle: 'italic', color: C.gold }}>puis on décline.</span><br/>
-              <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>Cardiologue, ophtalmologue, gynécologue… orchestrés selon vos résultats.</span>
+              <span style={{ fontSize: 35, fontWeight: 300, color: C.whiteDim }}>Cardiologue, ophtalmologue, gynécologue… orchestrés selon vos résultats.</span>
             </div>
 
             {/* connector lines from core to each service */}
@@ -160,9 +160,9 @@ function SceneServices({ start, end }) {
                 boxShadow: `0 0 70px ${C.gold}88, inset 0 0 30px rgba(35,41,58,0.15)`,
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center',
               }}>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.ink, letterSpacing: '0.25em', fontWeight: 600 }}>POINT D'ENTRÉE</div>
-                <div style={{ fontFamily: 'Inter', fontSize: 26, fontWeight: 500, color: C.ink, marginTop: 6, letterSpacing: '-0.01em' }}>Généraliste + biologie</div>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: C.ink, opacity: 0.75, letterSpacing: '0.2em', marginTop: 6, textTransform: 'uppercase' }}>puis on décline · piloté par l'app</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.ink, letterSpacing: '0.25em', fontWeight: 600 }}>POINT D'ENTRÉE</div>
+                <div style={{ fontFamily: 'Inter', fontSize: 31, fontWeight: 500, color: C.ink, marginTop: 6, letterSpacing: '-0.01em' }}>Généraliste + biologie</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.ink, opacity: 0.75, letterSpacing: '0.2em', marginTop: 6, textTransform: 'uppercase' }}>puis on décline · piloté par l'app</div>
               </div>
               {[0, 1, 2].map(i => {
                 const phase = (t * 0.7 + i * 0.6) % 2;
@@ -203,12 +203,12 @@ function SceneServices({ start, end }) {
                       <div style={{
                         width: 38, height: 38, borderRadius: 9, flexShrink: 0,
                         background: `${s.color}22`, border: `1px solid ${s.color}88`,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center', color: s.color, fontSize: 18,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', color: s.color, fontSize: 23,
                       }}>{s.icon}</div>
                     )}
                     <div style={{ minWidth: 0 }}>
-                      <div style={{ fontFamily: 'Inter', fontSize: 18, fontWeight: 600, color: C.white, letterSpacing: '-0.01em' }}>{s.label}</div>
-                      <div style={{ fontFamily: 'Inter', fontSize: 11, color: C.whiteDim, marginTop: 2, lineHeight: 1.3 }}>{s.sub}</div>
+                      <div style={{ fontFamily: 'Inter', fontSize: 23, fontWeight: 600, color: C.white, letterSpacing: '-0.01em' }}>{s.label}</div>
+                      <div style={{ fontFamily: 'Inter', fontSize: 14, color: C.whiteDim, marginTop: 2, lineHeight: 1.3 }}>{s.sub}</div>
                     </div>
                   </div>
                   <div style={{
@@ -216,8 +216,8 @@ function SceneServices({ start, end }) {
                     padding: '7px 12px', borderRadius: 8,
                     background: `linear-gradient(135deg, ${s.color}, ${s.color}aa)`,
                   }}>
-                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: C.ink, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Réserver</span>
-                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.ink, fontWeight: 600 }}>{s.slot}</span>
+                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.ink, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Réserver</span>
+                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.ink, fontWeight: 600 }}>{s.slot}</span>
                   </div>
                 </div>
               );
@@ -230,7 +230,7 @@ function SceneServices({ start, end }) {
               border: `1px solid ${C.gold}55`,
               background: 'linear-gradient(90deg, rgba(251,191,36,0.1), rgba(34,211,238,0.05))',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.whiteDim, letterSpacing: '0.12em',
+              fontFamily: 'JetBrains Mono, monospace', fontSize: 17, color: C.whiteDim, letterSpacing: '0.12em',
             }}>
               <span>● RDV garantis en 2 clics</span>
               <span style={{ color: C.gold }}>● Partenaires privilégiés · zéro liste d’attente</span>
@@ -269,18 +269,18 @@ function SceneConcierge({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, top: 160, right: 96,
               opacity: titleIn, transform: `translateY(${(1 - titleIn) * 20}px)`,
-              fontFamily: 'Inter', fontSize: 56, fontWeight: 200,
+              fontFamily: 'Inter', fontSize: 60, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
               La 1ʳᵉ plateforme de prévention pour dirigeants <span style={{ fontStyle: 'italic', color: C.gold }}>exigeants et pressés.</span><br/>
-              <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>Stress, sédentarité, repas d’affaires, dette de sommeil — un cœur exposé, en silence.</span>
+              <span style={{ fontSize: 35, fontWeight: 300, color: C.whiteDim }}>Stress, sédentarité, repas d’affaires, dette de sommeil — un cœur exposé, en silence.</span>
             </div>
 
             {/* Executive persona portrait + subscription tag */}
             <div style={{ position: 'absolute', left: 90, top: 444, opacity: phoneIn, transform: `translateY(${(1 - phoneIn) * 30}px)` }}>
               <PortraitFrame src="assets/faces/dirigeante.png" color={C.gold} w={280} h={360} />
-              <div style={{ textAlign: 'center', marginTop: 14, fontFamily: 'Inter', fontSize: 16, color: C.white, fontWeight: 500 }}>Vous, pilote de votre santé</div>
-              <div style={{ textAlign: 'center', marginTop: 6, fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 10, letterSpacing: '0.2em', color: C.gold, textTransform: 'uppercase' }}>Abonnement premium</div>
+              <div style={{ textAlign: 'center', marginTop: 14, fontFamily: 'Inter', fontSize: 20, color: C.white, fontWeight: 500 }}>Vous, pilote de votre santé</div>
+              <div style={{ textAlign: 'center', marginTop: 6, fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 13, letterSpacing: '0.2em', color: C.gold, textTransform: 'uppercase' }}>Abonnement premium</div>
             </div>
 
             {/* Executive dashboard phone */}
@@ -304,10 +304,10 @@ function SceneConcierge({ start, end }) {
                   display: 'flex', flexDirection: 'column', gap: 12,
                 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: C.gold, letterSpacing: '0.25em' }}>PREMIUM</div>
-                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: C.whiteDim }}>SilentCheck</div>
+                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.gold, letterSpacing: '0.25em' }}>PREMIUM</div>
+                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim }}>SilentCheck</div>
                   </div>
-                  <div style={{ fontSize: 15, color: C.white, fontWeight: 500 }}>Bonjour, Dr Durand</div>
+                  <div style={{ fontSize: 19, color: C.white, fontWeight: 500 }}>Bonjour, Dr Durand</div>
                   {/* score ring */}
                   <div style={{ alignSelf: 'center', position: 'relative', marginTop: 4 }}>
                     <svg width="120" height="120" viewBox="0 0 120 120">
@@ -315,8 +315,8 @@ function SceneConcierge({ start, end }) {
                       <circle cx="60" cy="60" r="48" fill="none" stroke={C.gold} strokeWidth="6"
                               strokeDasharray={`${0.34 * 2 * Math.PI * 48} ${2 * Math.PI * 48}`}
                               transform="rotate(-90 60 60)" strokeLinecap="round" />
-                      <text x="60" y="60" textAnchor="middle" fill={C.white} fontFamily="Inter" fontSize="32" fontWeight="200">34</text>
-                      <text x="60" y="80" textAnchor="middle" fill={C.whiteDim} fontFamily="JetBrains Mono, monospace" fontSize="8">RISQUE FAIBLE</text>
+                      <text x="60" y="60" textAnchor="middle" fill={C.white} fontFamily="Inter" fontSize="38" fontWeight="200">34</text>
+                      <text x="60" y="80" textAnchor="middle" fill={C.whiteDim} fontFamily="JetBrains Mono, monospace" fontSize="10">RISQUE FAIBLE</text>
                     </svg>
                   </div>
                   {[
@@ -325,12 +325,12 @@ function SceneConcierge({ start, end }) {
                     ['Espérance de vie', '+4,1 ans', C.cyan],
                     ['Alertes capteurs', 'aucune', C.cyan],
                   ].map(([k, v, col], i) => (
-                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', background: 'rgba(251,191,36,0.06)', border: `1px solid ${C.line}`, borderRadius: 8, fontSize: 11 }}>
+                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', background: 'rgba(251,191,36,0.06)', border: `1px solid ${C.line}`, borderRadius: 8, fontSize: 14 }}>
                       <span style={{ color: C.whiteDim }}>{k}</span>
                       <span style={{ color: col, fontWeight: 600 }}>{v}</span>
                     </div>
                   ))}
-                  <div style={{ marginTop: 'auto', padding: '11px', background: `linear-gradient(135deg, ${C.gold}, ${C.cyan})`, borderRadius: 10, textAlign: 'center', fontSize: 12, fontWeight: 700, color: C.ink }}>
+                  <div style={{ marginTop: 'auto', padding: '11px', background: `linear-gradient(135deg, ${C.gold}, ${C.cyan})`, borderRadius: 10, textAlign: 'center', fontSize: 15, fontWeight: 700, color: C.ink }}>
                     Contacter mon médecin référent
                   </div>
                 </div>
@@ -357,11 +357,11 @@ function SceneConcierge({ start, end }) {
                       width: 44, height: 44, flexShrink: 0, borderRadius: 11,
                       background: `linear-gradient(135deg, ${C.gold}33, ${C.gold}11)`,
                       border: `1px solid ${C.gold}66`,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.gold, fontSize: 20,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.gold, fontSize: 26,
                     }}>{f.icon}</div>
                     <div>
-                      <div style={{ fontSize: 17, fontWeight: 500, color: C.white }}>{f.title}</div>
-                      <div style={{ fontSize: 12, color: C.whiteDim, marginTop: 5, lineHeight: 1.5 }}>{f.desc}</div>
+                      <div style={{ fontSize: 22, fontWeight: 500, color: C.white }}>{f.title}</div>
+                      <div style={{ fontSize: 15, color: C.whiteDim, marginTop: 5, lineHeight: 1.5 }}>{f.desc}</div>
                     </div>
                   </div>
                 );
@@ -371,7 +371,7 @@ function SceneConcierge({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, right: 96, bottom: 46,
               opacity: clamp((t - 5.2) / 0.6, 0, 1),
-              fontFamily: 'Inter', fontSize: 20, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
+              fontFamily: 'Inter', fontSize: 26, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
               borderTop: `1px solid ${C.gold}33`, paddingTop: 18,
             }}>
               Un abonnement, tout piloté à distance — <span style={{ color: C.gold, fontWeight: 500 }}>RDV garantis, zéro liste d’attente, zéro perte de temps.</span>
@@ -424,11 +424,11 @@ function SceneSecondAvis({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, top: 160, right: 96,
               opacity: titleIn, transform: `translateY(${(1 - titleIn) * 20}px)`,
-              fontFamily: 'Inter', fontSize: 56, fontWeight: 200,
+              fontFamily: 'Inter', fontSize: 60, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
               Un doute ? Un <span style={{ fontStyle: 'italic', color: C.cyan }}>deuxième regard,</span> en quelques jours.<br/>
-              <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>Un réseau de correspondants de renommée internationale — France et Europe.</span>
+              <span style={{ fontSize: 35, fontWeight: 300, color: C.whiteDim }}>Un réseau de correspondants de renommée internationale — France et Europe.</span>
             </div>
 
             {/* network constellation */}
@@ -464,8 +464,8 @@ function SceneSecondAvis({ start, end }) {
                 boxShadow: `0 0 60px ${C.cyan}88, inset 0 0 24px rgba(35,41,58,0.15)`,
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               }}>
-                <div style={{ fontFamily: 'Inter', fontSize: 26, fontWeight: 400, color: C.ink, letterSpacing: '0.04em' }}>VOTRE CAS</div>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: C.ink, opacity: 0.75, letterSpacing: '0.2em', marginTop: 4 }}>SÉCURISÉ</div>
+                <div style={{ fontFamily: 'Inter', fontSize: 31, fontWeight: 400, color: C.ink, letterSpacing: '0.04em' }}>VOTRE CAS</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.ink, opacity: 0.75, letterSpacing: '0.2em', marginTop: 4 }}>SÉCURISÉ</div>
               </div>
               {[0, 1, 2].map(i => {
                 const phase = (t * 0.7 + i * 0.6) % 2;
@@ -496,7 +496,7 @@ function SceneSecondAvis({ start, end }) {
                   backdropFilter: 'blur(6px)',
                 }}>
                   <div style={{ width: 8, height: 8, borderRadius: 4, background: col, boxShadow: `0 0 8px ${col}` }} />
-                  <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.white, letterSpacing: '0.08em' }}>{n.name}</span>
+                  <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.white, letterSpacing: '0.08em' }}>{n.name}</span>
                 </div>
               );
             })}
@@ -506,7 +506,7 @@ function SceneSecondAvis({ start, end }) {
               position: 'absolute', left: cx, top: 920,
               transform: 'translateX(-50%)', opacity: netIn,
               display: 'flex', gap: 24,
-              fontFamily: 'JetBrains Mono, monospace', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase',
+              fontFamily: 'JetBrains Mono, monospace', fontSize: 14, letterSpacing: '0.15em', textTransform: 'uppercase',
             }}>
               <span style={{ color: C.cyan }}>● France</span>
               <span style={{ color: C.gold }}>● Europe</span>
@@ -528,10 +528,10 @@ function SceneSecondAvis({ start, end }) {
                     borderRadius: 14,
                     display: 'flex', gap: 18, alignItems: 'flex-start',
                   }}>
-                    <div style={{ fontFamily: 'Inter', fontSize: 44, fontWeight: 100, color: s.color, lineHeight: 0.9, letterSpacing: '-0.04em', minWidth: 60 }}>{s.n}</div>
+                    <div style={{ fontFamily: 'Inter', fontSize: 48, fontWeight: 100, color: s.color, lineHeight: 0.9, letterSpacing: '-0.04em', minWidth: 60 }}>{s.n}</div>
                     <div>
-                      <div style={{ fontSize: 20, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>{s.title}</div>
-                      <div style={{ fontSize: 13, color: C.whiteDim, marginTop: 6, lineHeight: 1.55 }}>{s.desc}</div>
+                      <div style={{ fontSize: 26, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>{s.title}</div>
+                      <div style={{ fontSize: 17, color: C.whiteDim, marginTop: 6, lineHeight: 1.55 }}>{s.desc}</div>
                     </div>
                   </div>
                 );
@@ -541,7 +541,7 @@ function SceneSecondAvis({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, right: 96, bottom: 44,
               opacity: clamp((t - 5.0) / 0.6, 0, 1),
-              fontFamily: 'Inter', fontSize: 20, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
+              fontFamily: 'Inter', fontSize: 26, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
               borderTop: `1px solid ${C.line}`, paddingTop: 16,
             }}>
               Le bon expert, de renommée internationale — <span style={{ color: C.cyan, fontWeight: 500 }}>RDV garanti, zéro liste d’attente, depuis votre téléphone.</span>
@@ -661,7 +661,7 @@ function PortraitFrame({ src, color = C.cyan, w = 300, h = 386 }) {
       })}
       <div style={{
         position: 'absolute', top: 9, left: 11, display: 'flex', alignItems: 'center', gap: 6,
-        fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 8, letterSpacing: '0.22em', color,
+        fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 10, letterSpacing: '0.22em', color,
       }}>
         <span style={{ width: 6, height: 6, borderRadius: 3, background: color, boxShadow: `0 0 8px ${color}`, opacity: 0.6 + Math.sin(t * 4) * 0.4 }} />SCAN
       </div>
@@ -689,11 +689,11 @@ function SceneHumans({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, top: 170, right: 96,
               opacity: titleIn, transform: `translateY(${(1 - titleIn) * 20}px)`,
-              fontFamily: 'Inter', fontSize: 58, fontWeight: 200,
+              fontFamily: 'Inter', fontSize: 63, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
               Derrière la technologie, <span style={{ fontStyle: 'italic', color: C.cyan }}>des humains.</span><br/>
-              <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>Patients, médecins, experts — un suivi à visage humain.</span>
+              <span style={{ fontSize: 35, fontWeight: 300, color: C.whiteDim }}>Patients, médecins, experts — un suivi à visage humain.</span>
             </div>
 
             <div style={{ position: 'absolute', left: 0, right: 0, top: 400, display: 'flex', justifyContent: 'center', gap: 96 }}>
@@ -706,9 +706,9 @@ function SceneHumans({ start, end }) {
                     opacity: fIn, transform: `translateY(${(1 - fIn) * 50 + wob}px) scale(${0.85 + fIn * 0.15})`,
                   }}>
                     <PortraitFrame src={'assets/faces/' + f.img} color={f.color} />
-                    <div style={{ fontFamily: 'Inter', fontSize: 26, fontWeight: 500, color: C.white, marginTop: 14, letterSpacing: '-0.01em' }}>{f.name}</div>
-                    <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 11, color: f.color, letterSpacing: '0.22em', textTransform: 'uppercase', marginTop: 8 }}>{f.role}</div>
-                    <div style={{ fontSize: 14, color: C.whiteDim, marginTop: 12, lineHeight: 1.5, maxWidth: 280, marginLeft: 'auto', marginRight: 'auto' }}>{f.desc}</div>
+                    <div style={{ fontFamily: 'Inter', fontSize: 31, fontWeight: 500, color: C.white, marginTop: 14, letterSpacing: '-0.01em' }}>{f.name}</div>
+                    <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 14, color: f.color, letterSpacing: '0.22em', textTransform: 'uppercase', marginTop: 8 }}>{f.role}</div>
+                    <div style={{ fontSize: 18, color: C.whiteDim, marginTop: 12, lineHeight: 1.5, maxWidth: 280, marginLeft: 'auto', marginRight: 'auto' }}>{f.desc}</div>
                   </div>
                 );
               })}
@@ -717,7 +717,7 @@ function SceneHumans({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, right: 96, bottom: 56,
               opacity: clamp((t - 3.4) / 0.7, 0, 1),
-              fontFamily: 'Inter', fontSize: 22, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
+              fontFamily: 'Inter', fontSize: 28, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
               borderTop: `1px solid ${C.line}`, paddingTop: 20,
             }}>
               La technologie au service de la <span style={{ color: C.cyan, fontWeight: 500 }}>relation médecin-patient</span> — jamais l'inverse.
@@ -760,27 +760,27 @@ function SceneBusinessModel({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, top: 160, right: 96,
               opacity: titleIn, transform: `translateY(${(1 - titleIn) * 20}px)`,
-              fontFamily: 'Inter', fontSize: 56, fontWeight: 200,
+              fontFamily: 'Inter', fontSize: 60, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
               Un seul abonnement. <span style={{ fontStyle: 'italic', color: C.gold }}>Tout le service.</span><br/>
-              <span style={{ fontSize: 30, fontWeight: 300, color: C.whiteDim }}>Un seul périmètre, pour tous — mensuel ou annuel.</span>
+              <span style={{ fontSize: 35, fontWeight: 300, color: C.whiteDim }}>Un seul périmètre, pour tous — mensuel ou annuel.</span>
             </div>
 
             {/* LEFT — single subscription */}
             <div style={{ position: 'absolute', left: 96, top: 392, width: 780, opacity: planIn, transform: `translateY(${(1 - planIn) * 30}px)` }}>
               <GlassCard x={0} y={0} w={780} h={548} border={`${C.gold}aa`}>
                 <div style={{ padding: 36, height: '100%', display: 'flex', flexDirection: 'column' }}>
-                  <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12, letterSpacing: '0.24em', color: C.gold, textTransform: 'uppercase' }}>Abonnement unique · pour tous</div>
+                  <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 15, letterSpacing: '0.24em', color: C.gold, textTransform: 'uppercase' }}>Abonnement unique · pour tous</div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 18 }}>
-                    <span style={{ fontFamily: 'Inter', fontSize: 44, fontWeight: 300, color: C.white, letterSpacing: '-0.02em' }}>Mensuel</span>
-                    <span style={{ fontSize: 22, color: C.whiteDim }}>ou</span>
-                    <span style={{ fontFamily: 'Inter', fontSize: 44, fontWeight: 300, color: C.gold, letterSpacing: '-0.02em' }}>Annuel</span>
+                    <span style={{ fontFamily: 'Inter', fontSize: 48, fontWeight: 300, color: C.white, letterSpacing: '-0.02em' }}>Mensuel</span>
+                    <span style={{ fontSize: 28, color: C.whiteDim }}>ou</span>
+                    <span style={{ fontFamily: 'Inter', fontSize: 48, fontWeight: 300, color: C.gold, letterSpacing: '-0.02em' }}>Annuel</span>
                   </div>
                   <div style={{ borderTop: `1px solid ${C.gold}33`, marginTop: 18, paddingTop: 20, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px 24px' }}>
                     {included.map((it, j) => (
-                      <div key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: 14.5, color: C.whiteDim, lineHeight: 1.35 }}>
-                        <span style={{ color: C.green, fontSize: 14, marginTop: 1 }}>✓</span>{it}
+                      <div key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: 19, color: C.whiteDim, lineHeight: 1.35 }}>
+                        <span style={{ color: C.green, fontSize: 18, marginTop: 1 }}>✓</span>{it}
                       </div>
                     ))}
                   </div>
@@ -792,7 +792,7 @@ function SceneBusinessModel({ start, end }) {
             <div style={{ position: 'absolute', right: 96, top: 392, width: 760 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
                 <div style={{ width: 28, height: 1, background: C.cyan }} />
-                <span style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12, letterSpacing: '0.26em', color: C.cyan, textTransform: 'uppercase' }}>Les soins · facturation transparente</span>
+                <span style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 15, letterSpacing: '0.26em', color: C.cyan, textTransform: 'uppercase' }}>Les soins · facturation transparente</span>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 13 }}>
                 {actes.map((a, i) => {
@@ -805,15 +805,15 @@ function SceneBusinessModel({ start, end }) {
                       background: `${a.color}0c`, border: `1px solid ${a.color}44`,
                     }}>
                       <div>
-                        <div style={{ fontFamily: 'Inter', fontSize: 19, fontWeight: 500, color: C.white }}>{a.label}</div>
-                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.whiteDim, letterSpacing: '0.06em', marginTop: 4 }}>{a.sub}</div>
+                        <div style={{ fontFamily: 'Inter', fontSize: 24, fontWeight: 500, color: C.white }}>{a.label}</div>
+                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.whiteDim, letterSpacing: '0.06em', marginTop: 4 }}>{a.sub}</div>
                       </div>
-                      <div style={{ fontFamily: 'Inter', fontSize: 16, fontWeight: 500, color: a.color, whiteSpace: 'nowrap', textAlign: 'right' }}>{a.price}</div>
+                      <div style={{ fontFamily: 'Inter', fontSize: 20, fontWeight: 500, color: a.color, whiteSpace: 'nowrap', textAlign: 'right' }}>{a.price}</div>
                     </div>
                   );
                 })}
               </div>
-              <div style={{ marginTop: 16, fontSize: 13, color: C.whiteDim, lineHeight: 1.5 }}>
+              <div style={{ marginTop: 16, fontSize: 17, color: C.whiteDim, lineHeight: 1.5 }}>
                 Consultations, biologie et imagerie sont <span style={{ color: C.green }}>financées par la Sécu et votre mutuelle</span>. L'abonnement couvre le <span style={{ color: C.gold }}>service : accès garanti, rapidité, suivi</span>.
               </div>
             </div>
@@ -821,11 +821,11 @@ function SceneBusinessModel({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, right: 96, bottom: 44,
               opacity: clamp((t - 3.6) / 0.7, 0, 1),
-              fontFamily: 'Inter', fontSize: 18, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
+              fontFamily: 'Inter', fontSize: 23, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
               borderTop: `1px solid ${C.gold}33`, paddingTop: 16,
             }}>
               <span style={{ color: C.cyan, fontWeight: 500 }}>100 % fondé sur la science validée</span> — aucune pseudoscience, aucun gadget marketing.
-              <span style={{ display: 'block', fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: 'rgba(35,41,58,0.4)', letterSpacing: '0.12em', marginTop: 8 }}>Sans engagement · mensuel ou annuel</span>
+              <span style={{ display: 'block', fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: 'rgba(35,41,58,0.4)', letterSpacing: '0.12em', marginTop: 8 }}>Sans engagement · mensuel ou annuel</span>
             </div>
           </div>
         );
