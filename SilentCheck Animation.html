@@ -45,10 +45,13 @@
   <script>
     (function () {
       var MOBILE = window.matchMedia('(max-width: 1100px)').matches || window.matchMedia('(pointer: coarse)').matches;
+      var LIVE = location.search.indexOf('live') >= 0;   // ?live forces the interactive animation
+      window.__SC_VIDEO__ = !LIVE;
       window.__SC_MOBILE__ = MOBILE;
-      if (!MOBILE) return;
+      if (LIVE) return;
       var v = document.getElementById('sc-video');
-      v.src = 'assets/silentcheck.mp4';
+      v.src = MOBILE ? 'assets/silentcheck.mp4' : 'assets/silentcheck-1080.mp4';
+      if (!MOBILE) v.setAttribute('controls', '');       // desktop: scrub / pause controls
       v.style.display = 'block';
       function fit() {
         var w = window.innerWidth, h = window.innerHeight;
@@ -134,8 +137,9 @@
       );
     }
 
-    // On mobile/tablet we show the pre-rendered video instead of the live app.
-    if (!window.__SC_MOBILE__) {
+    // Playback uses the pre-rendered video everywhere (smooth on any device).
+    // The live interactive animation is still available via the ?live URL flag.
+    if (!window.__SC_VIDEO__) {
       ReactDOM.createRoot(document.getElementById('root')).render(<App />);
     }
   </script>
