@@ -255,7 +255,7 @@ function SectionTag({ index, label, x = 96, y = 96, color = C.cyan }) {
       position: 'absolute', left: x, top: y,
       display: 'flex', alignItems: 'center', gap: 14,
       fontFamily: 'Orbitron, JetBrains Mono, monospace',
-      fontSize: 14,
+      fontSize: 18,
       letterSpacing: '0.3em',
       color: color,
       textTransform: 'uppercase',
@@ -342,7 +342,7 @@ function ImmersiveHUD({ boundaries = [] }) {
       <div style={{
         position: 'absolute', top: 18, left: '50%', transform: 'translateX(-50%)',
         display: 'flex', alignItems: 'center', gap: 12,
-        fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 11,
+        fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 14,
         letterSpacing: '0.3em', textTransform: 'uppercase',
         color: 'rgba(35,41,58,0.6)', whiteSpace: 'nowrap',
       }}>
@@ -363,7 +363,7 @@ function ImmersiveHUD({ boundaries = [] }) {
         </svg>
         <div style={{
           position: 'absolute', bottom: 10, right: 28,
-          fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12,
+          fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 15,
           color: C.red, letterSpacing: '0.15em', textShadow: `0 0 12px ${C.red}`,
         }}>♥ {bpm} BPM</div>
       </React.Fragment>

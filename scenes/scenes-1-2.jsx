@@ -45,7 +45,7 @@ function Scene1Intro({ start, end }) {
               transform: `translate(-50%, ${(1 - subAppear) * 16}px)`,
               opacity: subAppear,
               fontFamily: 'JetBrains Mono, monospace',
-              fontSize: 18, letterSpacing: '0.42em',
+              fontSize: 23, letterSpacing: '0.42em',
               color: C.cyan,
               textTransform: 'uppercase',
             }}>
@@ -58,7 +58,7 @@ function Scene1Intro({ start, end }) {
               transform: `translate(-50%, ${(1 - taglineAppear) * 16}px)`,
               opacity: taglineAppear,
               fontFamily: 'Inter, sans-serif',
-              fontSize: 28, fontWeight: 300,
+              fontSize: 33, fontWeight: 300,
               color: C.whiteDim,
               fontStyle: 'italic',
               textAlign: 'center',
@@ -78,7 +78,7 @@ function Scene1Intro({ start, end }) {
               background: 'rgba(34,211,238,0.05)',
               backdropFilter: 'blur(8px)',
               boxShadow: `0 0 30px rgba(34,211,238,0.18)`,
-              fontFamily: 'JetBrains Mono, monospace', fontSize: 13,
+              fontFamily: 'JetBrains Mono, monospace', fontSize: 17,
               letterSpacing: '0.18em', textTransform: 'uppercase',
               color: C.whiteDim, whiteSpace: 'nowrap',
             }}>
@@ -97,7 +97,7 @@ function Scene1Intro({ start, end }) {
               display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
               fontFamily: 'Inter, sans-serif',
             }}>
-              <div style={{ fontSize: 14, color: C.whiteDim, letterSpacing: '0.3em', textTransform: 'uppercase' }}>
+              <div style={{ fontSize: 18, color: C.whiteDim, letterSpacing: '0.3em', textTransform: 'uppercase' }}>
                 Powered by <span style={{ color: C.gold, fontWeight: 600 }}>Score BSD v5.0</span> · 53 références · 4M+ patients
               </div>
             </div>
@@ -106,7 +106,7 @@ function Scene1Intro({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, top: 64,
               fontFamily: 'JetBrains Mono, monospace',
-              fontSize: 13, letterSpacing: '0.4em',
+              fontSize: 17, letterSpacing: '0.4em',
               color: C.whiteDim, textTransform: 'uppercase',
             }}>
               SilentCheck · 2026
@@ -114,7 +114,7 @@ function Scene1Intro({ start, end }) {
             <div style={{
               position: 'absolute', right: 96, top: 64,
               fontFamily: 'JetBrains Mono, monospace',
-              fontSize: 13, letterSpacing: '0.3em',
+              fontSize: 17, letterSpacing: '0.3em',
               color: C.whiteDim,
             }}>
               Score BSD v5.0
@@ -148,7 +148,7 @@ function Scene2Crisis({ start, end }) {
               transform: `translateY(${(1 - headlineIn) * 30}px)`,
               opacity: headlineIn,
               fontFamily: 'Inter, sans-serif',
-              fontSize: 72, fontWeight: 200,
+              fontSize: 78, fontWeight: 200,
               letterSpacing: '-0.03em', lineHeight: 1.05,
               color: C.white,
             }}>
@@ -181,8 +181,8 @@ function Scene2Crisis({ start, end }) {
                         {s.in > 0.4 ? Math.round((s.in - 0.4) / 0.6 * s.big) : 0}{s.suf}
                       </div>
                       <div>
-                        <div style={{ fontSize: 22, fontWeight: 500, color: C.white, marginBottom: 6 }}>{s.label}</div>
-                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.whiteDim, letterSpacing: '0.15em', textTransform: 'uppercase' }}>{s.sub}</div>
+                        <div style={{ fontSize: 28, fontWeight: 500, color: C.white, marginBottom: 6 }}>{s.label}</div>
+                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 17, color: C.whiteDim, letterSpacing: '0.15em', textTransform: 'uppercase' }}>{s.sub}</div>
                       </div>
                     </div>
                   </GlassCard>
@@ -195,7 +195,7 @@ function Scene2Crisis({ start, end }) {
               opacity: ctaIn,
               transform: `translateY(${(1 - ctaIn) * 20}px)`,
               fontFamily: 'Inter, sans-serif',
-              fontSize: 28, fontWeight: 300, color: C.whiteDim,
+              fontSize: 33, fontWeight: 300, color: C.whiteDim,
               borderTop: `1px solid ${C.line}`, paddingTop: 24,
             }}>
               La médecine classique intervient <span style={{ color: C.red, fontWeight: 500 }}>APRÈS</span> la maladie.

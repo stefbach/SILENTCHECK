@@ -20,11 +20,11 @@ function Scene7Journey({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, top: 180,
               opacity: titleIn, transform: `translateY(${(1-titleIn)*20}px)`,
-              fontFamily: 'Inter', fontSize: 64, fontWeight: 200,
+              fontFamily: 'Inter', fontSize: 69, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
               Comment ça se passe ?<br/>
-              <span style={{ fontStyle: 'italic', color: C.cyan, fontSize: 36, fontWeight: 300 }}>Quatre étapes. Une chaîne de soin intégrée.</span>
+              <span style={{ fontStyle: 'italic', color: C.cyan, fontSize: 42, fontWeight: 300 }}>Quatre étapes. Une chaîne de soin intégrée.</span>
             </div>
 
             {/* Connector line */}
@@ -56,8 +56,8 @@ function Scene7Journey({ start, end }) {
                     <GlassCard x={0} y={0} w={410} h={380} border={i === 1 || i === 3 ? `${C.cyan}55` : `${C.gold}55`}>
                       <div style={{ padding: 32, height: '100%', display: 'flex', flexDirection: 'column' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, letterSpacing: '0.3em', color: C.whiteDim }}>ÉTAPE</div>
-                          <div style={{ fontFamily: 'Inter', fontSize: 80, fontWeight: 100, color: i === 1 || i === 3 ? C.cyan : C.gold, lineHeight: 0.8, letterSpacing: '-0.05em' }}>
+                          <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 17, letterSpacing: '0.3em', color: C.whiteDim }}>ÉTAPE</div>
+                          <div style={{ fontFamily: 'Inter', fontSize: 86, fontWeight: 100, color: i === 1 || i === 3 ? C.cyan : C.gold, lineHeight: 0.8, letterSpacing: '-0.05em' }}>
                             0{i+1}
                           </div>
                         </div>
@@ -65,8 +65,8 @@ function Scene7Journey({ start, end }) {
                           {s.icon}
                         </div>
                         <div>
-                          <div style={{ fontFamily: 'Inter', fontSize: 26, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>{s.title}</div>
-                          <div style={{ fontSize: 13, color: C.whiteDim, marginTop: 8, lineHeight: 1.5 }}>{s.sub}</div>
+                          <div style={{ fontFamily: 'Inter', fontSize: 31, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>{s.title}</div>
+                          <div style={{ fontSize: 17, color: C.whiteDim, marginTop: 8, lineHeight: 1.5 }}>{s.sub}</div>
                         </div>
                       </div>
                     </GlassCard>
@@ -78,7 +78,7 @@ function Scene7Journey({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, bottom: 60, right: 96,
               opacity: clamp((t - 4.4) / 0.6, 0, 1),
-              fontFamily: 'Inter', fontSize: 22, fontWeight: 300,
+              fontFamily: 'Inter', fontSize: 28, fontWeight: 300,
               color: C.whiteDim, textAlign: 'center',
               borderTop: `1px solid ${C.line}`, paddingTop: 18,
             }}>
@@ -110,7 +110,7 @@ function Scene8Outro({ start, end }) {
               position: 'absolute', left: '50%', top: '32%',
               transform: `translate(-50%, -50%) translateY(${(1-line1In)*30}px)`,
               opacity: line1In,
-              fontFamily: 'Inter', fontSize: 28, fontWeight: 300,
+              fontFamily: 'Inter', fontSize: 33, fontWeight: 300,
               color: C.cyan, letterSpacing: '0.4em', textTransform: 'uppercase',
               textAlign: 'center',
             }}>
@@ -139,14 +139,14 @@ function Scene8Outro({ start, end }) {
                 padding: '20px 48px',
                 border: `1px solid ${C.cyan}`,
                 borderRadius: 100,
-                fontFamily: 'JetBrains Mono, monospace', fontSize: 16,
+                fontFamily: 'JetBrains Mono, monospace', fontSize: 20,
                 letterSpacing: '0.3em', color: C.white, textTransform: 'uppercase',
                 background: 'rgba(34,211,238,0.05)',
                 boxShadow: `0 0 40px rgba(34,211,238,0.3)`,
               }}>
                 Votre compagnon de suivi validé
               </div>
-              <div style={{ fontSize: 16, color: C.whiteDim, fontWeight: 300 }}>
+              <div style={{ fontSize: 20, color: C.whiteDim, fontWeight: 300 }}>
                 Le score n'est que le début — l'app vous suit, vos médecins vous pilotent.
               </div>
             </div>
@@ -157,7 +157,7 @@ function Scene8Outro({ start, end }) {
               display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
               fontFamily: 'Inter',
             }}>
-              <div style={{ fontSize: 11, color: 'rgba(35,41,58,0.5)', letterSpacing: '0.25em', fontFamily: 'JetBrains Mono, monospace' }}>
+              <div style={{ fontSize: 14, color: 'rgba(35,41,58,0.5)', letterSpacing: '0.25em', fontFamily: 'JetBrains Mono, monospace' }}>
                 © 2026 · Score BSD v5.0 · Validé par 53 références internationales
               </div>
             </div>
@@ -165,14 +165,14 @@ function Scene8Outro({ start, end }) {
             {/* Corner brand */}
             <div style={{
               position: 'absolute', left: 96, top: 64,
-              fontFamily: 'JetBrains Mono, monospace', fontSize: 13,
+              fontFamily: 'JetBrains Mono, monospace', fontSize: 17,
               letterSpacing: '0.4em', color: C.whiteDim, textTransform: 'uppercase',
             }}>
               Score BSD v5.0
             </div>
             <div style={{
               position: 'absolute', right: 96, top: 64,
-              fontFamily: 'JetBrains Mono, monospace', fontSize: 13,
+              fontFamily: 'JetBrains Mono, monospace', fontSize: 17,
               letterSpacing: '0.3em', color: C.whiteDim,
             }}>
               Avril 2026

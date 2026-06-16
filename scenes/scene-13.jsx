@@ -54,7 +54,7 @@ function Scene13Exposome({ start, end }) {
           { label: 'Tensiomètre connecté', metric: 'mmHg systolique / diastolique', detail: 'Lecture domestique transmise automatiquement — moyenne sur 7/14/28 jours intégrée au score.', icon: (
             <svg viewBox="0 0 80 80" width="56" height="56">
               <rect x="20" y="30" width="40" height="28" rx="4" fill="none" stroke={C.gold} strokeWidth="2" />
-              <text x="40" y="48" textAnchor="middle" fill={C.gold} fontFamily="JetBrains Mono, monospace" fontSize="10">128/82</text>
+              <text x="40" y="48" textAnchor="middle" fill={C.gold} fontFamily="JetBrains Mono, monospace" fontSize="13">128/82</text>
               <path d="M 60 44 Q 70 44 70 34 Q 70 24 60 24" fill="none" stroke={C.gold} strokeWidth="2" />
               <circle cx="60" cy="34" r="2" fill={C.gold} />
             </svg>
@@ -70,7 +70,7 @@ function Scene13Exposome({ start, end }) {
             <svg viewBox="0 0 80 80" width="56" height="56">
               <rect x="14" y="40" width="52" height="20" rx="3" fill="none" stroke={C.gold} strokeWidth="2" />
               <rect x="32" y="22" width="16" height="18" rx="2" fill="none" stroke={C.gold} strokeWidth="2" />
-              <text x="40" y="56" textAnchor="middle" fill={C.gold} fontFamily="JetBrains Mono, monospace" fontSize="9">74,2</text>
+              <text x="40" y="56" textAnchor="middle" fill={C.gold} fontFamily="JetBrains Mono, monospace" fontSize="12">74,2</text>
             </svg>
           )},
           { label: 'Montre & sommeil', metric: 'FC repos · VFC · SpO₂ · sommeil', detail: 'Apple Watch, Garmin, Fitbit, Oura. Variabilité cardiaque = signature du système nerveux autonome.', icon: (
@@ -91,11 +91,11 @@ function Scene13Exposome({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, top: 170, right: 96,
               opacity: titleIn, transform: `translateY(${(1-titleIn)*20}px)`,
-              fontFamily: 'Inter', fontSize: 56, fontWeight: 200,
+              fontFamily: 'Inter', fontSize: 60, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
               Votre risque ne s'arrête pas au sang.<br/>
-              <span style={{ fontStyle: 'italic', fontSize: 32, fontWeight: 300, color: C.cyan }}>
+              <span style={{ fontStyle: 'italic', fontSize: 38, fontWeight: 300, color: C.cyan }}>
                 Air, bruit, chaleur, capteurs — tout entre dans l'équation.
               </span>
             </div>
@@ -108,11 +108,11 @@ function Scene13Exposome({ start, end }) {
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
                 <div style={{ width: 32, height: 1, background: C.cyan }} />
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, letterSpacing: '0.3em', color: C.cyan, textTransform: 'uppercase' }}>Exposome environnemental</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 15, letterSpacing: '0.3em', color: C.cyan, textTransform: 'uppercase' }}>Exposome environnemental</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
                 <div style={{ width: 32, height: 1, background: C.gold }} />
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, letterSpacing: '0.3em', color: C.gold, textTransform: 'uppercase' }}>Capteurs connectés</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 15, letterSpacing: '0.3em', color: C.gold, textTransform: 'uppercase' }}>Capteurs connectés</div>
               </div>
             </div>
 
@@ -139,9 +139,9 @@ function Scene13Exposome({ start, end }) {
                     }}>
                       <div style={{ flexShrink: 0, width: 64, height: 64, borderRadius: 12, background: 'rgba(34,211,238,0.08)', border: `1px solid ${C.lineStrong}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{e.icon}</div>
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontFamily: 'Inter', fontSize: 19, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>{e.label}</div>
-                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.cyan, letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: 3 }}>{e.metric}</div>
-                        <div style={{ fontSize: 12, color: C.whiteDim, marginTop: 6, lineHeight: 1.5 }}>{e.detail}</div>
+                        <div style={{ fontFamily: 'Inter', fontSize: 24, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>{e.label}</div>
+                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.cyan, letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: 3 }}>{e.metric}</div>
+                        <div style={{ fontSize: 15, color: C.whiteDim, marginTop: 6, lineHeight: 1.5 }}>{e.detail}</div>
                       </div>
                     </div>
                   );
@@ -166,9 +166,9 @@ function Scene13Exposome({ start, end }) {
                     }}>
                       <div style={{ flexShrink: 0, width: 64, height: 64, borderRadius: 12, background: 'rgba(251,191,36,0.08)', border: `1px solid ${C.gold}55`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{d.icon}</div>
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontFamily: 'Inter', fontSize: 19, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>{d.label}</div>
-                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.gold, letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: 3 }}>{d.metric}</div>
-                        <div style={{ fontSize: 12, color: C.whiteDim, marginTop: 6, lineHeight: 1.5 }}>{d.detail}</div>
+                        <div style={{ fontFamily: 'Inter', fontSize: 24, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>{d.label}</div>
+                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.gold, letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: 3 }}>{d.metric}</div>
+                        <div style={{ fontSize: 15, color: C.whiteDim, marginTop: 6, lineHeight: 1.5 }}>{d.detail}</div>
                       </div>
                     </div>
                   );
@@ -187,14 +187,14 @@ function Scene13Exposome({ start, end }) {
               border: `1px solid ${C.gold}66`,
               display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 24,
             }}>
-              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim, letterSpacing: '0.25em', textTransform: 'uppercase' }}>4 Dimensions intégrées</div>
-              <div style={{ display: 'flex', gap: 36, fontSize: 17, fontWeight: 400 }}>
+              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 15, color: C.whiteDim, letterSpacing: '0.25em', textTransform: 'uppercase' }}>4 Dimensions intégrées</div>
+              <div style={{ display: 'flex', gap: 36, fontSize: 22, fontWeight: 400 }}>
                 <span style={{ color: C.cyan }}>● Clinique</span>
                 <span style={{ color: C.cyan }}>● Exposome</span>
                 <span style={{ color: C.gold }}>● Occupationnel</span>
                 <span style={{ color: C.gold }}>● Lifestyle</span>
               </div>
-              <div style={{ fontFamily: 'Inter', fontSize: 17, fontWeight: 500, color: C.white }}>
+              <div style={{ fontFamily: 'Inter', fontSize: 22, fontWeight: 500, color: C.white }}>
                 = un seul score <span style={{ color: C.gold }}>BSD</span>
               </div>
             </div>

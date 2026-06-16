@@ -23,7 +23,7 @@ function Scene5Bilans({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, top: 180, right: 96,
               opacity: titleIn, transform: `translateY(${(1-titleIn)*20}px)`,
-              fontFamily: 'Inter, sans-serif', fontSize: 60, fontWeight: 200,
+              fontFamily: 'Inter, sans-serif', fontSize: 65, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
               Une prescription adaptée à <span style={{ fontStyle: 'italic', color: C.gold }}>VOTRE</span> niveau de risque.
@@ -38,16 +38,16 @@ function Scene5Bilans({ start, end }) {
                 }}>
                   <GlassCard x={0} y={0} w={540} h={520} border={`${b.color}55`}>
                     <div style={{ padding: 36, height: '100%', display: 'flex', flexDirection: 'column' }}>
-                      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, letterSpacing: '0.3em', color: b.color, textTransform: 'uppercase' }}>BILAN</div>
-                      <div style={{ fontFamily: 'Inter', fontSize: 44, fontWeight: 400, color: C.white, marginTop: 6, letterSpacing: '-0.02em' }}>{b.name}</div>
-                      <div style={{ fontSize: 14, color: C.whiteDim, marginTop: 4, fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.05em' }}>{b.sub}</div>
+                      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 17, letterSpacing: '0.3em', color: b.color, textTransform: 'uppercase' }}>BILAN</div>
+                      <div style={{ fontFamily: 'Inter', fontSize: 48, fontWeight: 400, color: C.white, marginTop: 6, letterSpacing: '-0.02em' }}>{b.name}</div>
+                      <div style={{ fontSize: 18, color: C.whiteDim, marginTop: 4, fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.05em' }}>{b.sub}</div>
 
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: 14, marginTop: 32, marginBottom: 24 }}>
                         <div style={{ fontFamily: 'Inter', fontSize: 120, fontWeight: 100, color: b.color, lineHeight: 1, letterSpacing: '-0.05em' }}>{b.count}</div>
-                        <div style={{ fontSize: 16, color: C.whiteDim, fontWeight: 300 }}>analyses<br/>biologiques</div>
+                        <div style={{ fontSize: 20, color: C.whiteDim, fontWeight: 300 }}>analyses<br/>biologiques</div>
                       </div>
 
-                      <div style={{ borderTop: `1px solid ${b.color}33`, paddingTop: 18, fontSize: 13, fontFamily: 'JetBrains Mono, monospace', color: C.whiteDim, lineHeight: 1.8 }}>
+                      <div style={{ borderTop: `1px solid ${b.color}33`, paddingTop: 18, fontSize: 17, fontFamily: 'JetBrains Mono, monospace', color: C.whiteDim, lineHeight: 1.8 }}>
                         {b.items.map((it, j) => <div key={j}>{it}</div>)}
                         {b.extra.map((it, j) => <div key={j} style={{ color: b.color }}>{it}</div>)}
                       </div>
@@ -90,11 +90,11 @@ function Scene6Synergy({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, top: 180,
               opacity: titleIn, transform: `translateY(${(1-titleIn)*20}px)`,
-              fontFamily: 'Inter', fontSize: 64, fontWeight: 200,
+              fontFamily: 'Inter', fontSize: 69, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
               La <span style={{ fontStyle: 'italic', color: C.red }}>synergie inflammatoire.</span><br/>
-              <span style={{ fontSize: 32, color: C.whiteDim, fontWeight: 300 }}>Notre signature scientifique.</span>
+              <span style={{ fontSize: 38, color: C.whiteDim, fontWeight: 300 }}>Notre signature scientifique.</span>
             </div>
 
             {/* Connections */}
@@ -145,8 +145,8 @@ function Scene6Synergy({ start, end }) {
                     display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                     backdropFilter: 'blur(8px)',
                   }}>
-                    <div style={{ fontFamily: 'Inter', fontSize: 22, fontWeight: 600, color: C.white }}>{n.name}</div>
-                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: 'rgba(35,41,58,0.85)', marginTop: 4, letterSpacing: '0.1em' }}>{n.sub}</div>
+                    <div style={{ fontFamily: 'Inter', fontSize: 28, fontWeight: 600, color: C.white }}>{n.name}</div>
+                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 15, color: 'rgba(35,41,58,0.85)', marginTop: 4, letterSpacing: '0.1em' }}>{n.sub}</div>
                   </div>
                 </div>
               );
@@ -166,8 +166,8 @@ function Scene6Synergy({ start, end }) {
                 boxShadow: `0 0 80px ${C.red}, 0 0 30px ${C.gold}`,
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               }}>
-                <div style={{ fontFamily: 'Inter', fontSize: 44, fontWeight: 200, color: C.white, letterSpacing: '0.1em' }}>TRIO</div>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.gold, letterSpacing: '0.3em', textTransform: 'uppercase' }}>Amplificateur</div>
+                <div style={{ fontFamily: 'Inter', fontSize: 48, fontWeight: 200, color: C.white, letterSpacing: '0.1em' }}>TRIO</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.gold, letterSpacing: '0.3em', textTransform: 'uppercase' }}>Amplificateur</div>
               </div>
               {/* Pulse rings */}
               {[0,1,2].map(i => {
@@ -188,17 +188,17 @@ function Scene6Synergy({ start, end }) {
               opacity: calloutIn, transform: `translateX(${(1-calloutIn)*40}px)`,
             }}>
               <div style={{
-                fontFamily: 'JetBrains Mono, monospace', fontSize: 12,
+                fontFamily: 'JetBrains Mono, monospace', fontSize: 15,
                 letterSpacing: '0.3em', color: C.gold, textTransform: 'uppercase',
               }}>Innovation propriétaire</div>
               <div style={{
-                fontFamily: 'Inter', fontSize: 40, fontWeight: 300,
+                fontFamily: 'Inter', fontSize: 47, fontWeight: 300,
                 color: C.white, marginTop: 16, lineHeight: 1.15, letterSpacing: '-0.02em',
               }}>
                 Aucun autre score au monde n'intègre cette <span style={{ fontStyle: 'italic', color: C.red }}>synergie biologie × exposome.</span>
               </div>
               <div style={{ marginTop: 28, padding: 24, background: 'rgba(34,211,238,0.05)', border: `1px solid ${C.line}`, borderRadius: 12 }}>
-                <div style={{ fontSize: 16, color: C.whiteDim, lineHeight: 1.5 }}>
+                <div style={{ fontSize: 20, color: C.whiteDim, lineHeight: 1.5 }}>
                   Quand les trois biomarqueurs sont élevés, l'inflammation <span style={{ color: C.cyan }}>amplifie</span> l'impact de la pollution, du stress et de la chaleur sur votre cœur.
                 </div>
               </div>

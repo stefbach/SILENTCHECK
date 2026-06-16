@@ -11,14 +11,14 @@ function Scene9Mockups({ start, end }) {
             tilt: -14, delay: 1.0,
             content: (
               <div style={{ padding: '40px 24px', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: C.whiteDim, letterSpacing: '0.2em' }}>SILENTCHECK</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim, letterSpacing: '0.2em' }}>SILENTCHECK</div>
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 12 }}>
-                  <div style={{ width: 60, height: 60, borderRadius: '50%', background: `radial-gradient(circle, ${C.cyan}, ${C.blueDeep})`, boxShadow: `0 0 30px ${C.cyan}aa`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28 }}>♥</div>
-                  <div style={{ fontSize: 26, fontWeight: 200, color: C.white, letterSpacing: '-0.02em', lineHeight: 1.1 }}>Connaissez<br/>votre risque.</div>
-                  <div style={{ fontSize: 11, color: C.whiteDim, lineHeight: 1.4 }}>Stratification cardiovasculaire personnalisée</div>
+                  <div style={{ width: 60, height: 60, borderRadius: '50%', background: `radial-gradient(circle, ${C.cyan}, ${C.blueDeep})`, boxShadow: `0 0 30px ${C.cyan}aa`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 33 }}>♥</div>
+                  <div style={{ fontSize: 31, fontWeight: 200, color: C.white, letterSpacing: '-0.02em', lineHeight: 1.1 }}>Connaissez<br/>votre risque.</div>
+                  <div style={{ fontSize: 14, color: C.whiteDim, lineHeight: 1.4 }}>Stratification cardiovasculaire personnalisée</div>
                 </div>
-                <div style={{ padding: '14px', background: `linear-gradient(135deg, ${C.cyan}, ${C.blue})`, borderRadius: 12, textAlign: 'center', fontSize: 13, fontWeight: 600, color: C.ink }}>Commencer mon évaluation</div>
-                <div style={{ marginTop: 10, fontSize: 9, color: C.whiteDim, textAlign: 'center', fontFamily: 'JetBrains Mono, monospace' }}>15 min · médecin inclus</div>
+                <div style={{ padding: '14px', background: `linear-gradient(135deg, ${C.cyan}, ${C.blue})`, borderRadius: 12, textAlign: 'center', fontSize: 17, fontWeight: 600, color: C.ink }}>Commencer mon évaluation</div>
+                <div style={{ marginTop: 10, fontSize: 12, color: C.whiteDim, textAlign: 'center', fontFamily: 'JetBrains Mono, monospace' }}>15 min · médecin inclus</div>
               </div>
             )
           },
@@ -27,21 +27,21 @@ function Scene9Mockups({ start, end }) {
             tilt: 0, delay: 1.4,
             content: (
               <div style={{ padding: '40px 24px', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: C.whiteDim, letterSpacing: '0.2em' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim, letterSpacing: '0.2em' }}>
                   <span>Q. 03 / ~40</span><span style={{ color: C.cyan }}>● ● ● ○ ○</span>
                 </div>
-                <div style={{ marginTop: 24, fontSize: 22, fontWeight: 300, color: C.white, lineHeight: 1.2 }}>Votre âge ?</div>
+                <div style={{ marginTop: 24, fontSize: 28, fontWeight: 300, color: C.white, lineHeight: 1.2 }}>Votre âge ?</div>
                 <div style={{ marginTop: 18, display: 'flex', flexDirection: 'column', gap: 8 }}>
                   {['18–29 ans','30–44 ans','45–59 ans','60–74 ans','75 ans et +'].map((opt, i) => (
                     <div key={i} style={{
-                      padding: '12px 14px', fontSize: 12, color: i === 2 ? C.bg0 : C.white,
+                      padding: '12px 14px', fontSize: 15, color: i === 2 ? C.bg0 : C.white,
                       background: i === 2 ? C.cyan : 'rgba(34,211,238,0.06)',
                       border: `1px solid ${i === 2 ? C.cyan : C.line}`,
                       borderRadius: 10, fontWeight: i === 2 ? 600 : 400,
                     }}>{opt}</div>
                   ))}
                 </div>
-                <div style={{ marginTop: 'auto', padding: '12px', background: 'rgba(34,211,238,0.1)', border: `1px solid ${C.line}`, borderRadius: 10, textAlign: 'center', fontSize: 12, color: C.cyan }}>Suivant →</div>
+                <div style={{ marginTop: 'auto', padding: '12px', background: 'rgba(34,211,238,0.1)', border: `1px solid ${C.line}`, borderRadius: 10, textAlign: 'center', fontSize: 15, color: C.cyan }}>Suivant →</div>
               </div>
             )
           },
@@ -50,18 +50,18 @@ function Scene9Mockups({ start, end }) {
             tilt: 14, delay: 1.8,
             content: (
               <div style={{ padding: '40px 24px', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: C.whiteDim, letterSpacing: '0.2em' }}>SCORE BSD</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim, letterSpacing: '0.2em' }}>SCORE BSD</div>
                 <div style={{ marginTop: 14, alignSelf: 'center', position: 'relative' }}>
                   <svg width="140" height="140" viewBox="0 0 140 140">
                     <circle cx="70" cy="70" r="58" fill="none" stroke={C.line} strokeWidth="6" />
                     <circle cx="70" cy="70" r="58" fill="none" stroke={C.gold} strokeWidth="6"
                             strokeDasharray={`${0.42 * 2 * Math.PI * 58} ${2 * Math.PI * 58}`}
                             transform="rotate(-90 70 70)" strokeLinecap="round" />
-                    <text x="70" y="78" textAnchor="middle" fill={C.white} fontFamily="Inter" fontSize="36" fontWeight="200">42</text>
-                    <text x="70" y="96" textAnchor="middle" fill={C.whiteDim} fontFamily="JetBrains Mono, monospace" fontSize="9">/ 100</text>
+                    <text x="70" y="78" textAnchor="middle" fill={C.white} fontFamily="Inter" fontSize="42" fontWeight="200">42</text>
+                    <text x="70" y="96" textAnchor="middle" fill={C.whiteDim} fontFamily="JetBrains Mono, monospace" fontSize="12">/ 100</text>
                   </svg>
                 </div>
-                <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 8, fontSize: 11 }}>
+                <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 8, fontSize: 14 }}>
                   {[
                     ['Risque', 'modéré', C.gold],
                     ['Bilan', '10 analyses', C.cyan],
@@ -74,7 +74,7 @@ function Scene9Mockups({ start, end }) {
                     </div>
                   ))}
                 </div>
-                <div style={{ marginTop: 'auto', padding: '12px', background: `linear-gradient(135deg, ${C.cyan}, ${C.gold})`, borderRadius: 10, textAlign: 'center', fontSize: 12, color: C.ink, fontWeight: 600 }}>Voir mon plan d'action</div>
+                <div style={{ marginTop: 'auto', padding: '12px', background: `linear-gradient(135deg, ${C.cyan}, ${C.gold})`, borderRadius: 10, textAlign: 'center', fontSize: 15, color: C.ink, fontWeight: 600 }}>Voir mon plan d'action</div>
               </div>
             )
           },
@@ -88,7 +88,7 @@ function Scene9Mockups({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, top: 180,
               opacity: titleIn, transform: `translateY(${(1-titleIn)*20}px)`,
-              fontFamily: 'Inter', fontSize: 60, fontWeight: 200,
+              fontFamily: 'Inter', fontSize: 65, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
               L'expérience patient,<br/>
@@ -126,7 +126,7 @@ function Scene9Mockups({ start, end }) {
                     </div>
                     <div style={{
                       marginTop: 18, textAlign: 'center',
-                      fontFamily: 'JetBrains Mono, monospace', fontSize: 11,
+                      fontFamily: 'JetBrains Mono, monospace', fontSize: 14,
                       color: C.whiteDim, letterSpacing: '0.2em', textTransform: 'uppercase',
                     }}>
                       Écran {i+1} · {p.label}
@@ -165,11 +165,11 @@ function Scene10Bilan({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, top: 160,
               opacity: titleIn, transform: `translateY(${(1-titleIn)*20}px)`,
-              fontFamily: 'Inter', fontSize: 56, fontWeight: 200,
+              fontFamily: 'Inter', fontSize: 60, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
               Une vraie <span style={{ fontStyle: 'italic', color: C.gold }}>stratégie de prévention,</span><br/>
-              <span style={{ fontSize: 28, fontWeight: 300, color: C.cyan }}>
+              <span style={{ fontSize: 33, fontWeight: 300, color: C.cyan }}>
                 co-construite par l'IA et votre médecin — plus jamais d'examens à l'aveugle.
               </span>
             </div>
@@ -189,7 +189,7 @@ function Scene10Bilan({ start, end }) {
                 boxShadow: `0 0 12px ${C.cyan}`,
                 opacity: 0.6 + Math.sin(t * 4) * 0.4,
               }} />
-              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.white, letterSpacing: '0.25em' }}>
+              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 17, color: C.white, letterSpacing: '0.25em' }}>
                 IA BIEN-ÊTRE · SOUS CONTRÔLE MÉDICAL
               </span>
             </div>
@@ -211,12 +211,12 @@ function Scene10Bilan({ start, end }) {
                           background: `linear-gradient(135deg, ${it.color}33, ${it.color}11)`,
                           border: `1px solid ${it.color}66`,
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          fontSize: 28, color: it.color,
+                          fontSize: 33, color: it.color,
                         }}>{it.icon}</div>
                         <div style={{ flex: 1 }}>
-                          <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: it.color, letterSpacing: '0.2em', textTransform: 'uppercase' }}>{it.sub}</div>
-                          <div style={{ fontFamily: 'Inter', fontSize: 22, fontWeight: 500, color: C.white, marginTop: 6, letterSpacing: '-0.01em' }}>{it.title}</div>
-                          <div style={{ fontSize: 13, color: C.whiteDim, marginTop: 10, lineHeight: 1.5 }}>{it.desc}</div>
+                          <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: it.color, letterSpacing: '0.2em', textTransform: 'uppercase' }}>{it.sub}</div>
+                          <div style={{ fontFamily: 'Inter', fontSize: 28, fontWeight: 500, color: C.white, marginTop: 6, letterSpacing: '-0.01em' }}>{it.title}</div>
+                          <div style={{ fontSize: 17, color: C.whiteDim, marginTop: 10, lineHeight: 1.5 }}>{it.desc}</div>
                         </div>
                       </div>
                     </GlassCard>
@@ -232,7 +232,7 @@ function Scene10Bilan({ start, end }) {
               padding: '16px 28px', borderRadius: 12,
               border: `1px solid ${C.gold}55`,
               background: 'linear-gradient(90deg, rgba(251,191,36,0.08), rgba(34,211,238,0.05))',
-              fontFamily: 'Inter', fontSize: 18, color: C.white, fontWeight: 300,
+              fontFamily: 'Inter', fontSize: 23, color: C.white, fontWeight: 300,
               textAlign: 'center', letterSpacing: '0.02em',
             }}>
               L'IA <span style={{ color: C.gold, fontWeight: 500 }}>facilite la lecture de vos résultats</span> · l'application est le <span style={{ color: C.cyan, fontWeight: 500 }}>vecteur</span>, l'algorithme mathématique la <span style={{ color: C.cyan, fontWeight: 500 }}>boussole</span> — périmètre bien-être & prévention, validé par des médecins.
@@ -271,7 +271,7 @@ function Scene11Security({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, top: 180,
               opacity: titleIn, transform: `translateY(${(1-titleIn)*20}px)`,
-              fontFamily: 'Inter', fontSize: 60, fontWeight: 200,
+              fontFamily: 'Inter', fontSize: 65, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
               Vos données,<br/>
@@ -307,7 +307,7 @@ function Scene11Security({ start, end }) {
                   <circle cx="0" cy="22" r="6" fill={C.cyan} />
                   <line x1="0" y1="22" x2="0" y2="40" stroke={C.cyan} strokeWidth="3" />
                 </g>
-                <text x="190" y="380" textAnchor="middle" fill={C.white} fontFamily="JetBrains Mono, monospace" fontSize="14" letterSpacing="6">RGPD · DPA</text>
+                <text x="190" y="380" textAnchor="middle" fill={C.white} fontFamily="JetBrains Mono, monospace" fontSize="18" letterSpacing="6">RGPD · DPA</text>
               </svg>
             </div>
 
@@ -331,11 +331,11 @@ function Scene11Security({ start, end }) {
                       borderRadius: '50%',
                       background: C.cyan,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      color: C.ink, fontWeight: 700, fontSize: 14,
+                      color: C.ink, fontWeight: 700, fontSize: 18,
                     }}>✓</div>
                     <div>
-                      <div style={{ fontSize: 16, fontWeight: 500, color: C.white }}>{c.title}</div>
-                      <div style={{ fontSize: 12, color: C.whiteDim, marginTop: 4, lineHeight: 1.5 }}>{c.desc}</div>
+                      <div style={{ fontSize: 20, fontWeight: 500, color: C.white }}>{c.title}</div>
+                      <div style={{ fontSize: 15, color: C.whiteDim, marginTop: 4, lineHeight: 1.5 }}>{c.desc}</div>
                     </div>
                   </div>
                 );
@@ -385,7 +385,7 @@ function Scene12Authors({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, top: 180,
               opacity: titleIn, transform: `translateY(${(1-titleIn)*20}px)`,
-              fontFamily: 'Inter', fontSize: 60, fontWeight: 200,
+              fontFamily: 'Inter', fontSize: 65, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
               Trois signatures<br/>
@@ -411,13 +411,13 @@ function Scene12Authors({ start, end }) {
                           border: `2px solid ${C.gold}`,
                           boxShadow: `0 0 50px ${C.gold}66, inset 0 0 20px rgba(35,41,58,0.2)`,
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          fontFamily: 'Inter', fontSize: 42, fontWeight: 300,
+                          fontFamily: 'Inter', fontSize: 45, fontWeight: 300,
                           color: C.ink, letterSpacing: '0.05em',
                           marginTop: 8, marginBottom: 28,
                         }}>{a.initials}</div>
-                        <div style={{ fontFamily: 'Inter', fontSize: 24, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>{a.name}</div>
-                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: C.gold, letterSpacing: '0.2em', textTransform: 'uppercase', marginTop: 10 }}>{a.role}</div>
-                        <div style={{ fontSize: 14, color: C.whiteDim, marginTop: 22, lineHeight: 1.55, fontWeight: 300 }}>{a.desc}</div>
+                        <div style={{ fontFamily: 'Inter', fontSize: 28, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>{a.name}</div>
+                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.gold, letterSpacing: '0.2em', textTransform: 'uppercase', marginTop: 10 }}>{a.role}</div>
+                        <div style={{ fontSize: 18, color: C.whiteDim, marginTop: 22, lineHeight: 1.55, fontWeight: 300 }}>{a.desc}</div>
                       </div>
                     </GlassCard>
                   </div>
@@ -428,7 +428,7 @@ function Scene12Authors({ start, end }) {
             <div style={{
               position: 'absolute', left: 96, bottom: 50, right: 96,
               opacity: clamp((t - 3.4) / 0.8, 0, 1),
-              fontFamily: 'JetBrains Mono, monospace', fontSize: 13,
+              fontFamily: 'JetBrains Mono, monospace', fontSize: 17,
               color: C.whiteDim, letterSpacing: '0.15em',
               borderTop: `1px solid ${C.line}`, paddingTop: 18,
               display: 'flex', justifyContent: 'space-between',
