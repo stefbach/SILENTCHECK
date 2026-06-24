@@ -3989,8 +3989,9 @@ function SceneBusinessModel({ start, end }) {
 Object.assign(window, { SceneStart, SceneServices, SceneConcierge, SceneSecondAvis, SceneHumans, SceneBusinessModel });
 </script>
   <script type="text/babel">
-    // Slideshow (diaporama) — each scene shown as a static, fully-revealed slide.
-    // No animation loop: navigate with click / arrows. Smooth on any device.
+    // Slideshow (diaporama) — each scene as a static, fully-revealed full-bleed
+    // slide. No animation loop. Navigate with click / arrows. Fullscreen + auto
+    // hiding floating controls. Smooth on any device.
     const TOTAL = 418;
     const RAW = [
       ['Scene1Intro',0,18],['Scene2Crisis',18,38],['SceneStart',38,58],['Scene4Score',58,80],
@@ -4006,14 +4007,18 @@ Object.assign(window, { SceneStart, SceneServices, SceneConcierge, SceneSecondAv
       const [i, setI] = React.useState(0);
       const [scale, setScale] = React.useState(0.4);
       const [rotated, setRotated] = React.useState(false);
+      const [ui, setUi] = React.useState(true);
+      const [fsOn, setFsOn] = React.useState(false);
       const ref = React.useRef(null);
+      const hideRef = React.useRef(null);
       const N = SLIDES.length;
       const go = React.useCallback((d) => setI(p => Math.max(0, Math.min(N - 1, p + d))), [N]);
 
+      // Auto-fit the 1920x1080 slide to the full viewport (rotate in portrait).
       React.useEffect(() => {
         const el = ref.current; if (!el) return;
         const measure = () => {
-          const cw = el.clientWidth, ch = Math.max(1, el.clientHeight - 70);
+          const cw = el.clientWidth, ch = Math.max(1, el.clientHeight);
           const normal = Math.min(cw / 1920, ch / 1080);
           const rot = Math.min(cw / 1080, ch / 1920);
           const useR = ch > cw && rot > normal;
@@ -4026,61 +4031,100 @@ Object.assign(window, { SceneStart, SceneServices, SceneConcierge, SceneSecondAv
         return () => { ro.disconnect(); window.removeEventListener('resize', measure); window.removeEventListener('orientationchange', measure); };
       }, []);
 
+      // Show controls, then auto-hide after inactivity.
+      const poke = React.useCallback(() => {
+        setUi(true);
+        clearTimeout(hideRef.current);
+        hideRef.current = setTimeout(() => setUi(false), 2800);
+      }, []);
+      React.useEffect(() => {
+        poke();
+        const h = () => poke();
+        window.addEventListener('pointermove', h);
+        window.addEventListener('pointerdown', h);
+        window.addEventListener('keydown', h);
+        return () => { clearTimeout(hideRef.current); window.removeEventListener('pointermove', h); window.removeEventListener('pointerdown', h); window.removeEventListener('keydown', h); };
+      }, [poke]);
+
+      const toggleFs = React.useCallback(() => {
+        const d = document, el = d.documentElement;
+        if (!d.fullscreenElement && !d.webkitFullscreenElement) {
+          (el.requestFullscreen || el.webkitRequestFullscreen || function(){}).call(el);
+        } else {
+          (d.exitFullscreen || d.webkitExitFullscreen || function(){}).call(d);
+        }
+      }, []);
+      React.useEffect(() => {
+        const onFs = () => setFsOn(!!(document.fullscreenElement || document.webkitFullscreenElement));
+        document.addEventListener('fullscreenchange', onFs);
+        document.addEventListener('webkitfullscreenchange', onFs);
+        return () => { document.removeEventListener('fullscreenchange', onFs); document.removeEventListener('webkitfullscreenchange', onFs); };
+      }, []);
+
       React.useEffect(() => {
         const onKey = (e) => {
           if (['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)) { e.preventDefault(); go(1); }
           else if (['ArrowLeft','ArrowUp','PageUp'].includes(e.key)) { e.preventDefault(); go(-1); }
           else if (e.key === 'Home') setI(0);
           else if (e.key === 'End') setI(N - 1);
+          else if (e.key === 'f' || e.key === 'F') toggleFs();
         };
         window.addEventListener('keydown', onKey);
         return () => window.removeEventListener('keydown', onKey);
-      }, [go, N]);
+      }, [go, N, toggleFs]);
 
       const cur = SLIDES[i];
-      const btn = (label, onClick, disabled) => (
+      const ctrl = (label, onClick, disabled, big) => (
         React.createElement('button', {
-          onClick, disabled,
+          onClick: (e) => { e.stopPropagation(); if (!disabled) onClick(); }, disabled,
           style: {
-            width: 44, height: 44, borderRadius: 10, border: '1px solid rgba(35,41,58,0.25)',
-            background: disabled ? 'rgba(35,41,58,0.04)' : '#faf6ec', color: disabled ? 'rgba(35,41,58,0.3)' : '#23293a',
-            cursor: disabled ? 'default' : 'pointer', fontSize: 20, fontFamily: 'Inter, sans-serif',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            width: big ? 46 : 42, height: big ? 46 : 42, borderRadius: 10,
+            border: '1px solid rgba(35,41,58,0.18)',
+            background: disabled ? 'rgba(35,41,58,0.05)' : 'rgba(250,246,236,0.92)',
+            color: disabled ? 'rgba(35,41,58,0.3)' : '#23293a',
+            cursor: disabled ? 'default' : 'pointer', fontSize: big ? 20 : 22,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', lineHeight: 1,
           },
         }, label)
       );
 
       return (
-        <div ref={ref} style={{ position: 'fixed', inset: 0, background: '#ddd5c2', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-          <div style={{ flex: 1, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', minHeight: 0 }}>
-            <div
-              onClick={() => go(1)}
-              style={{
-                width: 1920, height: 1080, background: '#efe7d4', position: 'relative', overflow: 'hidden',
-                flexShrink: 0, transform: `${rotated ? 'rotate(90deg) ' : ''}scale(${scale})`, transformOrigin: 'center',
-                boxShadow: '0 12px 50px rgba(60,50,30,0.28)', cursor: 'pointer',
-              }}
-            >
-              <TimelineContext.Provider value={{ time: cur.start + cur.settle, duration: TOTAL, playing: false }}>
-                {React.createElement(cur.comp, { start: cur.start, end: cur.end })}
-                <ImmersiveHUD boundaries={BOUNDS} />
-              </TimelineContext.Provider>
-            </div>
-          </div>
-          {/* Bottom navigation bar */}
+        <div
+          ref={ref}
+          onClick={() => go(1)}
+          style={{ position: 'fixed', inset: 0, background: '#ddd5c2', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', cursor: ui ? 'default' : 'none' }}
+        >
+          {/* Full-bleed slide */}
           <div style={{
-            height: 70, flexShrink: 0, width: '100%', maxWidth: 760, display: 'flex', alignItems: 'center',
-            justifyContent: 'center', gap: 18, padding: '0 16px',
-            fontFamily: 'Inter, system-ui, sans-serif', color: '#23293a',
+            width: 1920, height: 1080, background: '#efe7d4', position: 'relative', overflow: 'hidden',
+            flexShrink: 0, transform: `${rotated ? 'rotate(90deg) ' : ''}scale(${scale})`, transformOrigin: 'center',
           }}>
-            {btn('‹', (e) => { e.stopPropagation(); go(-1); }, i === 0)}
-            <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 14, letterSpacing: '0.15em', minWidth: 90, textAlign: 'center', color: 'rgba(35,41,58,0.7)' }}>
+            <TimelineContext.Provider value={{ time: cur.start + cur.settle, duration: TOTAL, playing: false }}>
+              {React.createElement(cur.comp, { start: cur.start, end: cur.end })}
+              <ImmersiveHUD boundaries={BOUNDS} />
+            </TimelineContext.Provider>
+          </div>
+
+          {/* Top progress bar */}
+          <div style={{ position: 'fixed', top: 0, left: 0, height: 3, width: `${((i + 1) / N) * 100}%`, background: '#0e7490', transition: 'width 180ms', zIndex: 20 }} />
+
+          {/* Floating controls (auto-hide) */}
+          <div style={{
+            position: 'fixed', bottom: 22, left: '50%', transform: 'translateX(-50%)', zIndex: 20,
+            display: 'flex', alignItems: 'center', gap: 14, padding: '8px 14px', borderRadius: 14,
+            background: 'rgba(239,231,212,0.82)', border: '1px solid rgba(35,41,58,0.12)',
+            boxShadow: '0 8px 28px rgba(60,50,30,0.18)', backdropFilter: 'blur(8px)',
+            opacity: ui ? 1 : 0, transition: 'opacity 300ms', pointerEvents: ui ? 'auto' : 'none',
+            fontFamily: 'Inter, system-ui, sans-serif',
+          }}>
+            {ctrl('‹', () => go(-1), i === 0)}
+            <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 14, letterSpacing: '0.14em', minWidth: 92, textAlign: 'center', color: 'rgba(35,41,58,0.72)' }}>
               {String(i + 1).padStart(2, '0')} / {String(N).padStart(2, '0')}
             </div>
-            {btn('›', (e) => { e.stopPropagation(); go(1); }, i === N - 1)}
+            {ctrl('›', () => go(1), i === N - 1)}
+            <div style={{ width: 1, height: 28, background: 'rgba(35,41,58,0.15)', margin: '0 2px' }} />
+            {ctrl(fsOn ? '⤢' : '⛶', toggleFs, false, true)}
           </div>
-          {/* Thin progress bar */}
-          <div style={{ position: 'fixed', top: 0, left: 0, height: 3, width: `${((i + 1) / N) * 100}%`, background: '#0e7490', transition: 'width 160ms' }} />
         </div>
       );
     }
