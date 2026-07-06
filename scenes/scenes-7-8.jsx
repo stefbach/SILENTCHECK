@@ -107,14 +107,13 @@ function Scene8Outro({ start, end }) {
             <PulseLine y={540} color={C.cyan} amp={100} opacity={0.4} />
 
             <div style={{
-              position: 'absolute', left: '50%', top: '32%',
+              position: 'absolute', left: '50%', top: '30%',
               transform: `translate(-50%, -50%) translateY(${(1-line1In)*30}px)`,
               opacity: line1In,
-              fontFamily: 'Inter', fontSize: 33, fontWeight: 300,
-              color: C.cyan, letterSpacing: '0.4em', textTransform: 'uppercase',
-              textAlign: 'center',
+              fontFamily: 'Poppins, Inter, sans-serif', textAlign: 'center',
             }}>
-              SilentCheck
+              <span style={{ fontSize: 58, fontWeight: 700, color: C.blue, letterSpacing: '-0.01em' }}>Austral</span>
+              <span style={{ fontSize: 58, fontWeight: 500, fontStyle: 'italic', color: C.blue, marginLeft: 12 }}>Lab</span>
             </div>
 
             <div style={{
@@ -157,7 +156,7 @@ function Scene8Outro({ start, end }) {
               display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
               fontFamily: 'Inter',
             }}>
-              <div style={{ fontSize: 14, color: 'rgba(35,41,58,0.5)', letterSpacing: '0.25em', fontFamily: 'JetBrains Mono, monospace' }}>
+              <div style={{ fontSize: 14, color: 'rgba(18,58,94,0.5)', letterSpacing: '0.25em', fontFamily: 'JetBrains Mono, monospace' }}>
                 © 2026 · Score BSD v5.0 · Validé par 53 références internationales
               </div>
             </div>

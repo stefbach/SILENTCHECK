@@ -80,7 +80,7 @@ function Scene12Authors({ start, end }) {
               ].map((n, i) => (
                 <div key={i} style={{
                   padding: '20px 26px',
-                  background: n.pain ? 'rgba(244,63,94,0.12)' : 'rgba(35,41,58,0.04)',
+                  background: n.pain ? 'rgba(244,63,94,0.12)' : 'rgba(18,58,94,0.04)',
                   border: `1px solid ${n.pain ? C.red + '88' : C.line}`,
                   borderRadius: 10,
                   fontFamily: 'Inter', fontSize: 20, fontWeight: n.pain ? 500 : 300,

@@ -7,11 +7,11 @@ function Scene9Mockups({ start, end }) {
         const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
         const phones = [
           {
-            label: 'Entrée SilentCheck',
+            label: 'Entrée Austral Lab',
             tilt: -14, delay: 1.0,
             content: (
               <div style={{ padding: '40px 24px', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim, letterSpacing: '0.2em' }}>SILENTCHECK</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim, letterSpacing: '0.2em' }}>AUSTRAL LAB</div>
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 12 }}>
                   <div style={{ width: 60, height: 60, borderRadius: '50%', background: `radial-gradient(circle, ${C.cyan}, ${C.blueDeep})`, boxShadow: `0 0 30px ${C.cyan}aa`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 33 }}>♥</div>
                   <div style={{ fontSize: 31, fontWeight: 200, color: C.white, letterSpacing: '-0.02em', lineHeight: 1.1 }}>Connaissez<br/>votre risque.</div>
@@ -151,7 +151,7 @@ function Scene10Bilan({ start, end }) {
         const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
         const aiIn = clamp((t - 1.0) / 0.8, 0, 1);
         const items = [
-          { title: 'Score SilentCheck', sub: '0–100 · 4 dimensions intégrées', desc: 'Clinique · Exposome · Occupationnel · Lifestyle. 15 biomarqueurs et ajustement ethnique automatisés par l\'IA.', icon: '◉', color: C.cyan },
+          { title: 'Score Austral Lab', sub: '0–100 · 4 dimensions intégrées', desc: 'Clinique · Exposome · Occupationnel · Lifestyle. 15 biomarqueurs et ajustement ethnique automatisés par l\'IA.', icon: '◉', color: C.cyan },
           { title: 'Stratégie de prévention sur-mesure', sub: 'Plan d\'action priorisé · 6 / 12 / 24 mois', desc: 'L\'IA hiérarchise vos risques et bâtit un vrai programme : objectifs, cibles biologiques, jalons de suivi datés.', icon: '∞', color: C.gold },
           { title: 'Examens utiles uniquement', sub: 'Fini la prescription à l\'aveugle', desc: 'Le moteur cible les biomarqueurs pertinents pour VOTRE profil. Zéro examen inutile · zéro consultation redondante.', icon: '✦', color: C.cyan },
           { title: 'Documents & dispositif de suivi', sub: '3 livrables bilingues FR / EN', desc: 'Plan de Route Longévité · Certificat Emprunteur · Certificat Engagement Santé. Suivi continu et réajusté par l\'IA.', icon: '◈', color: C.gold },
@@ -292,8 +292,8 @@ function Scene11Security({ start, end }) {
                     <stop offset="100%" stopColor={C.blueDeep} stopOpacity="0.15" />
                   </linearGradient>
                   <linearGradient id="shieldShine" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="rgba(35,41,58,0.4)" />
-                    <stop offset="40%" stopColor="rgba(35,41,58,0)" />
+                    <stop offset="0%" stopColor="rgba(18,58,94,0.4)" />
+                    <stop offset="40%" stopColor="rgba(18,58,94,0)" />
                   </linearGradient>
                 </defs>
                 <path d="M 190 20 L 60 70 L 60 220 Q 60 340 190 420 Q 320 340 320 220 L 320 70 Z"
@@ -409,7 +409,7 @@ function Scene12Authors({ start, end }) {
                           borderRadius: '50%',
                           background: `radial-gradient(circle at 30% 30%, ${C.gold}, ${C.goldDim})`,
                           border: `2px solid ${C.gold}`,
-                          boxShadow: `0 0 50px ${C.gold}66, inset 0 0 20px rgba(35,41,58,0.2)`,
+                          boxShadow: `0 0 50px ${C.gold}66, inset 0 0 20px rgba(18,58,94,0.2)`,
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                           fontFamily: 'Inter', fontSize: 45, fontWeight: 300,
                           color: C.ink, letterSpacing: '0.05em',

@@ -1,4 +1,4 @@
-// New service-platform scenes — repositioning SilentCheck as a connected,
+// New service-platform scenes — repositioning Austral Lab as a connected,
 // doctor-piloted health companion (not just a score).
 //   SceneStart        — le point de départ : score + 2 consultations + biologie
 //   SceneServices     — la plateforme de service : orchestration des RDV
@@ -157,7 +157,7 @@ function SceneServices({ start, end }) {
                 width: 230, height: 230, borderRadius: '50%',
                 background: `radial-gradient(circle at 35% 30%, ${C.gold}cc, ${C.goldDim}55)`,
                 border: `3px solid ${C.gold}`,
-                boxShadow: `0 0 70px ${C.gold}88, inset 0 0 30px rgba(35,41,58,0.15)`,
+                boxShadow: `0 0 70px ${C.gold}88, inset 0 0 30px rgba(18,58,94,0.15)`,
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center',
               }}>
                 <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.ink, letterSpacing: '0.25em', fontWeight: 600 }}>POINT D'ENTRÉE</div>
@@ -305,7 +305,7 @@ function SceneConcierge({ start, end }) {
                 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.gold, letterSpacing: '0.25em' }}>PREMIUM</div>
-                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim }}>SilentCheck</div>
+                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim }}>Austral Lab</div>
                   </div>
                   <div style={{ fontSize: 19, color: C.white, fontWeight: 500 }}>Bonjour, Dr Durand</div>
                   {/* score ring */}
@@ -413,7 +413,7 @@ function SceneSecondAvis({ start, end }) {
         const steps = [
           { n: '01', title: 'Dossier transmis', desc: 'Vos résultats, sécurisés et anonymisés, partagés en un clic depuis l’app.', color: C.cyan },
           { n: '02', title: 'Un expert de renommée internationale', desc: 'Un spécialiste de référence, choisi pour votre cas, rend un second avis argumenté — sans liste d’attente.', color: C.gold },
-          { n: '03', title: 'Coordonné par votre médecin', desc: 'Votre médecin SilentCheck intègre l’avis au plan d’action. RDV garanti, réponse en quelques jours.', color: C.red },
+          { n: '03', title: 'Coordonné par votre médecin', desc: 'Votre médecin Austral Lab intègre l’avis au plan d’action. RDV garanti, réponse en quelques jours.', color: C.red },
         ];
 
         return (
@@ -461,7 +461,7 @@ function SceneSecondAvis({ start, end }) {
                 width: 150, height: 150, borderRadius: '50%',
                 background: `radial-gradient(circle at 35% 30%, ${C.cyan}cc, ${C.cyanDim}44)`,
                 border: `3px solid ${C.cyan}`,
-                boxShadow: `0 0 60px ${C.cyan}88, inset 0 0 24px rgba(35,41,58,0.15)`,
+                boxShadow: `0 0 60px ${C.cyan}88, inset 0 0 24px rgba(18,58,94,0.15)`,
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               }}>
                 <div style={{ fontFamily: 'Inter', fontSize: 31, fontWeight: 400, color: C.ink, letterSpacing: '0.04em' }}>VOTRE CAS</div>
@@ -825,7 +825,7 @@ function SceneBusinessModel({ start, end }) {
               borderTop: `1px solid ${C.gold}33`, paddingTop: 16,
             }}>
               <span style={{ color: C.cyan, fontWeight: 500 }}>100 % fondé sur la science validée</span> — aucune pseudoscience, aucun gadget marketing.
-              <span style={{ display: 'block', fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: 'rgba(35,41,58,0.4)', letterSpacing: '0.12em', marginTop: 8 }}>Sans engagement · mensuel ou annuel</span>
+              <span style={{ display: 'block', fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: 'rgba(18,58,94,0.4)', letterSpacing: '0.12em', marginTop: 8 }}>Sans engagement · mensuel ou annuel</span>
             </div>
           </div>
         );
