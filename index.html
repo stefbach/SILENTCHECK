@@ -2,15 +2,15 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8" />
-<title>SilentCheck — Diaporama</title>
+<title>Austral Lab — Diaporama</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&family=Orbitron:wght@400;500;600;700;800&family=Exo+2:wght@300;400;500;600&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&family=Orbitron:wght@400;500;600;700;800&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Exo+2:wght@300;400;500;600&display=swap" />
 <style>
-  html, body, #root { margin: 0; padding: 0; height: 100%; background: #ddd5c2; overflow: hidden; }
+  html, body, #root { margin: 0; padding: 0; height: 100%; background: #e7e0d0; overflow: hidden; }
   body {
-    font-family: 'Inter', system-ui, sans-serif; color: #23293a; -webkit-font-smoothing: antialiased;
+    font-family: 'Inter', system-ui, sans-serif; color: #123a5e; -webkit-font-smoothing: antialiased;
     position: fixed; inset: 0; width: 100%; height: 100%;
     overscroll-behavior: none; touch-action: none; -webkit-user-select: none; user-select: none;
     -webkit-tap-highlight-color: transparent;
@@ -727,24 +727,24 @@ Object.assign(window, {
 // Shared visual primitives — 3D heart, particles, grid, glow.
 
 const C = {
-  bg0: '#efe7d4',          // light beige (page / scene background)
-  bg1: '#f4eede',
-  bg2: '#faf6ec',          // light card surface
-  ink: '#23293a',          // dark ink for text on bright chips
-  cyan: '#0e7490',         // teal — readable on beige
-  cyanDim: '#155e75',
-  blue: '#2563eb',
-  blueDeep: '#1e3a8a',
-  red: '#e11d48',
-  redDim: '#9f1239',
-  gold: '#b45309',         // amber — readable on beige
-  goldDim: '#92400e',
-  green: '#15803d',
-  greenDim: '#166534',
-  white: '#23293a',        // primary text = dark ink (key kept for reuse)
-  whiteDim: 'rgba(35,41,58,0.6)',
-  line: 'rgba(35,41,58,0.14)',
-  lineStrong: 'rgba(35,41,58,0.28)',
+  bg0: '#f4f1e8',          // Austral Lab cream (logo background)
+  bg1: '#f8f5ee',
+  bg2: '#fdfbf5',          // card cream surface
+  ink: '#123a5e',          // navy ink for text on bright chips
+  cyan: '#1c6ea4',         // brand blue — primary accent
+  cyanDim: '#12507d',
+  blue: '#123a5e',         // navy
+  blueDeep: '#0e2c47',
+  red: '#e5228d',          // logo pink / magenta
+  redDim: '#b01a6d',
+  gold: '#f2841c',         // logo orange
+  goldDim: '#c25f00',
+  green: '#1e8a5f',        // functional positive
+  greenDim: '#14663f',
+  white: '#123a5e',        // primary text = navy (key kept for reuse)
+  whiteDim: 'rgba(18,58,94,0.6)',
+  line: 'rgba(18,58,94,0.14)',
+  lineStrong: 'rgba(18,58,94,0.28)',
 };
 
 // ── 3D space backdrop with parallax grid + drifting particles ─────────────
@@ -918,12 +918,12 @@ function Heart3D({ x = 960, y = 540, size = 280, beat = true }) {
             <stop offset="100%" stopColor={C.redDim} />
           </radialGradient>
           <linearGradient id="heartShine" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="rgba(35,41,58,0.7)" />
-            <stop offset="60%" stopColor="rgba(35,41,58,0)" />
+            <stop offset="0%" stopColor="rgba(18,58,94,0.7)" />
+            <stop offset="60%" stopColor="rgba(18,58,94,0)" />
           </linearGradient>
         </defs>
         <path d="M 0,40 C -50,10 -90,-20 -90,-50 C -90,-80 -60,-95 -30,-80 C -10,-70 0,-50 0,-40 C 0,-50 10,-70 30,-80 C 60,-95 90,-80 90,-50 C 90,-20 50,10 0,40 Z"
-              fill="url(#heartGrad)" stroke="rgba(35,41,58,0.3)" strokeWidth="1" />
+              fill="url(#heartGrad)" stroke="rgba(18,58,94,0.3)" strokeWidth="1" />
         <path d="M 0,30 C -42,4 -75,-18 -75,-44 C -75,-62 -55,-72 -32,-62"
               fill="none" stroke="url(#heartShine)" strokeWidth="3" opacity="0.7" />
       </svg>
@@ -1070,10 +1070,10 @@ function ImmersiveHUD({ boundaries = [] }) {
         display: 'flex', alignItems: 'center', gap: 12,
         fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 14,
         letterSpacing: '0.3em', textTransform: 'uppercase',
-        color: 'rgba(35,41,58,0.6)', whiteSpace: 'nowrap',
+        color: 'rgba(18,58,94,0.6)', whiteSpace: 'nowrap',
       }}>
         <span style={{ width: 7, height: 7, borderRadius: 4, background: C.green, boxShadow: `0 0 10px ${C.green}`, opacity: 0.55 + Math.sin(t * 4) * 0.45 }} />
-        <span>SilentCheck</span>
+        <span>Austral Lab</span>
         <span style={{ opacity: 0.35 }}>·</span>
         <span style={{ color: C.cyan }}>Clinique virtuelle</span>
         <span style={{ opacity: 0.35 }}>·</span>
@@ -1102,7 +1102,7 @@ function ImmersiveHUD({ boundaries = [] }) {
             position: 'absolute', top: '-20%', bottom: '-20%',
             left: `${sweepP * 122 - 11}%`, width: '13%',
             transform: 'skewX(-12deg)',
-            background: `linear-gradient(90deg, transparent, ${C.cyan}cc, rgba(35,41,58,0.85), ${C.cyan}cc, transparent)`,
+            background: `linear-gradient(90deg, transparent, ${C.cyan}cc, rgba(18,58,94,0.85), ${C.cyan}cc, transparent)`,
             boxShadow: `0 0 90px 24px ${C.cyan}`, opacity: 0.85,
           }} />
           <div style={{ position: 'absolute', inset: 0, background: C.cyan, opacity: flash * 0.08 }} />
@@ -1117,7 +1117,7 @@ Object.assign(window, {
 });
 </script>
   <script type="text/babel" data-from="scenes/scenes-1-2.jsx">
-// Scene 1 — Intro: SilentCheck logo emerges from cardiac pulse
+// Scene 1 — Intro: Austral Lab logo emerges from cardiac pulse
 function Scene1Intro({ start, end }) {
   return (
     <Sprite start={start} end={end}>
@@ -1133,38 +1133,52 @@ function Scene1Intro({ start, end }) {
             <PulseLine y={540} color={C.cyan} amp={140} opacity={pulseOpacity * 0.9} />
             <PulseLine y={540} color={C.red} amp={120} opacity={pulseOpacity * 0.4} />
 
-            {/* Center logo mark */}
+            {/* Center logo mark — Austral Lab */}
             <div style={{
-              position: 'absolute', left: '50%', top: '38%',
+              position: 'absolute', left: '50%', top: '32%',
               transform: `translate(-50%, -50%) scale(${0.7 + titleAppear * 0.3})`,
               opacity: titleAppear,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              gap: 18,
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
             }}>
-              <svg width="72" height="72" viewBox="0 0 72 72" style={{ filter: `drop-shadow(0 0 18px ${C.cyan})` }}>
-                <circle cx="36" cy="36" r="30" fill="none" stroke={C.cyan} strokeWidth="2" opacity="0.5" />
-                <circle cx="36" cy="36" r="22" fill="none" stroke={C.cyan} strokeWidth="1.5" opacity="0.8" />
-                <path d="M 8 36 L 22 36 L 28 22 L 36 50 L 42 30 L 48 36 L 64 36"
-                      fill="none" stroke={C.cyan} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+              <svg width="150" height="150" viewBox="0 0 140 140" style={{ marginBottom: 6 }}>
+                <defs>
+                  <linearGradient id="brandGrad" x1="0" y1="1" x2="1" y2="0">
+                    <stop offset="0%" stopColor={C.red} />
+                    <stop offset="100%" stopColor={C.gold} />
+                  </linearGradient>
+                </defs>
+                <circle cx="70" cy="70" r="64" fill="none" stroke="url(#brandGrad)" strokeWidth="2.5" />
+                {Array.from({ length: 48 }).map((_, k) => {
+                  const a = (k / 48) * Math.PI * 2;
+                  const r1 = 56, r2 = k % 4 === 0 ? 47 : 51;
+                  return <line key={k} x1={70 + Math.cos(a) * r1} y1={70 + Math.sin(a) * r1} x2={70 + Math.cos(a) * r2} y2={70 + Math.sin(a) * r2} stroke="url(#brandGrad)" strokeWidth={k % 4 === 0 ? 2.5 : 1.4} strokeLinecap="round" />;
+                })}
+                <path d="M70,20 L83,57 L120,70 L83,83 L70,120 L57,83 L20,70 L57,57 Z" fill="url(#brandGrad)" />
+                <circle cx="70" cy="70" r="7" fill="#fff" stroke="url(#brandGrad)" strokeWidth="3" />
               </svg>
               <div style={{
-                fontFamily: 'Inter, sans-serif',
-                fontSize: 96, fontWeight: 200,
-                letterSpacing: '-0.04em',
-                color: C.white,
-                lineHeight: 1,
-              }}>
-                Silent<span style={{ fontWeight: 600, background: `linear-gradient(135deg, ${C.cyan}, ${C.blue})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Check</span>
-              </div>
+                fontFamily: 'Poppins, Inter, sans-serif',
+                fontSize: 96, fontWeight: 700,
+                letterSpacing: '-0.02em',
+                color: C.blue,
+                lineHeight: 0.95,
+              }}>Austral</div>
+              <div style={{
+                fontFamily: 'Poppins, Inter, sans-serif',
+                fontSize: 60, fontWeight: 500, fontStyle: 'italic',
+                letterSpacing: '0.01em',
+                color: C.blue,
+                lineHeight: 1, marginTop: -2,
+              }}>Lab</div>
             </div>
 
             {/* Subtitle */}
             <div style={{
-              position: 'absolute', left: '50%', top: '52%',
+              position: 'absolute', left: '50%', top: '57%',
               transform: `translate(-50%, ${(1 - subAppear) * 16}px)`,
               opacity: subAppear,
               fontFamily: 'JetBrains Mono, monospace',
-              fontSize: 23, letterSpacing: '0.42em',
+              fontSize: 22, letterSpacing: '0.22em',
               color: C.cyan,
               textTransform: 'uppercase',
             }}>
@@ -1173,7 +1187,7 @@ function Scene1Intro({ start, end }) {
 
             {/* Tagline */}
             <div style={{
-              position: 'absolute', left: '50%', top: '62%',
+              position: 'absolute', left: '50%', top: '66%',
               transform: `translate(-50%, ${(1 - taglineAppear) * 16}px)`,
               opacity: taglineAppear,
               fontFamily: 'Inter, sans-serif',
@@ -1187,7 +1201,7 @@ function Scene1Intro({ start, end }) {
 
             {/* Positioning strap — a science-validated virtual clinic, not a coach app */}
             <div style={{
-              position: 'absolute', left: '50%', top: '72%',
+              position: 'absolute', left: '50%', top: '76%',
               transform: `translate(-50%, ${(1 - taglineAppear) * 16}px)`,
               opacity: taglineAppear,
               display: 'flex', alignItems: 'center', gap: 14,
@@ -1228,7 +1242,7 @@ function Scene1Intro({ start, end }) {
               fontSize: 17, letterSpacing: '0.4em',
               color: C.whiteDim, textTransform: 'uppercase',
             }}>
-              SilentCheck · 2026
+              Austral Lab · 2026
             </div>
             <div style={{
               position: 'absolute', right: 96, top: 64,
@@ -1260,7 +1274,7 @@ function Scene2Crisis({ start, end }) {
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
             <CosmicBackdrop hue="red" />
 
-            <SectionTag index="01" label="Pourquoi SilentCheck" color={C.red} />
+            <SectionTag index="01" label="Pourquoi Austral Lab" color={C.red} />
 
             <div style={{
               position: 'absolute', left: 96, top: 180, right: 96,
@@ -1318,7 +1332,7 @@ function Scene2Crisis({ start, end }) {
               borderTop: `1px solid ${C.line}`, paddingTop: 24,
             }}>
               La médecine classique intervient <span style={{ color: C.red, fontWeight: 500 }}>APRÈS</span> la maladie.
-              <span style={{ color: C.cyan, fontWeight: 500 }}>  SilentCheck agit AVANT.</span>
+              <span style={{ color: C.cyan, fontWeight: 500 }}>  Austral Lab agit AVANT.</span>
             </div>
           </div>
         );
@@ -1691,7 +1705,7 @@ function Scene6Synergy({ start, end }) {
                     backdropFilter: 'blur(8px)',
                   }}>
                     <div style={{ fontFamily: 'Inter', fontSize: 28, fontWeight: 600, color: C.white }}>{n.name}</div>
-                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 15, color: 'rgba(35,41,58,0.85)', marginTop: 4, letterSpacing: '0.1em' }}>{n.sub}</div>
+                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 15, color: 'rgba(18,58,94,0.85)', marginTop: 4, letterSpacing: '0.1em' }}>{n.sub}</div>
                   </div>
                 </div>
               );
@@ -1867,14 +1881,13 @@ function Scene8Outro({ start, end }) {
             <PulseLine y={540} color={C.cyan} amp={100} opacity={0.4} />
 
             <div style={{
-              position: 'absolute', left: '50%', top: '32%',
+              position: 'absolute', left: '50%', top: '30%',
               transform: `translate(-50%, -50%) translateY(${(1-line1In)*30}px)`,
               opacity: line1In,
-              fontFamily: 'Inter', fontSize: 33, fontWeight: 300,
-              color: C.cyan, letterSpacing: '0.4em', textTransform: 'uppercase',
-              textAlign: 'center',
+              fontFamily: 'Poppins, Inter, sans-serif', textAlign: 'center',
             }}>
-              SilentCheck
+              <span style={{ fontSize: 58, fontWeight: 700, color: C.blue, letterSpacing: '-0.01em' }}>Austral</span>
+              <span style={{ fontSize: 58, fontWeight: 500, fontStyle: 'italic', color: C.blue, marginLeft: 12 }}>Lab</span>
             </div>
 
             <div style={{
@@ -1917,7 +1930,7 @@ function Scene8Outro({ start, end }) {
               display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
               fontFamily: 'Inter',
             }}>
-              <div style={{ fontSize: 14, color: 'rgba(35,41,58,0.5)', letterSpacing: '0.25em', fontFamily: 'JetBrains Mono, monospace' }}>
+              <div style={{ fontSize: 14, color: 'rgba(18,58,94,0.5)', letterSpacing: '0.25em', fontFamily: 'JetBrains Mono, monospace' }}>
                 © 2026 · Score BSD v5.0 · Validé par 53 références internationales
               </div>
             </div>
@@ -1956,11 +1969,11 @@ function Scene9Mockups({ start, end }) {
         const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
         const phones = [
           {
-            label: 'Entrée SilentCheck',
+            label: 'Entrée Austral Lab',
             tilt: -14, delay: 1.0,
             content: (
               <div style={{ padding: '40px 24px', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim, letterSpacing: '0.2em' }}>SILENTCHECK</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim, letterSpacing: '0.2em' }}>AUSTRAL LAB</div>
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 12 }}>
                   <div style={{ width: 60, height: 60, borderRadius: '50%', background: `radial-gradient(circle, ${C.cyan}, ${C.blueDeep})`, boxShadow: `0 0 30px ${C.cyan}aa`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 33 }}>♥</div>
                   <div style={{ fontSize: 31, fontWeight: 200, color: C.white, letterSpacing: '-0.02em', lineHeight: 1.1 }}>Connaissez<br/>votre risque.</div>
@@ -2100,7 +2113,7 @@ function Scene10Bilan({ start, end }) {
         const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
         const aiIn = clamp((t - 1.0) / 0.8, 0, 1);
         const items = [
-          { title: 'Score SilentCheck', sub: '0–100 · 4 dimensions intégrées', desc: 'Clinique · Exposome · Occupationnel · Lifestyle. 15 biomarqueurs et ajustement ethnique automatisés par l\'IA.', icon: '◉', color: C.cyan },
+          { title: 'Score Austral Lab', sub: '0–100 · 4 dimensions intégrées', desc: 'Clinique · Exposome · Occupationnel · Lifestyle. 15 biomarqueurs et ajustement ethnique automatisés par l\'IA.', icon: '◉', color: C.cyan },
           { title: 'Stratégie de prévention sur-mesure', sub: 'Plan d\'action priorisé · 6 / 12 / 24 mois', desc: 'L\'IA hiérarchise vos risques et bâtit un vrai programme : objectifs, cibles biologiques, jalons de suivi datés.', icon: '∞', color: C.gold },
           { title: 'Examens utiles uniquement', sub: 'Fini la prescription à l\'aveugle', desc: 'Le moteur cible les biomarqueurs pertinents pour VOTRE profil. Zéro examen inutile · zéro consultation redondante.', icon: '✦', color: C.cyan },
           { title: 'Documents & dispositif de suivi', sub: '3 livrables bilingues FR / EN', desc: 'Plan de Route Longévité · Certificat Emprunteur · Certificat Engagement Santé. Suivi continu et réajusté par l\'IA.', icon: '◈', color: C.gold },
@@ -2241,8 +2254,8 @@ function Scene11Security({ start, end }) {
                     <stop offset="100%" stopColor={C.blueDeep} stopOpacity="0.15" />
                   </linearGradient>
                   <linearGradient id="shieldShine" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="rgba(35,41,58,0.4)" />
-                    <stop offset="40%" stopColor="rgba(35,41,58,0)" />
+                    <stop offset="0%" stopColor="rgba(18,58,94,0.4)" />
+                    <stop offset="40%" stopColor="rgba(18,58,94,0)" />
                   </linearGradient>
                 </defs>
                 <path d="M 190 20 L 60 70 L 60 220 Q 60 340 190 420 Q 320 340 320 220 L 320 70 Z"
@@ -2358,7 +2371,7 @@ function Scene12Authors({ start, end }) {
                           borderRadius: '50%',
                           background: `radial-gradient(circle at 30% 30%, ${C.gold}, ${C.goldDim})`,
                           border: `2px solid ${C.gold}`,
-                          boxShadow: `0 0 50px ${C.gold}66, inset 0 0 20px rgba(35,41,58,0.2)`,
+                          boxShadow: `0 0 50px ${C.gold}66, inset 0 0 20px rgba(18,58,94,0.2)`,
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                           fontFamily: 'Inter', fontSize: 45, fontWeight: 300,
                           color: C.ink, letterSpacing: '0.05em',
@@ -2707,7 +2720,7 @@ function Scene14Hub({ start, end }) {
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.cyan, letterSpacing: '0.2em' }}>● LIVE</div>
-                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim }}>SilentCheck</div>
+                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim }}>Austral Lab</div>
                   </div>
                   <div style={{ fontSize: 18, color: C.white, fontWeight: 500, marginTop: 4 }}>Tableau de bord</div>
                   {/* Mini metrics */}
@@ -2950,7 +2963,7 @@ function Scene12Authors({ start, end }) {
               ].map((n, i) => (
                 <div key={i} style={{
                   padding: '20px 26px',
-                  background: n.pain ? 'rgba(244,63,94,0.12)' : 'rgba(35,41,58,0.04)',
+                  background: n.pain ? 'rgba(244,63,94,0.12)' : 'rgba(18,58,94,0.04)',
                   border: `1px solid ${n.pain ? C.red + '88' : C.line}`,
                   borderRadius: 10,
                   fontFamily: 'Inter', fontSize: 20, fontWeight: n.pain ? 500 : 300,
@@ -3150,7 +3163,7 @@ function Scene12Authors({ start, end }) {
 Object.assign(window, { Scene12Authors });
 </script>
   <script type="text/babel" data-from="scenes/scenes-service.jsx">
-// New service-platform scenes — repositioning SilentCheck as a connected,
+// New service-platform scenes — repositioning Austral Lab as a connected,
 // doctor-piloted health companion (not just a score).
 //   SceneStart        — le point de départ : score + 2 consultations + biologie
 //   SceneServices     — la plateforme de service : orchestration des RDV
@@ -3309,7 +3322,7 @@ function SceneServices({ start, end }) {
                 width: 230, height: 230, borderRadius: '50%',
                 background: `radial-gradient(circle at 35% 30%, ${C.gold}cc, ${C.goldDim}55)`,
                 border: `3px solid ${C.gold}`,
-                boxShadow: `0 0 70px ${C.gold}88, inset 0 0 30px rgba(35,41,58,0.15)`,
+                boxShadow: `0 0 70px ${C.gold}88, inset 0 0 30px rgba(18,58,94,0.15)`,
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center',
               }}>
                 <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.ink, letterSpacing: '0.25em', fontWeight: 600 }}>POINT D'ENTRÉE</div>
@@ -3457,7 +3470,7 @@ function SceneConcierge({ start, end }) {
                 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.gold, letterSpacing: '0.25em' }}>PREMIUM</div>
-                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim }}>SilentCheck</div>
+                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim }}>Austral Lab</div>
                   </div>
                   <div style={{ fontSize: 19, color: C.white, fontWeight: 500 }}>Bonjour, Dr Durand</div>
                   {/* score ring */}
@@ -3565,7 +3578,7 @@ function SceneSecondAvis({ start, end }) {
         const steps = [
           { n: '01', title: 'Dossier transmis', desc: 'Vos résultats, sécurisés et anonymisés, partagés en un clic depuis l’app.', color: C.cyan },
           { n: '02', title: 'Un expert de renommée internationale', desc: 'Un spécialiste de référence, choisi pour votre cas, rend un second avis argumenté — sans liste d’attente.', color: C.gold },
-          { n: '03', title: 'Coordonné par votre médecin', desc: 'Votre médecin SilentCheck intègre l’avis au plan d’action. RDV garanti, réponse en quelques jours.', color: C.red },
+          { n: '03', title: 'Coordonné par votre médecin', desc: 'Votre médecin Austral Lab intègre l’avis au plan d’action. RDV garanti, réponse en quelques jours.', color: C.red },
         ];
 
         return (
@@ -3613,7 +3626,7 @@ function SceneSecondAvis({ start, end }) {
                 width: 150, height: 150, borderRadius: '50%',
                 background: `radial-gradient(circle at 35% 30%, ${C.cyan}cc, ${C.cyanDim}44)`,
                 border: `3px solid ${C.cyan}`,
-                boxShadow: `0 0 60px ${C.cyan}88, inset 0 0 24px rgba(35,41,58,0.15)`,
+                boxShadow: `0 0 60px ${C.cyan}88, inset 0 0 24px rgba(18,58,94,0.15)`,
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               }}>
                 <div style={{ fontFamily: 'Inter', fontSize: 31, fontWeight: 400, color: C.ink, letterSpacing: '0.04em' }}>VOTRE CAS</div>
@@ -3977,7 +3990,7 @@ function SceneBusinessModel({ start, end }) {
               borderTop: `1px solid ${C.gold}33`, paddingTop: 16,
             }}>
               <span style={{ color: C.cyan, fontWeight: 500 }}>100 % fondé sur la science validée</span> — aucune pseudoscience, aucun gadget marketing.
-              <span style={{ display: 'block', fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: 'rgba(35,41,58,0.4)', letterSpacing: '0.12em', marginTop: 8 }}>Sans engagement · mensuel ou annuel</span>
+              <span style={{ display: 'block', fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: 'rgba(18,58,94,0.4)', letterSpacing: '0.12em', marginTop: 8 }}>Sans engagement · mensuel ou annuel</span>
             </div>
           </div>
         );
@@ -4079,9 +4092,9 @@ Object.assign(window, { SceneStart, SceneServices, SceneConcierge, SceneSecondAv
           onClick: (e) => { e.stopPropagation(); if (!disabled) onClick(); }, disabled,
           style: {
             width: big ? 46 : 42, height: big ? 46 : 42, borderRadius: 10,
-            border: '1px solid rgba(35,41,58,0.18)',
-            background: disabled ? 'rgba(35,41,58,0.05)' : 'rgba(250,246,236,0.92)',
-            color: disabled ? 'rgba(35,41,58,0.3)' : '#23293a',
+            border: '1px solid rgba(18,58,94,0.18)',
+            background: disabled ? 'rgba(18,58,94,0.05)' : 'rgba(250,246,236,0.92)',
+            color: disabled ? 'rgba(18,58,94,0.3)' : '#123a5e',
             cursor: disabled ? 'default' : 'pointer', fontSize: big ? 20 : 22,
             display: 'flex', alignItems: 'center', justifyContent: 'center', lineHeight: 1,
           },
@@ -4092,11 +4105,11 @@ Object.assign(window, { SceneStart, SceneServices, SceneConcierge, SceneSecondAv
         <div
           ref={ref}
           onClick={() => go(1)}
-          style={{ position: 'fixed', inset: 0, background: '#ddd5c2', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', cursor: ui ? 'default' : 'none' }}
+          style={{ position: 'fixed', inset: 0, background: '#e7e0d0', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', cursor: ui ? 'default' : 'none' }}
         >
           {/* Full-bleed slide */}
           <div style={{
-            width: 1920, height: 1080, background: '#efe7d4', position: 'relative', overflow: 'hidden',
+            width: 1920, height: 1080, background: '#f4f1e8', position: 'relative', overflow: 'hidden',
             flexShrink: 0, transform: `${rotated ? 'rotate(90deg) ' : ''}scale(${scale})`, transformOrigin: 'center',
           }}>
             <TimelineContext.Provider value={{ time: cur.start + cur.settle, duration: TOTAL, playing: false }}>
@@ -4106,23 +4119,23 @@ Object.assign(window, { SceneStart, SceneServices, SceneConcierge, SceneSecondAv
           </div>
 
           {/* Top progress bar */}
-          <div style={{ position: 'fixed', top: 0, left: 0, height: 3, width: `${((i + 1) / N) * 100}%`, background: '#0e7490', transition: 'width 180ms', zIndex: 20 }} />
+          <div style={{ position: 'fixed', top: 0, left: 0, height: 3, width: `${((i + 1) / N) * 100}%`, background: '#1c6ea4', transition: 'width 180ms', zIndex: 20 }} />
 
           {/* Floating controls (auto-hide) */}
           <div style={{
             position: 'fixed', bottom: 22, left: '50%', transform: 'translateX(-50%)', zIndex: 20,
             display: 'flex', alignItems: 'center', gap: 14, padding: '8px 14px', borderRadius: 14,
-            background: 'rgba(239,231,212,0.82)', border: '1px solid rgba(35,41,58,0.12)',
+            background: 'rgba(244,241,232,0.82)', border: '1px solid rgba(18,58,94,0.12)',
             boxShadow: '0 8px 28px rgba(60,50,30,0.18)', backdropFilter: 'blur(8px)',
             opacity: ui ? 1 : 0, transition: 'opacity 300ms', pointerEvents: ui ? 'auto' : 'none',
             fontFamily: 'Inter, system-ui, sans-serif',
           }}>
             {ctrl('‹', () => go(-1), i === 0)}
-            <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 14, letterSpacing: '0.14em', minWidth: 92, textAlign: 'center', color: 'rgba(35,41,58,0.72)' }}>
+            <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 14, letterSpacing: '0.14em', minWidth: 92, textAlign: 'center', color: 'rgba(18,58,94,0.72)' }}>
               {String(i + 1).padStart(2, '0')} / {String(N).padStart(2, '0')}
             </div>
             {ctrl('›', () => go(1), i === N - 1)}
-            <div style={{ width: 1, height: 28, background: 'rgba(35,41,58,0.15)', margin: '0 2px' }} />
+            <div style={{ width: 1, height: 28, background: 'rgba(18,58,94,0.15)', margin: '0 2px' }} />
             {ctrl(fsOn ? '⤢' : '⛶', toggleFs, false, true)}
           </div>
         </div>

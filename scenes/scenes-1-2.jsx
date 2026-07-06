@@ -1,4 +1,4 @@
-// Scene 1 — Intro: SilentCheck logo emerges from cardiac pulse
+// Scene 1 — Intro: Austral Lab logo emerges from cardiac pulse
 function Scene1Intro({ start, end }) {
   return (
     <Sprite start={start} end={end}>
@@ -14,38 +14,52 @@ function Scene1Intro({ start, end }) {
             <PulseLine y={540} color={C.cyan} amp={140} opacity={pulseOpacity * 0.9} />
             <PulseLine y={540} color={C.red} amp={120} opacity={pulseOpacity * 0.4} />
 
-            {/* Center logo mark */}
+            {/* Center logo mark — Austral Lab */}
             <div style={{
-              position: 'absolute', left: '50%', top: '38%',
+              position: 'absolute', left: '50%', top: '32%',
               transform: `translate(-50%, -50%) scale(${0.7 + titleAppear * 0.3})`,
               opacity: titleAppear,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              gap: 18,
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
             }}>
-              <svg width="72" height="72" viewBox="0 0 72 72" style={{ filter: `drop-shadow(0 0 18px ${C.cyan})` }}>
-                <circle cx="36" cy="36" r="30" fill="none" stroke={C.cyan} strokeWidth="2" opacity="0.5" />
-                <circle cx="36" cy="36" r="22" fill="none" stroke={C.cyan} strokeWidth="1.5" opacity="0.8" />
-                <path d="M 8 36 L 22 36 L 28 22 L 36 50 L 42 30 L 48 36 L 64 36"
-                      fill="none" stroke={C.cyan} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+              <svg width="150" height="150" viewBox="0 0 140 140" style={{ marginBottom: 6 }}>
+                <defs>
+                  <linearGradient id="brandGrad" x1="0" y1="1" x2="1" y2="0">
+                    <stop offset="0%" stopColor={C.red} />
+                    <stop offset="100%" stopColor={C.gold} />
+                  </linearGradient>
+                </defs>
+                <circle cx="70" cy="70" r="64" fill="none" stroke="url(#brandGrad)" strokeWidth="2.5" />
+                {Array.from({ length: 48 }).map((_, k) => {
+                  const a = (k / 48) * Math.PI * 2;
+                  const r1 = 56, r2 = k % 4 === 0 ? 47 : 51;
+                  return <line key={k} x1={70 + Math.cos(a) * r1} y1={70 + Math.sin(a) * r1} x2={70 + Math.cos(a) * r2} y2={70 + Math.sin(a) * r2} stroke="url(#brandGrad)" strokeWidth={k % 4 === 0 ? 2.5 : 1.4} strokeLinecap="round" />;
+                })}
+                <path d="M70,20 L83,57 L120,70 L83,83 L70,120 L57,83 L20,70 L57,57 Z" fill="url(#brandGrad)" />
+                <circle cx="70" cy="70" r="7" fill="#fff" stroke="url(#brandGrad)" strokeWidth="3" />
               </svg>
               <div style={{
-                fontFamily: 'Inter, sans-serif',
-                fontSize: 96, fontWeight: 200,
-                letterSpacing: '-0.04em',
-                color: C.white,
-                lineHeight: 1,
-              }}>
-                Silent<span style={{ fontWeight: 600, background: `linear-gradient(135deg, ${C.cyan}, ${C.blue})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Check</span>
-              </div>
+                fontFamily: 'Poppins, Inter, sans-serif',
+                fontSize: 96, fontWeight: 700,
+                letterSpacing: '-0.02em',
+                color: C.blue,
+                lineHeight: 0.95,
+              }}>Austral</div>
+              <div style={{
+                fontFamily: 'Poppins, Inter, sans-serif',
+                fontSize: 60, fontWeight: 500, fontStyle: 'italic',
+                letterSpacing: '0.01em',
+                color: C.blue,
+                lineHeight: 1, marginTop: -2,
+              }}>Lab</div>
             </div>
 
             {/* Subtitle */}
             <div style={{
-              position: 'absolute', left: '50%', top: '52%',
+              position: 'absolute', left: '50%', top: '57%',
               transform: `translate(-50%, ${(1 - subAppear) * 16}px)`,
               opacity: subAppear,
               fontFamily: 'JetBrains Mono, monospace',
-              fontSize: 23, letterSpacing: '0.42em',
+              fontSize: 22, letterSpacing: '0.22em',
               color: C.cyan,
               textTransform: 'uppercase',
             }}>
@@ -54,7 +68,7 @@ function Scene1Intro({ start, end }) {
 
             {/* Tagline */}
             <div style={{
-              position: 'absolute', left: '50%', top: '62%',
+              position: 'absolute', left: '50%', top: '66%',
               transform: `translate(-50%, ${(1 - taglineAppear) * 16}px)`,
               opacity: taglineAppear,
               fontFamily: 'Inter, sans-serif',
@@ -68,7 +82,7 @@ function Scene1Intro({ start, end }) {
 
             {/* Positioning strap — a science-validated virtual clinic, not a coach app */}
             <div style={{
-              position: 'absolute', left: '50%', top: '72%',
+              position: 'absolute', left: '50%', top: '76%',
               transform: `translate(-50%, ${(1 - taglineAppear) * 16}px)`,
               opacity: taglineAppear,
               display: 'flex', alignItems: 'center', gap: 14,
@@ -109,7 +123,7 @@ function Scene1Intro({ start, end }) {
               fontSize: 17, letterSpacing: '0.4em',
               color: C.whiteDim, textTransform: 'uppercase',
             }}>
-              SilentCheck · 2026
+              Austral Lab · 2026
             </div>
             <div style={{
               position: 'absolute', right: 96, top: 64,
@@ -141,7 +155,7 @@ function Scene2Crisis({ start, end }) {
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
             <CosmicBackdrop hue="red" />
 
-            <SectionTag index="01" label="Pourquoi SilentCheck" color={C.red} />
+            <SectionTag index="01" label="Pourquoi Austral Lab" color={C.red} />
 
             <div style={{
               position: 'absolute', left: 96, top: 180, right: 96,
@@ -199,7 +213,7 @@ function Scene2Crisis({ start, end }) {
               borderTop: `1px solid ${C.line}`, paddingTop: 24,
             }}>
               La médecine classique intervient <span style={{ color: C.red, fontWeight: 500 }}>APRÈS</span> la maladie.
-              <span style={{ color: C.cyan, fontWeight: 500 }}>  SilentCheck agit AVANT.</span>
+              <span style={{ color: C.cyan, fontWeight: 500 }}>  Austral Lab agit AVANT.</span>
             </div>
           </div>
         );

@@ -1,24 +1,24 @@
 // Shared visual primitives — 3D heart, particles, grid, glow.
 
 const C = {
-  bg0: '#efe7d4',          // light beige (page / scene background)
-  bg1: '#f4eede',
-  bg2: '#faf6ec',          // light card surface
-  ink: '#23293a',          // dark ink for text on bright chips
-  cyan: '#0e7490',         // teal — readable on beige
-  cyanDim: '#155e75',
-  blue: '#2563eb',
-  blueDeep: '#1e3a8a',
-  red: '#e11d48',
-  redDim: '#9f1239',
-  gold: '#b45309',         // amber — readable on beige
-  goldDim: '#92400e',
-  green: '#15803d',
-  greenDim: '#166534',
-  white: '#23293a',        // primary text = dark ink (key kept for reuse)
-  whiteDim: 'rgba(35,41,58,0.6)',
-  line: 'rgba(35,41,58,0.14)',
-  lineStrong: 'rgba(35,41,58,0.28)',
+  bg0: '#f4f1e8',          // Austral Lab cream (logo background)
+  bg1: '#f8f5ee',
+  bg2: '#fdfbf5',          // card cream surface
+  ink: '#123a5e',          // navy ink for text on bright chips
+  cyan: '#1c6ea4',         // brand blue — primary accent
+  cyanDim: '#12507d',
+  blue: '#123a5e',         // navy
+  blueDeep: '#0e2c47',
+  red: '#e5228d',          // logo pink / magenta
+  redDim: '#b01a6d',
+  gold: '#f2841c',         // logo orange
+  goldDim: '#c25f00',
+  green: '#1e8a5f',        // functional positive
+  greenDim: '#14663f',
+  white: '#123a5e',        // primary text = navy (key kept for reuse)
+  whiteDim: 'rgba(18,58,94,0.6)',
+  line: 'rgba(18,58,94,0.14)',
+  lineStrong: 'rgba(18,58,94,0.28)',
 };
 
 // ── 3D space backdrop with parallax grid + drifting particles ─────────────
@@ -192,12 +192,12 @@ function Heart3D({ x = 960, y = 540, size = 280, beat = true }) {
             <stop offset="100%" stopColor={C.redDim} />
           </radialGradient>
           <linearGradient id="heartShine" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="rgba(35,41,58,0.7)" />
-            <stop offset="60%" stopColor="rgba(35,41,58,0)" />
+            <stop offset="0%" stopColor="rgba(18,58,94,0.7)" />
+            <stop offset="60%" stopColor="rgba(18,58,94,0)" />
           </linearGradient>
         </defs>
         <path d="M 0,40 C -50,10 -90,-20 -90,-50 C -90,-80 -60,-95 -30,-80 C -10,-70 0,-50 0,-40 C 0,-50 10,-70 30,-80 C 60,-95 90,-80 90,-50 C 90,-20 50,10 0,40 Z"
-              fill="url(#heartGrad)" stroke="rgba(35,41,58,0.3)" strokeWidth="1" />
+              fill="url(#heartGrad)" stroke="rgba(18,58,94,0.3)" strokeWidth="1" />
         <path d="M 0,30 C -42,4 -75,-18 -75,-44 C -75,-62 -55,-72 -32,-62"
               fill="none" stroke="url(#heartShine)" strokeWidth="3" opacity="0.7" />
       </svg>
@@ -344,10 +344,10 @@ function ImmersiveHUD({ boundaries = [] }) {
         display: 'flex', alignItems: 'center', gap: 12,
         fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 14,
         letterSpacing: '0.3em', textTransform: 'uppercase',
-        color: 'rgba(35,41,58,0.6)', whiteSpace: 'nowrap',
+        color: 'rgba(18,58,94,0.6)', whiteSpace: 'nowrap',
       }}>
         <span style={{ width: 7, height: 7, borderRadius: 4, background: C.green, boxShadow: `0 0 10px ${C.green}`, opacity: 0.55 + Math.sin(t * 4) * 0.45 }} />
-        <span>SilentCheck</span>
+        <span>Austral Lab</span>
         <span style={{ opacity: 0.35 }}>·</span>
         <span style={{ color: C.cyan }}>Clinique virtuelle</span>
         <span style={{ opacity: 0.35 }}>·</span>
@@ -376,7 +376,7 @@ function ImmersiveHUD({ boundaries = [] }) {
             position: 'absolute', top: '-20%', bottom: '-20%',
             left: `${sweepP * 122 - 11}%`, width: '13%',
             transform: 'skewX(-12deg)',
-            background: `linear-gradient(90deg, transparent, ${C.cyan}cc, rgba(35,41,58,0.85), ${C.cyan}cc, transparent)`,
+            background: `linear-gradient(90deg, transparent, ${C.cyan}cc, rgba(18,58,94,0.85), ${C.cyan}cc, transparent)`,
             boxShadow: `0 0 90px 24px ${C.cyan}`, opacity: 0.85,
           }} />
           <div style={{ position: 'absolute', inset: 0, background: C.cyan, opacity: flash * 0.08 }} />

@@ -99,7 +99,7 @@ function Scene14Hub({ start, end }) {
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.cyan, letterSpacing: '0.2em' }}>● LIVE</div>
-                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim }}>SilentCheck</div>
+                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim }}>Austral Lab</div>
                   </div>
                   <div style={{ fontSize: 18, color: C.white, fontWeight: 500, marginTop: 4 }}>Tableau de bord</div>
                   {/* Mini metrics */}
