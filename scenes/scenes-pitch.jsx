@@ -80,6 +80,91 @@ function SceneTeam({ start, end }) {
   );
 }
 
+// ── Scene — Marché potentiel · TAM / SAM / SOM ──────────────────────────────
+function SceneMarket({ start, end }) {
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime }) => {
+        const t = localTime;
+        const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
+        const layers = [
+          { key: 'TAM', w: 100, val: '≈ 450 Md€', color: C.cyan,
+            label: 'Marché mondial · santé préventive & longévité',
+            sub: 'horizon 2030 · croissance ≈ +11 %/an' },
+          { key: 'SAM', w: 60, val: '≈ 36 Md€', color: C.gold,
+            label: 'Europe · 60 M de cadres & actifs premium',
+            sub: 'abonnement annuel moyen ≈ 600 €' },
+          { key: 'SOM', w: 26, val: '≈ 332 M€', color: C.red,
+            label: 'Notre cible à 5 ans · France, Benelux → Pan-Europe',
+            sub: '750 000 cadres abonnés' },
+        ];
+        const pen = [
+          { k: '750 000', v: 'cadres abonnés visés à horizon 5 ans', color: C.cyan },
+          { k: '≈ 1,3 %', v: 'de pénétration du SAM européen premium', color: C.gold },
+          { k: '< 1 %', v: 'du marché adressable — marge de croissance immense', color: C.red },
+        ];
+        return (
+          <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
+            <CosmicBackdrop hue="cyan" />
+            <SectionTag index="" label="Marché potentiel · TAM / SAM / SOM" color={C.cyan} />
+            <div style={{
+              position: 'absolute', left: 96, top: 150, right: 96,
+              opacity: titleIn, transform: `translateY(${(1 - titleIn) * 20}px)`,
+              fontFamily: 'Inter', fontSize: 52, fontWeight: 200, color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
+            }}>
+              Un marché de la prévention à <span style={{ fontStyle: 'italic', color: C.cyan }}>plusieurs centaines de milliards.</span>
+            </div>
+
+            {/* Funnel — nested bars */}
+            <div style={{ position: 'absolute', left: 96, top: 320, right: 96, display: 'flex', flexDirection: 'column', gap: 26 }}>
+              {layers.map((L, i) => {
+                const bIn = clamp((t - 1.0 - i * 0.28) / 0.7, 0, 1);
+                return (
+                  <div key={i} style={{ opacity: bIn, transform: `translateY(${(1 - bIn) * 20}px)`, display: 'flex', alignItems: 'center', gap: 28 }}>
+                    <div style={{ width: 380, flexShrink: 0 }}>
+                      <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 20, fontWeight: 700, letterSpacing: '0.12em', color: L.color }}>{L.key}</div>
+                      <div style={{ fontFamily: 'Inter', fontSize: 18, fontWeight: 500, color: C.white, marginTop: 5, lineHeight: 1.25 }}>{L.label}</div>
+                      <div style={{ fontSize: 13.5, color: C.whiteDim, marginTop: 3 }}>{L.sub}</div>
+                    </div>
+                    <div style={{ flex: 1, height: 82 }}>
+                      <div style={{
+                        width: `${Math.max(14, L.w * bIn)}%`, height: '100%', borderRadius: 13,
+                        background: `linear-gradient(135deg, ${L.color}, ${L.color}aa)`,
+                        boxShadow: `0 8px 22px ${L.color}33`,
+                        display: 'flex', alignItems: 'center', justifyContent: 'flex-end', padding: '0 26px',
+                      }}>
+                        <span style={{ fontFamily: 'Inter', fontSize: 30, fontWeight: 700, color: '#fff', whiteSpace: 'nowrap' }}>{L.val}</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Penetration callouts */}
+            <div style={{ position: 'absolute', left: 96, right: 96, top: 700, display: 'flex', gap: 24, opacity: clamp((t - 2.6) / 0.8, 0, 1) }}>
+              {pen.map((c, i) => (
+                <div key={i} style={{ flex: 1, padding: '22px 28px', borderRadius: 16, background: 'rgba(255,255,255,0.55)', border: `1px solid ${c.color}33` }}>
+                  <div style={{ fontFamily: 'Inter', fontSize: 46, fontWeight: 300, color: c.color, letterSpacing: '-0.02em', lineHeight: 1 }}>{c.k}</div>
+                  <div style={{ fontSize: 15.5, color: C.whiteDim, marginTop: 10, lineHeight: 1.4 }}>{c.v}</div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{
+              position: 'absolute', left: 96, right: 96, bottom: 46, opacity: clamp((t - 3.6) / 0.7, 0, 1),
+              fontFamily: 'Inter', fontSize: 19, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
+              borderTop: `1px solid ${C.line}`, paddingTop: 16,
+            }}>
+              Nous ne captons qu'une <span style={{ color: C.cyan, fontWeight: 500 }}>fraction</span> du seul segment européen premium — <span style={{ color: C.gold, fontWeight: 500 }}>l'essentiel du marché reste devant nous.</span>
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
 // ── Scene — Trajectoire financière ──────────────────────────────────────────
 function SceneFinance({ start, end }) {
   return (
@@ -260,4 +345,4 @@ function SceneCompetition({ start, end }) {
   );
 }
 
-Object.assign(window, { SceneTeam, SceneFinance, SceneCompetition });
+Object.assign(window, { SceneTeam, SceneMarket, SceneFinance, SceneCompetition });
