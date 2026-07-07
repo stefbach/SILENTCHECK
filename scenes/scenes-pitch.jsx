@@ -17,9 +17,9 @@ function SceneTeam({ start, end }) {
           { initials: 'NR', name: 'Nicolas de Raulin', role: 'Compliance · Juridique & Dév.', desc: 'Conformité et partenariats de croissance.', color: C.red },
         ];
         const sci = [
-          { initials: 'SB', name: 'Dr Stéphane Bach', role: 'Médecin fondateur', desc: 'Prévention cardiovasculaire & obésité.', color: C.cyan },
-          { initials: 'JS', name: 'Pr José Sampol', role: 'Hématologie & méd. vasculaire', desc: 'Référent stratification thrombo-vasculaire.', color: C.gold },
-          { initials: 'FD', name: 'Pr F. Dignat-George', role: 'Hématologie · Aix-Marseille', desc: 'Présidente SFTH · conseil INSERM.', color: C.red },
+          { initials: 'SB', name: 'Dr Stéphane Bach', role: 'Concepteur de l\'algorithme · Score BSD', desc: 'Architecte du moteur de prédiction cardiovasculaire.', color: C.cyan },
+          { initials: 'JS', name: 'Pr José Sampol', role: 'Co-concepteur · validation clinique', desc: 'Stratification thrombo-vasculaire du modèle.', color: C.gold },
+          { initials: 'FD', name: 'Pr F. Dignat-George', role: 'Conception scientifique · Aix-Marseille', desc: 'Présidente SFTH · conseil INSERM.', color: C.red },
         ];
         const Card = (m, i, delay) => {
           const cIn = clamp((t - delay - i * 0.15) / 0.6, 0, 1);
@@ -46,21 +46,23 @@ function SceneTeam({ start, end }) {
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
             <CosmicBackdrop hue="cyan" />
-            <SectionTag index="" label="L'équipe · direction & science" color={C.cyan} />
+            <SectionTag index="" label="L'équipe · un comité de direction intégré" color={C.cyan} />
             <div style={{
               position: 'absolute', left: 96, top: 150, right: 96,
               opacity: titleIn, transform: `translateY(${(1 - titleIn) * 20}px)`,
-              fontFamily: 'Inter', fontSize: 56, fontWeight: 200, color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
+              fontFamily: 'Inter', fontSize: 52, fontWeight: 200, color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
-              Une équipe business, <span style={{ fontStyle: 'italic', color: C.gold }}>un comité scientifique de haut niveau.</span>
+              Les concepteurs de l'algorithme et de la plateforme <span style={{ fontStyle: 'italic', color: C.gold }}>siègent au comité de direction.</span>
             </div>
 
             <div style={{ position: 'absolute', left: 96, top: 300 }}>
-              <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 13, letterSpacing: '0.24em', color: C.gold, textTransform: 'uppercase', marginBottom: 14 }}>— Direction & business</div>
+              <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 13, letterSpacing: '0.24em', color: C.gold, textTransform: 'uppercase', marginBottom: 6 }}>— Direction & business</div>
+              <div style={{ fontFamily: 'Inter', fontSize: 13, color: C.whiteDim, marginBottom: 14 }}>Exécution commerciale & croissance</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>{dir.map((m, i) => Card(m, i, 1.0))}</div>
             </div>
             <div style={{ position: 'absolute', right: 96, top: 300 }}>
-              <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 13, letterSpacing: '0.24em', color: C.cyan, textTransform: 'uppercase', marginBottom: 14 }}>— Comité scientifique & médical</div>
+              <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 13, letterSpacing: '0.24em', color: C.cyan, textTransform: 'uppercase', marginBottom: 6 }}>— Concepteurs · membres du comité de direction</div>
+              <div style={{ fontFamily: 'Inter', fontSize: 13, color: C.whiteDim, marginBottom: 14 }}>Ils ont conçu l'algorithme <span style={{ color: C.cyan }}>et</span> la plateforme</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>{sci.map((m, i) => Card(m, i, 1.4))}</div>
             </div>
 
@@ -69,7 +71,7 @@ function SceneTeam({ start, end }) {
               fontFamily: 'Inter', fontSize: 20, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
               borderTop: `1px solid ${C.line}`, paddingTop: 18,
             }}>
-              Une exécution commerciale rapide, <span style={{ color: C.cyan, fontWeight: 500 }}>adossée à une caution médicale et scientifique reconnue.</span>
+              L'algorithme et la plateforme sont pensés par ceux qui dirigent — <span style={{ color: C.cyan, fontWeight: 500 }}>science et produit intégrés à la direction, là où les autres plateformes sous-traitent.</span>
             </div>
           </div>
         );
