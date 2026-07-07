@@ -763,21 +763,34 @@ function SceneBusinessModel({ start, end }) {
               fontFamily: 'Inter', fontSize: 60, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
-              Un seul abonnement. <span style={{ fontStyle: 'italic', color: C.gold }}>Tout le service.</span><br/>
-              <span style={{ fontSize: 35, fontWeight: 300, color: C.whiteDim }}>Un seul périmètre, pour tous — mensuel ou annuel.</span>
+              Un diagnostic d'entrée. <span style={{ fontStyle: 'italic', color: C.gold }}>Puis un abonnement unique.</span><br/>
+              <span style={{ fontSize: 35, fontWeight: 300, color: C.whiteDim }}>100 € à l'entrée, puis 45 € / mois — mensuel ou annuel.</span>
             </div>
 
             {/* LEFT — single subscription */}
             <div style={{ position: 'absolute', left: 96, top: 392, width: 780, opacity: planIn, transform: `translateY(${(1 - planIn) * 30}px)` }}>
               <GlassCard x={0} y={0} w={780} h={548} border={`${C.gold}aa`}>
                 <div style={{ padding: 36, height: '100%', display: 'flex', flexDirection: 'column' }}>
-                  <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 15, letterSpacing: '0.24em', color: C.gold, textTransform: 'uppercase' }}>Abonnement unique · pour tous</div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 18 }}>
-                    <span style={{ fontFamily: 'Inter', fontSize: 48, fontWeight: 300, color: C.white, letterSpacing: '-0.02em' }}>Mensuel</span>
-                    <span style={{ fontSize: 28, color: C.whiteDim }}>ou</span>
-                    <span style={{ fontFamily: 'Inter', fontSize: 48, fontWeight: 300, color: C.gold, letterSpacing: '-0.02em' }}>Annuel</span>
+                  <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 15, letterSpacing: '0.24em', color: C.gold, textTransform: 'uppercase' }}>Un parcours en deux temps</div>
+                  <div style={{ display: 'flex', alignItems: 'stretch', gap: 24, marginTop: 16 }}>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, letterSpacing: '0.08em', color: C.whiteDim, textTransform: 'uppercase', lineHeight: 1.35 }}>Diagnostic initial<br/>algorithme Score BSD</div>
+                      <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginTop: 8 }}>
+                        <span style={{ fontFamily: 'Inter', fontSize: 52, fontWeight: 300, color: C.cyan, letterSpacing: '-0.02em' }}>100 €</span>
+                        <span style={{ fontSize: 18, color: C.whiteDim }}>une fois</span>
+                      </div>
+                    </div>
+                    <div style={{ width: 1, background: `${C.gold}33` }} />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, letterSpacing: '0.08em', color: C.whiteDim, textTransform: 'uppercase', lineHeight: 1.35 }}>Puis abonnement<br/>suivi continu</div>
+                      <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginTop: 8 }}>
+                        <span style={{ fontFamily: 'Inter', fontSize: 52, fontWeight: 300, color: C.gold, letterSpacing: '-0.02em' }}>45 €</span>
+                        <span style={{ fontSize: 18, color: C.whiteDim }}>/ mois</span>
+                      </div>
+                      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: 'rgba(18,58,94,0.45)', letterSpacing: '0.08em', marginTop: 4 }}>mensuel ou annuel</div>
+                    </div>
                   </div>
-                  <div style={{ borderTop: `1px solid ${C.gold}33`, marginTop: 18, paddingTop: 20, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px 24px' }}>
+                  <div style={{ borderTop: `1px solid ${C.gold}33`, marginTop: 18, paddingTop: 18, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px 24px' }}>
                     {included.map((it, j) => (
                       <div key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: 19, color: C.whiteDim, lineHeight: 1.35 }}>
                         <span style={{ color: C.green, fontSize: 18, marginTop: 1 }}>✓</span>{it}
