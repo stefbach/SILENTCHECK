@@ -1329,7 +1329,7 @@ function Scene2Crisis({ start, end }) {
         const ctaIn = clamp((t - 4.4) / 0.6, 0, 1);
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
-            <CosmicBackdrop hue="red" />
+            <PhotoBackdrop src="assets/viz/silk.png" scrim="none" opacity={0.6} />
 
             <SectionTag index="01" label="Pourquoi PREVIQ" color={C.red} />
 
@@ -1420,7 +1420,7 @@ function Scene3Heart({ start, end }) {
 
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
-            <CosmicBackdrop hue="cyan" />
+            <PhotoBackdrop src="assets/viz/data.png" scrim="left" opacity={0.5} />
             <SectionTag index="04" label="15 biomarqueurs · tableau de bord intérieur" color={C.cyan} />
 
             <div style={{
@@ -1520,7 +1520,7 @@ function Scene4Score({ start, end }) {
 
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
-            <CosmicBackdrop hue="cyan" />
+            <PhotoBackdrop src="assets/viz/molecular.png" scrim="left" opacity={0.55} />
             <SectionTag index="03" label="La science du Score BS" color={C.gold} />
 
             <div style={{
@@ -1633,7 +1633,7 @@ function Scene5Bilans({ start, end }) {
 
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
-            <CosmicBackdrop hue="gold" />
+            <PhotoBackdrop src="assets/viz/topo.png" scrim="none" opacity={0.85} />
             <SectionTag index="05" label="3 bilans · médecine de précision" color={C.gold} />
 
             <div style={{
@@ -1700,7 +1700,7 @@ function Scene6Synergy({ start, end }) {
 
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
-            <CosmicBackdrop hue="red" />
+            <PhotoBackdrop src="assets/viz/molecular.png" scrim="left" opacity={0.5} />
             <SectionTag index="06" label="Innovation propriétaire" color={C.red} />
 
             <div style={{
@@ -1845,7 +1845,7 @@ function Scene7Journey({ start, end }) {
 
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
-            <CosmicBackdrop hue="cyan" />
+            <PhotoBackdrop src="assets/viz/topo.png" scrim="none" opacity={0.85} />
             <SectionTag index="13" label="Parcours utilisateur · 4 étapes" color={C.cyan} />
 
             <div style={{
@@ -2102,7 +2102,7 @@ function Scene9Mockups({ start, end }) {
 
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
-            <CosmicBackdrop hue="cyan" />
+            <PhotoBackdrop src="assets/viz/bokeh.png" scrim="none" opacity={0.55} />
             <SectionTag index="12" label="Côté patient · trois écrans clés" color={C.cyan} />
 
             <div style={{
@@ -2179,7 +2179,7 @@ function Scene10Bilan({ start, end }) {
 
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
-            <CosmicBackdrop hue="gold" />
+            <PhotoBackdrop src="assets/viz/aurora.png" scrim="none" opacity={0.7} />
             <SectionTag index="14" label="IA bien-être · sous contrôle médical" color={C.gold} />
 
             <div style={{
@@ -2285,7 +2285,7 @@ function Scene11Security({ start, end }) {
 
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
-            <CosmicBackdrop hue="cyan" />
+            <PhotoBackdrop src="assets/viz/silk.png" scrim="none" opacity={0.6} />
             <SectionTag index="15" label="Confidentialité · consentement · conformité" color={C.cyan} />
 
             <div style={{
@@ -2393,7 +2393,7 @@ function Scene12Authors({ start, end }) {
 
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
-            <CosmicBackdrop hue="gold" />
+            <PhotoBackdrop src="assets/viz/aurora.png" scrim="none" opacity={0.6} />
             <SectionTag index="10" label="Auteurs scientifiques & validation" color={C.gold} />
 
             <div style={{
@@ -2548,7 +2548,7 @@ function Scene13Exposome({ start, end }) {
 
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
-            <CosmicBackdrop hue="cyan" />
+            <PhotoBackdrop src="assets/viz/topo.png" scrim="none" opacity={0.8} />
             <SectionTag index="07" label="Exposome × Capteurs · au-delà du sang" color={C.cyan} />
 
             <div style={{
@@ -2709,7 +2709,7 @@ function Scene14Hub({ start, end }) {
 
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
-            <CosmicBackdrop hue="cyan" />
+            <PhotoBackdrop src="assets/viz/bokeh.png" scrim="none" opacity={0.55} />
             <SectionTag index="08" label="Connecteurs · tous vos appareils dans l'app" color={C.cyan} />
 
             <div style={{
@@ -2972,7 +2972,7 @@ function Scene12Authors({ start, end }) {
 
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0, overflow: 'hidden' }}>
-            <CosmicBackdrop hue="gold" />
+            <PhotoBackdrop src="assets/viz/aurora.png" scrim="none" opacity={0.6} />
             <SectionTag index="16" label="L’application pilote · tout dans le téléphone" color={C.gold} />
 
             {/* Title */}
@@ -3251,7 +3251,7 @@ function SceneStart({ start, end }) {
         ];
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
-            <CosmicBackdrop hue="cyan" />
+            <PhotoBackdrop src="assets/viz/aurora.png" scrim="none" opacity={0.7} />
             <SectionTag index="02" label="Le point de départ" color={C.cyan} />
 
             <div style={{
@@ -3329,7 +3329,7 @@ function SceneServices({ start, end }) {
 
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
-            <CosmicBackdrop hue="gold" />
+            <PhotoBackdrop src="assets/viz/aurora.png" scrim="none" opacity={0.7} />
             <SectionTag index="09" label="Plateforme de service · orchestration des soins" color={C.gold} />
 
             <div style={{
@@ -3480,7 +3480,7 @@ function SceneConcierge({ start, end }) {
 
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
-            <CosmicBackdrop hue="gold" />
+            <PhotoBackdrop src="assets/viz/silk.png" scrim="none" opacity={0.5} />
             <SectionTag index="10" label="En option · le suivi premium tout-inclus" color={C.gold} />
 
             <div style={{
@@ -3635,7 +3635,7 @@ function SceneSecondAvis({ start, end }) {
 
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
-            <CosmicBackdrop hue="cyan" />
+            <PhotoBackdrop src="assets/viz/network.png" scrim="left" opacity={0.5} />
             <SectionTag index="11" label="Second avis intégré · réseau France & Europe" color={C.cyan} />
 
             <div style={{
@@ -3900,7 +3900,7 @@ function SceneHumans({ start, end }) {
         ];
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
-            <CosmicBackdrop hue="cyan" />
+            <PhotoBackdrop src="assets/viz/aurora.png" scrim="none" opacity={0.6} />
             <SectionTag index="" label="À visage humain" color={C.cyan} />
 
             <div style={{
@@ -3971,7 +3971,7 @@ function SceneBusinessModel({ start, end }) {
         ];
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
-            <CosmicBackdrop hue="gold" />
+            <PhotoBackdrop src="assets/viz/silk.png" scrim="none" opacity={0.55} />
             <SectionTag index="" label="Modèle économique" color={C.gold} />
 
             <div style={{
@@ -4164,7 +4164,7 @@ function SceneMarket({ start, end }) {
         ];
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
-            <CosmicBackdrop hue="cyan" />
+            <PhotoBackdrop src="assets/viz/topo.png" scrim="none" opacity={0.85} />
             <SectionTag index="" label="Marché potentiel · TAM / SAM / SOM" color={C.cyan} />
             <div style={{
               position: 'absolute', left: 96, top: 150, right: 96,
@@ -4248,7 +4248,7 @@ function SceneFinance({ start, end }) {
         ];
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
-            <CosmicBackdrop hue="gold" />
+            <PhotoBackdrop src="assets/viz/topo.png" scrim="none" opacity={0.85} />
             <SectionTag index="" label="Chiffres · trajectoire financière" color={C.gold} />
             <div style={{
               position: 'absolute', left: 96, top: 150, right: 96,
@@ -4327,7 +4327,7 @@ function SceneCompetition({ start, end }) {
         ];
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
-            <CosmicBackdrop hue="red" />
+            <PhotoBackdrop src="assets/viz/bokeh.png" scrim="none" opacity={0.55} />
             <SectionTag index="" label="Concurrents · positionnement" color={C.red} />
             <div style={{
               position: 'absolute', left: 96, top: 150, right: 96,
