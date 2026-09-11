@@ -1207,6 +1207,12 @@ function Scene1Intro({ start, end }) {
                 marginTop: 10,
                 lineHeight: 0.95,
               }}><PreviqWord size={118} /></div>
+              <div style={{
+                marginTop: 14, fontFamily: 'Inter, sans-serif',
+                fontSize: 27, fontWeight: 300, color: C.whiteDim,
+                letterSpacing: '0.34em', textTransform: 'uppercase',
+                paddingLeft: '0.34em',
+              }}>La prévention <span style={{ color: C.cyan, fontWeight: 500 }}>intelligente</span></div>
             </div>
 
             {/* Subtitle */}
@@ -1942,9 +1948,14 @@ function Scene8Outro({ start, end }) {
               opacity: line1In,
               fontFamily: 'Poppins, Inter, sans-serif', textAlign: 'center',
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18 }}>
-                <PreviqMark size={78} draw={clamp((t - 0.2) / 1.2, 0, 1)} />
-                <PreviqWord size={64} />
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18 }}>
+                  <PreviqMark size={78} draw={clamp((t - 0.2) / 1.2, 0, 1)} />
+                  <PreviqWord size={64} />
+                </div>
+                <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 18, fontWeight: 300, color: C.whiteDim, letterSpacing: '0.34em', textTransform: 'uppercase', paddingLeft: '0.34em' }}>
+                  La prévention <span style={{ color: C.cyan, fontWeight: 500 }}>intelligente</span>
+                </div>
               </div>
             </div>
 
@@ -2026,78 +2037,9 @@ function Scene9Mockups({ start, end }) {
         const t = localTime;
         const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
         const phones = [
-          {
-            label: 'Entrée PREVIQ',
-            tilt: -14, delay: 1.0,
-            content: (
-              <div style={{ padding: '40px 24px', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim, letterSpacing: '0.2em' }}>PREVIQ</div>
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 12 }}>
-                  <div style={{ width: 60, height: 60, borderRadius: '50%', background: `radial-gradient(circle, ${C.cyan}, ${C.blueDeep})`, boxShadow: `0 0 30px ${C.cyan}aa`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 33 }}>♥</div>
-                  <div style={{ fontSize: 31, fontWeight: 200, color: C.white, letterSpacing: '-0.02em', lineHeight: 1.1 }}>Connaissez<br/>votre risque.</div>
-                  <div style={{ fontSize: 14, color: C.whiteDim, lineHeight: 1.4 }}>Stratification cardiovasculaire personnalisée</div>
-                </div>
-                <div style={{ padding: '14px', background: `linear-gradient(135deg, ${C.cyan}, ${C.blue})`, borderRadius: 12, textAlign: 'center', fontSize: 17, fontWeight: 600, color: C.ink }}>Commencer mon évaluation</div>
-                <div style={{ marginTop: 10, fontSize: 12, color: C.whiteDim, textAlign: 'center', fontFamily: 'JetBrains Mono, monospace' }}>15 min · médecin inclus</div>
-              </div>
-            )
-          },
-          {
-            label: 'Questionnaire',
-            tilt: 0, delay: 1.4,
-            content: (
-              <div style={{ padding: '40px 24px', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim, letterSpacing: '0.2em' }}>
-                  <span>Q. 03 / ~40</span><span style={{ color: C.cyan }}>● ● ● ○ ○</span>
-                </div>
-                <div style={{ marginTop: 24, fontSize: 28, fontWeight: 300, color: C.white, lineHeight: 1.2 }}>Votre âge ?</div>
-                <div style={{ marginTop: 18, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {['18–29 ans','30–44 ans','45–59 ans','60–74 ans','75 ans et +'].map((opt, i) => (
-                    <div key={i} style={{
-                      padding: '12px 14px', fontSize: 15, color: i === 2 ? C.bg0 : C.white,
-                      background: i === 2 ? C.cyan : 'rgba(0,179,154,0.06)',
-                      border: `1px solid ${i === 2 ? C.cyan : C.line}`,
-                      borderRadius: 10, fontWeight: i === 2 ? 600 : 400,
-                    }}>{opt}</div>
-                  ))}
-                </div>
-                <div style={{ marginTop: 'auto', padding: '12px', background: 'rgba(0,179,154,0.1)', border: `1px solid ${C.line}`, borderRadius: 10, textAlign: 'center', fontSize: 15, color: C.cyan }}>Suivant →</div>
-              </div>
-            )
-          },
-          {
-            label: 'Score & restitution',
-            tilt: 14, delay: 1.8,
-            content: (
-              <div style={{ padding: '40px 24px', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim, letterSpacing: '0.2em' }}>SCORE BS</div>
-                <div style={{ marginTop: 14, alignSelf: 'center', position: 'relative' }}>
-                  <svg width="140" height="140" viewBox="0 0 140 140">
-                    <circle cx="70" cy="70" r="58" fill="none" stroke={C.line} strokeWidth="6" />
-                    <circle cx="70" cy="70" r="58" fill="none" stroke={C.gold} strokeWidth="6"
-                            strokeDasharray={`${0.42 * 2 * Math.PI * 58} ${2 * Math.PI * 58}`}
-                            transform="rotate(-90 70 70)" strokeLinecap="round" />
-                    <text x="70" y="78" textAnchor="middle" fill={C.white} fontFamily="Inter" fontSize="42" fontWeight="200">42</text>
-                    <text x="70" y="96" textAnchor="middle" fill={C.whiteDim} fontFamily="JetBrains Mono, monospace" fontSize="12">/ 100</text>
-                  </svg>
-                </div>
-                <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 8, fontSize: 14 }}>
-                  {[
-                    ['Risque', 'modéré', C.gold],
-                    ['Bilan', '10 analyses', C.cyan],
-                    ['Espérance de vie', '+3,2 ans', C.cyan],
-                    ['Téléconsultation', 'programmée', C.cyan],
-                  ].map(([k, v, col], i) => (
-                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', background: 'rgba(0,179,154,0.05)', border: `1px solid ${C.line}`, borderRadius: 8 }}>
-                      <span style={{ color: C.whiteDim }}>{k}</span>
-                      <span style={{ color: col, fontWeight: 500 }}>{v}</span>
-                    </div>
-                  ))}
-                </div>
-                <div style={{ marginTop: 'auto', padding: '12px', background: `linear-gradient(135deg, ${C.cyan}, ${C.gold})`, borderRadius: 10, textAlign: 'center', fontSize: 15, color: C.ink, fontWeight: 600 }}>Voir mon plan d'action</div>
-              </div>
-            )
-          },
+          { label: 'Questionnaire', img: 'app-quiz', tilt: -14, delay: 1.0 },
+          { label: 'Score & biomarqueurs', img: 'score-biomarkers', tilt: 0, delay: 1.4 },
+          { label: 'Longévité', img: 'app-longevity', tilt: 14, delay: 1.8 },
         ];
 
         return (
@@ -2121,29 +2063,15 @@ function Scene9Mockups({ start, end }) {
                 const wob = Math.sin(t * 1.3 + i) * 6;
                 return (
                   <div key={i} style={{
-                    width: 280, height: 560,
+                    width: 384, height: 620,
                     transform: `rotateY(${p.tilt}deg) translateY(${(1-phoneIn)*60 + wob}px) scale(${0.85 + phoneIn * 0.15})`,
                     opacity: phoneIn,
                     transformStyle: 'preserve-3d',
                   }}>
-                    {/* Phone bezel */}
-                    <div style={{
-                      width: '100%', height: '100%',
-                      background: 'linear-gradient(135deg, #1a2540, #0a1535)',
-                      borderRadius: 36,
-                      border: `2px solid ${C.lineStrong}`,
-                      boxShadow: `0 30px 80px rgba(0,0,0,0.6), 0 0 40px ${C.cyan}33`,
-                      padding: 8, position: 'relative',
-                    }}>
-                      <div style={{ position: 'absolute', top: 14, left: '50%', transform: 'translateX(-50%)', width: 80, height: 18, background: '#000', borderRadius: 12, zIndex: 2 }} />
-                      <div style={{
-                        width: '100%', height: '100%',
-                        background: C.bg0, borderRadius: 30,
-                        overflow: 'hidden', position: 'relative',
-                      }}>
-                        {p.content}
-                      </div>
-                    </div>
+                    <img src={`assets/viz/${p.img}-cut.png`} alt="" style={{
+                      width: '100%', height: '100%', objectFit: 'contain', display: 'block',
+                      filter: 'drop-shadow(0 30px 54px rgba(10,37,64,0.28))',
+                    }} />
                     <div style={{
                       marginTop: 18, textAlign: 'center',
                       fontFamily: 'JetBrains Mono, monospace', fontSize: 14,
@@ -3500,58 +3428,16 @@ function SceneConcierge({ start, end }) {
               <div style={{ textAlign: 'center', marginTop: 6, fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 13, letterSpacing: '0.2em', color: C.gold, textTransform: 'uppercase' }}>Abonnement premium</div>
             </div>
 
-            {/* Executive dashboard phone */}
+            {/* Premium dashboard — vrai rendu de l'app */}
             <div style={{
-              position: 'absolute', left: 560, top: 680,
-              transform: `translate(-50%, -50%) perspective(1500px) rotateY(${Math.sin(t * 0.5) * 6}deg) scale(${0.7 + phoneIn * 0.3})`,
-              opacity: phoneIn, transformStyle: 'preserve-3d',
+              position: 'absolute', left: 560, top: 690,
+              transform: `translate(-50%, -50%) perspective(1500px) rotateY(${Math.sin(t * 0.5) * 5}deg) scale(${0.82 + phoneIn * 0.18})`,
+              opacity: phoneIn, width: 470, height: 730,
             }}>
-              <div style={{
-                width: 300, height: 600,
-                background: 'linear-gradient(135deg, #1a2540, #0a1535)',
-                borderRadius: 38, padding: 9,
-                border: `2px solid ${C.gold}66`,
-                boxShadow: `0 30px 90px rgba(0,0,0,0.6), 0 0 60px ${C.gold}44`,
-                position: 'relative',
-              }}>
-                <div style={{ position: 'absolute', top: 16, left: '50%', transform: 'translateX(-50%)', width: 84, height: 18, background: '#000', borderRadius: 12, zIndex: 2 }} />
-                <div style={{
-                  width: '100%', height: '100%', background: C.bg0,
-                  borderRadius: 30, overflow: 'hidden', padding: '42px 20px 20px',
-                  display: 'flex', flexDirection: 'column', gap: 12,
-                }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.gold, letterSpacing: '0.25em' }}>PREMIUM</div>
-                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim }}>PREVIQ</div>
-                  </div>
-                  <div style={{ fontSize: 19, color: C.white, fontWeight: 500 }}>Bonjour, Dr Durand</div>
-                  {/* score ring */}
-                  <div style={{ alignSelf: 'center', position: 'relative', marginTop: 4 }}>
-                    <svg width="120" height="120" viewBox="0 0 120 120">
-                      <circle cx="60" cy="60" r="48" fill="none" stroke={C.line} strokeWidth="6" />
-                      <circle cx="60" cy="60" r="48" fill="none" stroke={C.gold} strokeWidth="6"
-                              strokeDasharray={`${0.34 * 2 * Math.PI * 48} ${2 * Math.PI * 48}`}
-                              transform="rotate(-90 60 60)" strokeLinecap="round" />
-                      <text x="60" y="60" textAnchor="middle" fill={C.white} fontFamily="Inter" fontSize="38" fontWeight="200">34</text>
-                      <text x="60" y="80" textAnchor="middle" fill={C.whiteDim} fontFamily="JetBrains Mono, monospace" fontSize="10">RISQUE FAIBLE</text>
-                    </svg>
-                  </div>
-                  {[
-                    ['Prochain bilan', 'dans 14 j', C.cyan],
-                    ['Cardiologue', 'Mar. 14h30', C.gold],
-                    ['Espérance de vie', '+4,1 ans', C.cyan],
-                    ['Alertes capteurs', 'aucune', C.cyan],
-                  ].map(([k, v, col], i) => (
-                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', background: 'rgba(251,191,36,0.06)', border: `1px solid ${C.line}`, borderRadius: 8, fontSize: 14 }}>
-                      <span style={{ color: C.whiteDim }}>{k}</span>
-                      <span style={{ color: col, fontWeight: 600 }}>{v}</span>
-                    </div>
-                  ))}
-                  <div style={{ marginTop: 'auto', padding: '11px', background: `linear-gradient(135deg, ${C.gold}, ${C.cyan})`, borderRadius: 10, textAlign: 'center', fontSize: 15, fontWeight: 700, color: C.ink }}>
-                    Contacter mon médecin référent
-                  </div>
-                </div>
-              </div>
+              <img src="assets/viz/app-longevity-cut.png" alt="Application PREVIQ — suivi longévité" style={{
+                width: '100%', height: '100%', objectFit: 'contain', display: 'block',
+                filter: 'drop-shadow(0 30px 60px rgba(10,37,64,0.30))',
+              }} />
             </div>
 
             {/* Feature list */}
@@ -4445,7 +4331,7 @@ function SceneProof({ start, end }) {
 
             {/* Real, functional app — actual product screenshot */}
             <div style={{ position: 'absolute', right: 30, top: 84, width: 1010, height: 910, opacity: imgIn, transform: `translateY(${(1 - imgIn) * 30}px) scale(${0.94 + imgIn * 0.06})` }}>
-              <img src="assets/viz/app-score.png" alt="Application PREVIQ — Score BS" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              <img src="assets/viz/app-score-cut.png" alt="Application PREVIQ — Score BS" style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'drop-shadow(0 30px 60px rgba(10,37,64,0.26))' }} />
               <div style={{ position: 'absolute', right: 150, top: 150, display: 'flex', alignItems: 'center', gap: 10, padding: '9px 18px', borderRadius: 100, background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(6px)', border: `1px solid ${C.green}55`, boxShadow: `0 8px 24px ${C.green}22`, fontFamily: 'JetBrains Mono, monospace', fontSize: 13, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.blue, whiteSpace: 'nowrap' }}>
                 <span style={{ width: 8, height: 8, borderRadius: 4, background: C.green, boxShadow: `0 0 10px ${C.green}`, opacity: 0.5 + Math.sin(t * 4) * 0.5 }} />
                 Score en temps réel
