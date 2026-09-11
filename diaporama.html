@@ -1440,66 +1440,43 @@ function Scene3Heart({ start, end }) {
               <span style={{ fontStyle: 'italic', color: C.cyan }}>Votre corps aussi.</span>
             </div>
 
-            {/* 3D Heart center */}
-            <div style={{ opacity: heartIn, transform: `scale(${0.5 + heartIn * 0.5})`, transformOrigin: '960px 700px' }}>
-              <Heart3D x={960} y={700} size={300} />
+            {/* Real biomarkers app phone (left) */}
+            <div style={{ position: 'absolute', left: 78, top: 372, width: 500, height: 660, opacity: heartIn, transform: `translateY(${(1-heartIn)*30}px)` }}>
+              <img src="assets/viz/score-biomarkers-cut.png" alt="Application PREVIQ — biomarqueurs" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', filter: 'drop-shadow(0 28px 58px rgba(10,37,64,0.26))' }} />
             </div>
 
-            {/* Orbiting biomarker pills */}
-            {markers.map((m, i) => {
-              const angle = (i / markers.length) * Math.PI * 2 + t * 0.25;
-              const radiusX = 540;
-              const radiusY = 220;
-              const cx = 960 + Math.cos(angle) * radiusX;
-              const cy = 700 + Math.sin(angle) * radiusY;
-              const z = Math.sin(angle); // -1 (back) to 1 (front)
-              const scale = 0.7 + (z + 1) * 0.25;
-              const opa = (0.45 + (z + 1) * 0.27) * orbitIn;
-              return (
-                <div key={i} style={{
-                  position: 'absolute',
-                  left: cx, top: cy,
-                  transform: `translate(-50%, -50%) scale(${scale})`,
-                  opacity: opa,
-                  padding: '8px 16px',
-                  fontFamily: 'JetBrains Mono, monospace',
-                  fontSize: 18, fontWeight: 500,
-                  color: C.cyan,
-                  background: 'rgba(8,145,178,0.12)',
-                  border: `1px solid ${C.lineStrong}`,
-                  borderRadius: 100,
-                  backdropFilter: 'blur(8px)',
-                  whiteSpace: 'nowrap',
-                  boxShadow: z > 0 ? `0 0 20px rgba(0,179,154,0.4)` : 'none',
-                  zIndex: Math.round(z * 100),
-                }}>
-                  {String(i+1).padStart(2,'0')} · {m}
-                </div>
-              );
-            })}
+            {/* 15 biomarkers — clean grid */}
+            <div style={{ position: 'absolute', left: 620, top: 400, right: 96, display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 13 }}>
+              {markers.map((m, i) => {
+                const chipIn = clamp((t - 1.2 - i * 0.05) / 0.5, 0, 1) * orbitIn;
+                return (
+                  <div key={i} style={{
+                    opacity: chipIn, transform: `translateY(${(1-chipIn)*14}px)`,
+                    display: 'flex', alignItems: 'center', gap: 10,
+                    padding: '13px 16px', borderRadius: 12,
+                    background: 'rgba(255,255,255,0.62)', border: `1px solid ${C.line}`,
+                    backdropFilter: 'blur(6px)',
+                  }}>
+                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.cyan, fontWeight: 600 }}>{String(i+1).padStart(2,'0')}</span>
+                    <span style={{ fontFamily: 'Inter', fontSize: 16.5, color: C.white, fontWeight: 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{m}</span>
+                  </div>
+                );
+              })}
+            </div>
 
-            {/* Big stat callout */}
+            {/* Big stat callout (bottom) */}
             <div style={{
-              position: 'absolute', right: 96, top: 480,
-              opacity: calloutIn,
-              transform: `translateY(${(1-calloutIn)*30}px)`,
-              textAlign: 'right',
+              position: 'absolute', left: 620, right: 96, bottom: 56,
+              opacity: calloutIn, transform: `translateY(${(1-calloutIn)*20}px)`,
+              display: 'flex', alignItems: 'center', gap: 28,
+              borderTop: `1px solid ${C.line}`, paddingTop: 22,
             }}>
-              <div style={{
-                fontFamily: 'Inter, sans-serif', fontSize: 220, fontWeight: 100,
-                background: `linear-gradient(135deg, ${C.cyan}, ${C.gold})`,
-                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-                lineHeight: 0.9, letterSpacing: '-0.06em',
-              }}>80%</div>
-              <div style={{ fontSize: 28, color: C.whiteDim, fontWeight: 300, maxWidth: 480, marginLeft: 'auto' }}>
-                des maladies cardiaques se développent <span style={{ color: C.white, fontStyle: 'italic' }}>sans symptôme</span> pendant 10 à 20 ans.
-              </div>
-              <div style={{
-                marginTop: 18,
-                fontFamily: 'JetBrains Mono, monospace', fontSize: 17,
-                letterSpacing: '0.25em', color: C.gold, textTransform: 'uppercase',
-              }}>
-                ↳ Détection 5 à 10 ans à l'avance
+              <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 96, fontWeight: 100, background: `linear-gradient(135deg, ${C.cyan}, ${C.gold})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', lineHeight: 0.9, letterSpacing: '-0.04em', flexShrink: 0 }}>80%</div>
+              <div>
+                <div style={{ fontSize: 24, color: C.whiteDim, fontWeight: 300, lineHeight: 1.35 }}>
+                  des maladies cardiaques se développent <span style={{ color: C.white, fontStyle: 'italic' }}>sans symptôme</span> pendant 10 à 20 ans.
+                </div>
+                <div style={{ marginTop: 8, fontFamily: 'JetBrains Mono, monospace', fontSize: 15, letterSpacing: '0.22em', color: C.gold, textTransform: 'uppercase' }}>↳ Détection 5 à 10 ans à l'avance</div>
               </div>
             </div>
           </div>
@@ -2142,7 +2119,12 @@ function Scene10Bilan({ start, end }) {
               </span>
             </div>
 
-            <div style={{ position: 'absolute', left: 96, top: 440, right: 96, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+            {/* Real app — plan de prévention */}
+            <div style={{ position: 'absolute', left: 70, top: 424, width: 470, height: 620, opacity: aiIn, transform: `translateY(${(1-aiIn)*30}px)` }}>
+              <img src="assets/viz/app-plan-cut.png" alt="Application PREVIQ — plan de prévention" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', filter: 'drop-shadow(0 28px 56px rgba(10,37,64,0.26))' }} />
+            </div>
+
+            <div style={{ position: 'absolute', left: 560, top: 440, right: 90, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 22 }}>
               {items.map((it, i) => {
                 const itemIn = clamp((t - 1.4 - i * 0.3) / 0.7, 0, 1);
                 const tilt = (i % 2 === 0 ? -1 : 1) * 4;
@@ -2493,7 +2475,7 @@ function Scene13Exposome({ start, end }) {
 
             {/* Two-column header bar */}
             <div style={{
-              position: 'absolute', left: 96, top: 360, right: 96,
+              position: 'absolute', left: 96, top: 360, right: 560,
               display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 36,
               opacity: titleIn,
             }}>
@@ -2507,10 +2489,15 @@ function Scene13Exposome({ start, end }) {
               </div>
             </div>
 
+            {/* Real environment app phone (right) */}
+            <div style={{ position: 'absolute', right: 48, top: 356, width: 480, height: 610, opacity: connectedIn, transform: `translateY(${(1-connectedIn)*30}px)` }}>
+              <img src="assets/viz/app-exposome-cut.png" alt="Application PREVIQ — environnement" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', filter: 'drop-shadow(0 28px 56px rgba(10,37,64,0.26))' }} />
+            </div>
+
             {/* Two columns of cards */}
             <div style={{
-              position: 'absolute', left: 96, top: 410, right: 96, bottom: 140,
-              display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 36,
+              position: 'absolute', left: 96, top: 410, right: 560, bottom: 140,
+              display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 28,
             }}>
               {/* Left — exposome */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -2569,7 +2556,7 @@ function Scene13Exposome({ start, end }) {
 
             {/* Synthesis bar */}
             <div style={{
-              position: 'absolute', left: 96, right: 96, bottom: 50,
+              position: 'absolute', left: 96, right: 560, bottom: 50,
               opacity: synthesisIn,
               transform: `translateY(${(1-synthesisIn)*20}px)`,
               padding: '20px 32px',
@@ -4416,7 +4403,7 @@ Object.assign(window, { SceneTeam, SceneMarket, SceneFinance, SceneCompetition, 
       ['SceneChAll',220,242],['SceneHumans',230,248],
       ['SceneSecondAvis',248,270],['Scene9Mockups',290,308],['Scene7Journey',308,326],
       ['Scene10Bilan',326,348],['Scene11Security',348,368],['Scene12Authors',368,402],
-      ['SceneTeam',420,440],['SceneMarket',480,500],['SceneBusinessModel',270,290],['SceneFinance',440,460],['SceneCompetition',460,480],['Scene8Outro',402,418],
+      ['SceneMarket',480,500],['SceneBusinessModel',270,290],['SceneCompetition',460,480],['SceneTeam',420,440],['Scene8Outro',402,418],
     ];
     const SLIDES = RAW.map(([n,s,e]) => ({ comp: window[n], start: s, end: e, settle: Math.max(3, (e - s) - 2.5) }));
     const BOUNDS = [];
