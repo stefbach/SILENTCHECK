@@ -2,15 +2,15 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8" />
-<title>Austral Lab — Diaporama</title>
+<title>PREVIQ — Diaporama</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&family=Orbitron:wght@400;500;600;700;800&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Exo+2:wght@300;400;500;600&display=swap" />
 <style>
-  html, body, #root { margin: 0; padding: 0; height: 100%; background: #e7e0d0; overflow: hidden; }
+  html, body, #root { margin: 0; padding: 0; height: 100%; background: #ffffff; overflow: hidden; }
   body {
-    font-family: 'Inter', system-ui, sans-serif; color: #123a5e; -webkit-font-smoothing: antialiased;
+    font-family: 'Inter', system-ui, sans-serif; color: #0a2540; -webkit-font-smoothing: antialiased;
     position: fixed; inset: 0; width: 100%; height: 100%;
     overscroll-behavior: none; touch-action: none; -webkit-user-select: none; user-select: none;
     -webkit-tap-highlight-color: transparent;
@@ -275,8 +275,8 @@ function ImageSprite({
     <div style={{
       width: '100%', height: '100%',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
-      background: 'repeating-linear-gradient(135deg, #e9e6df 0 10px, #dcd8cf 10px 20px)',
-      color: '#6b6458',
+      background: 'repeating-linear-gradient(135deg, #eef2f4 0 10px, #e2e8ec 10px 20px)',
+      color: '#7a8794',
       fontFamily: 'JetBrains Mono, ui-monospace, monospace',
       fontSize: 13,
       letterSpacing: '0.04em',
@@ -483,7 +483,7 @@ function Stage({
         position: 'absolute', inset: 0,
         display: 'flex', flexDirection: 'column',
         alignItems: 'center',
-        background: '#ddd5c2',
+        background: '#eaf0f2',
         fontFamily: 'Inter, system-ui, sans-serif',
       }}
     >
@@ -727,25 +727,59 @@ Object.assign(window, {
 // Shared visual primitives — 3D heart, particles, grid, glow.
 
 const C = {
-  bg0: '#f4f1e8',          // Austral Lab cream (logo background)
-  bg1: '#f8f5ee',
-  bg2: '#fdfbf5',          // card cream surface
-  ink: '#123a5e',          // navy ink for text on bright chips
-  cyan: '#1c6ea4',         // brand blue — primary accent
-  cyanDim: '#12507d',
-  blue: '#123a5e',         // navy
-  blueDeep: '#0e2c47',
-  red: '#e5228d',          // logo pink / magenta
-  redDim: '#b01a6d',
-  gold: '#f2841c',         // logo orange
-  goldDim: '#c25f00',
-  green: '#1e8a5f',        // functional positive
-  greenDim: '#14663f',
-  white: '#123a5e',        // primary text = navy (key kept for reuse)
-  whiteDim: 'rgba(18,58,94,0.6)',
-  line: 'rgba(18,58,94,0.14)',
-  lineStrong: 'rgba(18,58,94,0.28)',
+  bg0: '#ffffff',          // PREVIQ pure white base
+  bg1: '#f5f8f9',
+  bg2: '#ffffff',          // card surface
+  ink: '#0a2540',          // deep navy ink for text on bright chips
+  cyan: '#00b39a',         // PREVIQ signature — vivid clinical teal (primary accent)
+  cyanDim: '#008e7c',
+  blue: '#0a2540',         // deep navy (headlines)
+  blueDeep: '#06192e',
+  red: '#f04468',          // semantic — risque élevé (corail)
+  redDim: '#c42b4c',
+  gold: '#eba23b',         // semantic — risque modéré (ambre)
+  goldDim: '#b9781a',
+  green: '#00b39a',        // positive == signature teal (unifié 1 accent)
+  greenDim: '#008e7c',
+  white: '#0a2540',        // primary text = deep navy (key kept for reuse)
+  whiteDim: 'rgba(10,37,64,0.6)',
+  line: 'rgba(10,37,64,0.12)',
+  lineStrong: 'rgba(10,37,64,0.24)',
 };
+
+// ── PREVIQ brand mark ───────────────────────────────────────────────
+// Monogramme « P » (navy) traversé d'une onde ECG (teal) = prédiction
+// cardiovasculaire. Vectoriel : net à toute taille, animable via `draw`.
+const PREVIQ_PULSE = '4,66 40,66 47,66 52,50 58,66 64,66 70,28 77,96 83,58 89,66 116,66';
+function PreviqMark({ size = 120, ink = C.blue, accent = C.cyan, draw = 1, boxed = false, boxFill = '#ffffff', halo = '#ffffff' }) {
+  const LEN = 300;
+  return (
+    <svg width={size} height={size} viewBox="0 0 120 120" style={{ display: 'block' }}>
+      {boxed && <rect x="1.5" y="1.5" width="117" height="117" rx="27" fill={boxFill} stroke={C.line} strokeWidth="1" />}
+      <text x="59" y="93" textAnchor="middle" fontFamily="Poppins, Inter, sans-serif" fontWeight="800" fontSize="112" letterSpacing="-0.05em" fill={ink}>P</text>
+      <polyline points={PREVIQ_PULSE} fill="none" stroke={boxed ? boxFill : halo} strokeWidth="14" strokeLinecap="round" strokeLinejoin="round" />
+      <polyline points={PREVIQ_PULSE} fill="none" stroke={accent} strokeWidth="6" strokeLinecap="round" strokeLinejoin="round"
+        strokeDasharray={LEN} strokeDashoffset={(1 - clamp(draw, 0, 1)) * LEN} />
+    </svg>
+  );
+}
+// Wordmark « PREV·IQ » — PREV navy, IQ en accent teal.
+function PreviqWord({ size = 60, color = C.blue, accent = C.cyan, weight = 700 }) {
+  return (
+    <span style={{ fontFamily: 'Poppins, Inter, sans-serif', fontWeight: weight, fontSize: size, letterSpacing: '0.01em', color, lineHeight: 1, whiteSpace: 'nowrap' }}>
+      PREV<span style={{ color: accent }}>IQ</span>
+    </span>
+  );
+}
+// Verrou horizontal : mark + wordmark.
+function PreviqLogo({ mark = 60, word = 40, draw = 1, gap = 16, color = C.blue }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap }}>
+      <PreviqMark size={mark} draw={draw} />
+      <PreviqWord size={word} color={color} />
+    </div>
+  );
+}
 
 // ── 3D space backdrop with parallax grid + drifting particles ─────────────
 function CosmicBackdrop({ depth = 0, hue = 'cyan' }) {
@@ -955,12 +989,12 @@ function GlassCard({ x, y, w, h, children, tilt = 0, depth = 0, opacity = 1, bor
       width: w, height: h,
       transform: `perspective(1400px) rotateY(${tilt}deg) translateZ(${depth}px)`,
       transformStyle: 'preserve-3d',
-      background: 'linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(250,244,232,0.62) 100%)',
+      background: 'linear-gradient(135deg, rgba(255,255,255,0.96) 0%, rgba(244,249,250,0.9) 100%)',
       backdropFilter: 'blur(14px)',
       WebkitBackdropFilter: 'blur(14px)',
       border: `1px solid ${border}`,
       borderRadius: 18,
-      boxShadow: `0 20px 50px rgba(70,60,40,0.16), inset 0 1px 0 rgba(255,255,255,0.7)`,
+      boxShadow: `0 18px 44px rgba(10,37,64,0.10), 0 2px 8px rgba(10,37,64,0.05), inset 0 1px 0 rgba(255,255,255,0.9)`,
       opacity,
       overflow: 'hidden',
     }}>
@@ -1054,7 +1088,7 @@ function ImmersiveHUD({ boundaries = [] }) {
       {/* Cinematic vignette */}
       <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 45%, transparent 50%, rgba(150,140,120,0.62) 100%)' }} />
       {/* CRT scanlines */}
-      <div style={{ position: 'absolute', inset: 0, opacity: 0.4, backgroundImage: 'repeating-linear-gradient(0deg, rgba(34,211,238,0.07) 0px, rgba(34,211,238,0.07) 1px, transparent 1px, transparent 4px)' }} />
+      <div style={{ position: 'absolute', inset: 0, opacity: 0.4, backgroundImage: 'repeating-linear-gradient(0deg, rgba(0,179,154,0.07) 0px, rgba(0,179,154,0.07) 1px, transparent 1px, transparent 4px)' }} />
       {/* Rolling scan band */}
       {!LITE && <div style={{ position: 'absolute', left: 0, right: 0, top: `${rollY}%`, height: '9%', background: `linear-gradient(180deg, transparent, ${C.cyan}14, transparent)` }} />}
       {/* Top hairline + scanning node */}
@@ -1073,11 +1107,11 @@ function ImmersiveHUD({ boundaries = [] }) {
         color: 'rgba(18,58,94,0.6)', whiteSpace: 'nowrap',
       }}>
         <span style={{ width: 7, height: 7, borderRadius: 4, background: C.green, boxShadow: `0 0 10px ${C.green}`, opacity: 0.55 + Math.sin(t * 4) * 0.45 }} />
-        <span>Austral Lab</span>
+        <span>PREVIQ</span>
         <span style={{ opacity: 0.35 }}>·</span>
         <span style={{ color: C.cyan }}>Clinique virtuelle</span>
         <span style={{ opacity: 0.35 }}>·</span>
-        <span>Moteur BSD actif</span>
+        <span>Moteur BS actif</span>
       </div>
 
       {/* Bottom ECG vitals monitor */}
@@ -1117,7 +1151,7 @@ Object.assign(window, {
 });
 </script>
   <script type="text/babel" data-from="scenes/scenes-1-2.jsx">
-// Scene 1 — Intro: Austral Lab logo emerges from cardiac pulse
+// Scene 1 — Intro: PREVIQ logo emerges from cardiac pulse
 function Scene1Intro({ start, end }) {
   return (
     <Sprite start={start} end={end}>
@@ -1133,43 +1167,21 @@ function Scene1Intro({ start, end }) {
             <PulseLine y={540} color={C.cyan} amp={140} opacity={pulseOpacity * 0.9} />
             <PulseLine y={540} color={C.red} amp={120} opacity={pulseOpacity * 0.4} />
 
-            {/* Center logo mark — Austral Lab */}
+            {/* Center logo mark — PREVIQ */}
             <div style={{
               position: 'absolute', left: '50%', top: '32%',
               transform: `translate(-50%, -50%) scale(${0.7 + titleAppear * 0.3})`,
               opacity: titleAppear,
               display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
             }}>
-              <svg width="150" height="150" viewBox="0 0 140 140" style={{ marginBottom: 6 }}>
-                <defs>
-                  <linearGradient id="brandGrad" x1="0" y1="1" x2="1" y2="0">
-                    <stop offset="0%" stopColor={C.red} />
-                    <stop offset="100%" stopColor={C.gold} />
-                  </linearGradient>
-                </defs>
-                <circle cx="70" cy="70" r="64" fill="none" stroke="url(#brandGrad)" strokeWidth="2.5" />
-                {Array.from({ length: 48 }).map((_, k) => {
-                  const a = (k / 48) * Math.PI * 2;
-                  const r1 = 56, r2 = k % 4 === 0 ? 47 : 51;
-                  return <line key={k} x1={70 + Math.cos(a) * r1} y1={70 + Math.sin(a) * r1} x2={70 + Math.cos(a) * r2} y2={70 + Math.sin(a) * r2} stroke="url(#brandGrad)" strokeWidth={k % 4 === 0 ? 2.5 : 1.4} strokeLinecap="round" />;
-                })}
-                <path d="M70,20 L83,57 L120,70 L83,83 L70,120 L57,83 L20,70 L57,57 Z" fill="url(#brandGrad)" />
-                <circle cx="70" cy="70" r="7" fill="#fff" stroke="url(#brandGrad)" strokeWidth="3" />
-              </svg>
+              <PreviqMark size={168} draw={clamp((t0 - 0.6) / 1.6, 0, 1)} />
               <div style={{
                 fontFamily: 'Poppins, Inter, sans-serif',
-                fontSize: 96, fontWeight: 700,
-                letterSpacing: '-0.02em',
-                color: C.blue,
+                fontSize: 118, fontWeight: 700,
+                letterSpacing: '0.005em',
+                marginTop: 10,
                 lineHeight: 0.95,
-              }}>Austral</div>
-              <div style={{
-                fontFamily: 'Poppins, Inter, sans-serif',
-                fontSize: 60, fontWeight: 500, fontStyle: 'italic',
-                letterSpacing: '0.01em',
-                color: C.blue,
-                lineHeight: 1, marginTop: -2,
-              }}>Lab</div>
+              }}><PreviqWord size={118} /></div>
             </div>
 
             {/* Subtitle */}
@@ -1208,9 +1220,9 @@ function Scene1Intro({ start, end }) {
               padding: '12px 26px',
               border: `1px solid ${C.cyan}66`,
               borderRadius: 100,
-              background: 'rgba(34,211,238,0.05)',
+              background: 'rgba(0,179,154,0.05)',
               backdropFilter: 'blur(8px)',
-              boxShadow: `0 0 30px rgba(34,211,238,0.18)`,
+              boxShadow: `0 0 30px rgba(0,179,154,0.18)`,
               fontFamily: 'JetBrains Mono, monospace', fontSize: 17,
               letterSpacing: '0.18em', textTransform: 'uppercase',
               color: C.whiteDim, whiteSpace: 'nowrap',
@@ -1231,7 +1243,7 @@ function Scene1Intro({ start, end }) {
               fontFamily: 'Inter, sans-serif',
             }}>
               <div style={{ fontSize: 18, color: C.whiteDim, letterSpacing: '0.3em', textTransform: 'uppercase' }}>
-                Powered by <span style={{ color: C.gold, fontWeight: 600 }}>Score BSD v5.0</span> · 53 références · 4M+ patients
+                Powered by <span style={{ color: C.gold, fontWeight: 600 }}>Score BS v5.0</span> · 53 références · 4M+ patients
               </div>
             </div>
 
@@ -1242,7 +1254,7 @@ function Scene1Intro({ start, end }) {
               fontSize: 17, letterSpacing: '0.4em',
               color: C.whiteDim, textTransform: 'uppercase',
             }}>
-              Austral Lab · 2026
+              PREVIQ · 2026
             </div>
             <div style={{
               position: 'absolute', right: 96, top: 64,
@@ -1250,7 +1262,7 @@ function Scene1Intro({ start, end }) {
               fontSize: 17, letterSpacing: '0.3em',
               color: C.whiteDim,
             }}>
-              Score BSD v5.0
+              Score BS v5.0
             </div>
           </div>
         );
@@ -1274,7 +1286,7 @@ function Scene2Crisis({ start, end }) {
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
             <CosmicBackdrop hue="red" />
 
-            <SectionTag index="01" label="Pourquoi Austral Lab" color={C.red} />
+            <SectionTag index="01" label="Pourquoi PREVIQ" color={C.red} />
 
             <div style={{
               position: 'absolute', left: 96, top: 180, right: 96,
@@ -1332,7 +1344,7 @@ function Scene2Crisis({ start, end }) {
               borderTop: `1px solid ${C.line}`, paddingTop: 24,
             }}>
               La médecine classique intervient <span style={{ color: C.red, fontWeight: 500 }}>APRÈS</span> la maladie.
-              <span style={{ color: C.cyan, fontWeight: 500 }}>  Austral Lab agit AVANT.</span>
+              <span style={{ color: C.cyan, fontWeight: 500 }}>  PREVIQ agit AVANT.</span>
             </div>
           </div>
         );
@@ -1407,7 +1419,7 @@ function Scene3Heart({ start, end }) {
                   borderRadius: 100,
                   backdropFilter: 'blur(8px)',
                   whiteSpace: 'nowrap',
-                  boxShadow: z > 0 ? `0 0 20px rgba(34,211,238,0.4)` : 'none',
+                  boxShadow: z > 0 ? `0 0 20px rgba(0,179,154,0.4)` : 'none',
                   zIndex: Math.round(z * 100),
                 }}>
                   {String(i+1).padStart(2,'0')} · {m}
@@ -1446,7 +1458,7 @@ function Scene3Heart({ start, end }) {
   );
 }
 
-// Scene 4 — Score BSD with animated radial gauge
+// Scene 4 — Score BS with animated radial gauge
 function Scene4Score({ start, end }) {
   return (
     <Sprite start={start} end={end}>
@@ -1464,7 +1476,7 @@ function Scene4Score({ start, end }) {
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
             <CosmicBackdrop hue="cyan" />
-            <SectionTag index="03" label="La science du Score BSD" color={C.gold} />
+            <SectionTag index="03" label="La science du Score BS" color={C.gold} />
 
             <div style={{
               position: 'absolute', left: 96, top: 180,
@@ -1507,7 +1519,7 @@ function Scene4Score({ start, end }) {
                   return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={i < 60 * (score/100) ? C.cyan : C.line} strokeWidth={i % 5 === 0 ? 2 : 1} />;
                 })}
                 {/* main arc bg */}
-                <circle cx="270" cy="270" r="200" fill="none" stroke="rgba(34,211,238,0.1)" strokeWidth="14"
+                <circle cx="270" cy="270" r="200" fill="none" stroke="rgba(0,179,154,0.1)" strokeWidth="14"
                         strokeDasharray={`${arcLen * 0.75} ${arcLen}`} transform="rotate(135 270 270)" strokeLinecap="round" />
                 {/* main arc fg */}
                 <circle cx="270" cy="270" r="200" fill="none" stroke="url(#gaugegrad)" strokeWidth="14"
@@ -1516,7 +1528,7 @@ function Scene4Score({ start, end }) {
                 <circle cx="270" cy="270" r="200" fill="none" stroke="url(#gaugegrad)" strokeWidth="14"
                         strokeDasharray={`${dash} ${arcLen}`} transform="rotate(135 270 270)" strokeLinecap="round" />
                 {/* center text */}
-                <text x="270" y="240" textAnchor="middle" fill={C.whiteDim} fontFamily="JetBrains Mono, monospace" fontSize="18" letterSpacing="6">SCORE BSD</text>
+                <text x="270" y="240" textAnchor="middle" fill={C.whiteDim} fontFamily="JetBrains Mono, monospace" fontSize="18" letterSpacing="6">SCORE BS</text>
                 <text x="270" y="320" textAnchor="middle" fill={C.white} fontFamily="Inter" fontSize="140" fontWeight="200" letterSpacing="-0.04em">{score}</text>
                 <text x="270" y="360" textAnchor="middle" fill={C.cyan} fontFamily="JetBrains Mono, monospace" fontSize="18" letterSpacing="3">/ 100</text>
               </svg>
@@ -1756,7 +1768,7 @@ function Scene6Synergy({ start, end }) {
               }}>
                 Aucun autre score au monde n'intègre cette <span style={{ fontStyle: 'italic', color: C.red }}>synergie biologie × exposome.</span>
               </div>
-              <div style={{ marginTop: 28, padding: 24, background: 'rgba(34,211,238,0.05)', border: `1px solid ${C.line}`, borderRadius: 12 }}>
+              <div style={{ marginTop: 28, padding: 24, background: 'rgba(0,179,154,0.05)', border: `1px solid ${C.line}`, borderRadius: 12 }}>
                 <div style={{ fontSize: 20, color: C.whiteDim, lineHeight: 1.5 }}>
                   Quand les trois biomarqueurs sont élevés, l'inflammation <span style={{ color: C.cyan }}>amplifie</span> l'impact de la pollution, du stress et de la chaleur sur votre cœur.
                 </div>
@@ -1856,7 +1868,7 @@ function Scene7Journey({ start, end }) {
               color: C.whiteDim, textAlign: 'center',
               borderTop: `1px solid ${C.line}`, paddingTop: 18,
             }}>
-              <span style={{ color: C.gold }}>2 téléconsultations + rapport + certificats</span> — inclus dans le programme BSD
+              <span style={{ color: C.gold }}>2 téléconsultations + rapport + certificats</span> — inclus dans le programme BS
             </div>
           </div>
         );
@@ -1886,8 +1898,10 @@ function Scene8Outro({ start, end }) {
               opacity: line1In,
               fontFamily: 'Poppins, Inter, sans-serif', textAlign: 'center',
             }}>
-              <span style={{ fontSize: 58, fontWeight: 700, color: C.blue, letterSpacing: '-0.01em' }}>Austral</span>
-              <span style={{ fontSize: 58, fontWeight: 500, fontStyle: 'italic', color: C.blue, marginLeft: 12 }}>Lab</span>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18 }}>
+                <PreviqMark size={78} draw={clamp((t - 0.2) / 1.2, 0, 1)} />
+                <PreviqWord size={64} />
+              </div>
             </div>
 
             <div style={{
@@ -1914,8 +1928,8 @@ function Scene8Outro({ start, end }) {
                 borderRadius: 100,
                 fontFamily: 'JetBrains Mono, monospace', fontSize: 20,
                 letterSpacing: '0.3em', color: C.white, textTransform: 'uppercase',
-                background: 'rgba(34,211,238,0.05)',
-                boxShadow: `0 0 40px rgba(34,211,238,0.3)`,
+                background: 'rgba(0,179,154,0.05)',
+                boxShadow: `0 0 40px rgba(0,179,154,0.3)`,
               }}>
                 Votre compagnon de suivi validé
               </div>
@@ -1931,7 +1945,7 @@ function Scene8Outro({ start, end }) {
               fontFamily: 'Inter',
             }}>
               <div style={{ fontSize: 14, color: 'rgba(18,58,94,0.5)', letterSpacing: '0.25em', fontFamily: 'JetBrains Mono, monospace' }}>
-                © 2026 · Score BSD v5.0 · Validé par 53 références internationales
+                © 2026 · Score BS v5.0 · Validé par 53 références internationales
               </div>
             </div>
 
@@ -1941,7 +1955,7 @@ function Scene8Outro({ start, end }) {
               fontFamily: 'JetBrains Mono, monospace', fontSize: 17,
               letterSpacing: '0.4em', color: C.whiteDim, textTransform: 'uppercase',
             }}>
-              Score BSD v5.0
+              Score BS v5.0
             </div>
             <div style={{
               position: 'absolute', right: 96, top: 64,
@@ -1969,11 +1983,11 @@ function Scene9Mockups({ start, end }) {
         const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
         const phones = [
           {
-            label: 'Entrée Austral Lab',
+            label: 'Entrée PREVIQ',
             tilt: -14, delay: 1.0,
             content: (
               <div style={{ padding: '40px 24px', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim, letterSpacing: '0.2em' }}>AUSTRAL LAB</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim, letterSpacing: '0.2em' }}>PREVIQ</div>
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 12 }}>
                   <div style={{ width: 60, height: 60, borderRadius: '50%', background: `radial-gradient(circle, ${C.cyan}, ${C.blueDeep})`, boxShadow: `0 0 30px ${C.cyan}aa`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 33 }}>♥</div>
                   <div style={{ fontSize: 31, fontWeight: 200, color: C.white, letterSpacing: '-0.02em', lineHeight: 1.1 }}>Connaissez<br/>votre risque.</div>
@@ -1997,13 +2011,13 @@ function Scene9Mockups({ start, end }) {
                   {['18–29 ans','30–44 ans','45–59 ans','60–74 ans','75 ans et +'].map((opt, i) => (
                     <div key={i} style={{
                       padding: '12px 14px', fontSize: 15, color: i === 2 ? C.bg0 : C.white,
-                      background: i === 2 ? C.cyan : 'rgba(34,211,238,0.06)',
+                      background: i === 2 ? C.cyan : 'rgba(0,179,154,0.06)',
                       border: `1px solid ${i === 2 ? C.cyan : C.line}`,
                       borderRadius: 10, fontWeight: i === 2 ? 600 : 400,
                     }}>{opt}</div>
                   ))}
                 </div>
-                <div style={{ marginTop: 'auto', padding: '12px', background: 'rgba(34,211,238,0.1)', border: `1px solid ${C.line}`, borderRadius: 10, textAlign: 'center', fontSize: 15, color: C.cyan }}>Suivant →</div>
+                <div style={{ marginTop: 'auto', padding: '12px', background: 'rgba(0,179,154,0.1)', border: `1px solid ${C.line}`, borderRadius: 10, textAlign: 'center', fontSize: 15, color: C.cyan }}>Suivant →</div>
               </div>
             )
           },
@@ -2012,7 +2026,7 @@ function Scene9Mockups({ start, end }) {
             tilt: 14, delay: 1.8,
             content: (
               <div style={{ padding: '40px 24px', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim, letterSpacing: '0.2em' }}>SCORE BSD</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim, letterSpacing: '0.2em' }}>SCORE BS</div>
                 <div style={{ marginTop: 14, alignSelf: 'center', position: 'relative' }}>
                   <svg width="140" height="140" viewBox="0 0 140 140">
                     <circle cx="70" cy="70" r="58" fill="none" stroke={C.line} strokeWidth="6" />
@@ -2030,7 +2044,7 @@ function Scene9Mockups({ start, end }) {
                     ['Espérance de vie', '+3,2 ans', C.cyan],
                     ['Téléconsultation', 'programmée', C.cyan],
                   ].map(([k, v, col], i) => (
-                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', background: 'rgba(34,211,238,0.05)', border: `1px solid ${C.line}`, borderRadius: 8 }}>
+                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', background: 'rgba(0,179,154,0.05)', border: `1px solid ${C.line}`, borderRadius: 8 }}>
                       <span style={{ color: C.whiteDim }}>{k}</span>
                       <span style={{ color: col, fontWeight: 500 }}>{v}</span>
                     </div>
@@ -2113,7 +2127,7 @@ function Scene10Bilan({ start, end }) {
         const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
         const aiIn = clamp((t - 1.0) / 0.8, 0, 1);
         const items = [
-          { title: 'Score Austral Lab', sub: '0–100 · 4 dimensions intégrées', desc: 'Clinique · Exposome · Occupationnel · Lifestyle. 15 biomarqueurs et ajustement ethnique automatisés par l\'IA.', icon: '◉', color: C.cyan },
+          { title: 'Score PREVIQ', sub: '0–100 · 4 dimensions intégrées', desc: 'Clinique · Exposome · Occupationnel · Lifestyle. 15 biomarqueurs et ajustement ethnique automatisés par l\'IA.', icon: '◉', color: C.cyan },
           { title: 'Stratégie de prévention sur-mesure', sub: 'Plan d\'action priorisé · 6 / 12 / 24 mois', desc: 'L\'IA hiérarchise vos risques et bâtit un vrai programme : objectifs, cibles biologiques, jalons de suivi datés.', icon: '∞', color: C.gold },
           { title: 'Examens utiles uniquement', sub: 'Fini la prescription à l\'aveugle', desc: 'Le moteur cible les biomarqueurs pertinents pour VOTRE profil. Zéro examen inutile · zéro consultation redondante.', icon: '✦', color: C.cyan },
           { title: 'Documents & dispositif de suivi', sub: '3 livrables bilingues FR / EN', desc: 'Plan de Route Longévité · Certificat Emprunteur · Certificat Engagement Santé. Suivi continu et réajusté par l\'IA.', icon: '◈', color: C.gold },
@@ -2141,7 +2155,7 @@ function Scene10Bilan({ start, end }) {
               position: 'absolute', right: 96, top: 180,
               opacity: aiIn, transform: `translateY(${(1-aiIn)*20}px)`,
               padding: '14px 22px',
-              background: 'linear-gradient(135deg, rgba(34,211,238,0.15), rgba(251,191,36,0.1))',
+              background: 'linear-gradient(135deg, rgba(0,179,154,0.15), rgba(251,191,36,0.1))',
               border: `1px solid ${C.cyan}88`, borderRadius: 100,
               display: 'flex', alignItems: 'center', gap: 12,
               boxShadow: `0 0 30px ${C.cyan}44`,
@@ -2193,7 +2207,7 @@ function Scene10Bilan({ start, end }) {
               opacity: clamp((t - 4.5) / 0.7, 0, 1),
               padding: '16px 28px', borderRadius: 12,
               border: `1px solid ${C.gold}55`,
-              background: 'linear-gradient(90deg, rgba(251,191,36,0.08), rgba(34,211,238,0.05))',
+              background: 'linear-gradient(90deg, rgba(251,191,36,0.08), rgba(0,179,154,0.05))',
               fontFamily: 'Inter', fontSize: 23, color: C.white, fontWeight: 300,
               textAlign: 'center', letterSpacing: '0.02em',
             }}>
@@ -2283,7 +2297,7 @@ function Scene11Security({ start, end }) {
                   <div key={i} style={{
                     opacity: itIn, transform: `translateX(${(1-itIn)*30}px)`,
                     padding: '18px 22px',
-                    background: 'rgba(34,211,238,0.04)',
+                    background: 'rgba(0,179,154,0.04)',
                     border: `1px solid ${C.line}`,
                     borderRadius: 12,
                     display: 'flex', gap: 14,
@@ -2329,12 +2343,6 @@ function Scene12Authors({ start, end }) {
             initials: 'JS', name: 'Pr. José Sampol',
             role: 'Hématologie & médecine vasculaire',
             desc: 'Professeur émérite. Référent international pour la stratification des risques thrombo-vasculaires.',
-            tilt: 0,
-          },
-          {
-            initials: 'FD', name: 'Pr. Françoise Dignat-George',
-            role: 'Hématologie · Aix-Marseille Université',
-            desc: 'Présidente de la SFTH · membre du conseil scientifique INSERM. Référente cellules circulantes & inflammation.',
             tilt: 10,
           },
         ];
@@ -2350,11 +2358,11 @@ function Scene12Authors({ start, end }) {
               fontFamily: 'Inter', fontSize: 65, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
-              Trois signatures<br/>
-              <span style={{ fontStyle: 'italic', color: C.gold }}>derrière chaque score.</span>
+              Deux signatures<br/>
+              <span style={{ fontStyle: 'italic', color: C.gold }}>derrière le Score BS.</span>
             </div>
 
-            <div style={{ position: 'absolute', left: 96, top: 460, display: 'flex', gap: 36 }}>
+            <div style={{ position: 'absolute', left: 0, right: 0, top: 460, display: 'flex', justifyContent: 'center', gap: 72 }}>
               {authors.map((a, i) => {
                 const aIn = clamp((t - 1.0 - i * 0.4) / 0.7, 0, 1);
                 const wob = Math.sin(t * 1.2 + i) * 4;
@@ -2543,12 +2551,12 @@ function Scene13Exposome({ start, end }) {
                       transformStyle: 'preserve-3d',
                       padding: '18px 22px',
                       display: 'flex', gap: 18, alignItems: 'center',
-                      background: 'linear-gradient(135deg, rgba(34,211,238,0.06), rgba(34,211,238,0.02))',
+                      background: 'linear-gradient(135deg, rgba(0,179,154,0.06), rgba(0,179,154,0.02))',
                       border: `1px solid ${C.lineStrong}`,
                       borderRadius: 14,
                       backdropFilter: 'blur(10px)',
                     }}>
-                      <div style={{ flexShrink: 0, width: 64, height: 64, borderRadius: 12, background: 'rgba(34,211,238,0.08)', border: `1px solid ${C.lineStrong}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{e.icon}</div>
+                      <div style={{ flexShrink: 0, width: 64, height: 64, borderRadius: 12, background: 'rgba(0,179,154,0.08)', border: `1px solid ${C.lineStrong}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{e.icon}</div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ fontFamily: 'Inter', fontSize: 24, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>{e.label}</div>
                         <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.cyan, letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: 3 }}>{e.metric}</div>
@@ -2594,7 +2602,7 @@ function Scene13Exposome({ start, end }) {
               transform: `translateY(${(1-synthesisIn)*20}px)`,
               padding: '20px 32px',
               borderRadius: 14,
-              background: `linear-gradient(90deg, rgba(34,211,238,0.1), rgba(244,63,94,0.1), rgba(251,191,36,0.1))`,
+              background: `linear-gradient(90deg, rgba(0,179,154,0.1), rgba(244,63,94,0.1), rgba(251,191,36,0.1))`,
               border: `1px solid ${C.gold}66`,
               display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 24,
             }}>
@@ -2606,7 +2614,7 @@ function Scene13Exposome({ start, end }) {
                 <span style={{ color: C.gold }}>● Lifestyle</span>
               </div>
               <div style={{ fontFamily: 'Inter', fontSize: 22, fontWeight: 500, color: C.white }}>
-                = un seul score <span style={{ color: C.gold }}>BSD</span>
+                = un seul score <span style={{ color: C.gold }}>BS</span>
               </div>
             </div>
           </div>
@@ -2668,7 +2676,7 @@ function Scene14Hub({ start, end }) {
             }}>
               Tous vos appareils parlent à l'app.<br/>
               <span style={{ fontStyle: 'italic', fontSize: 38, fontWeight: 300, color: C.cyan }}>
-                En temps réel — tout converge dans un seul score BSD.
+                En temps réel — tout converge dans un seul score BS.
               </span>
             </div>
 
@@ -2720,7 +2728,7 @@ function Scene14Hub({ start, end }) {
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.cyan, letterSpacing: '0.2em' }}>● LIVE</div>
-                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim }}>Austral Lab</div>
+                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim }}>PREVIQ</div>
                   </div>
                   <div style={{ fontSize: 18, color: C.white, fontWeight: 500, marginTop: 4 }}>Tableau de bord</div>
                   {/* Mini metrics */}
@@ -2735,7 +2743,7 @@ function Scene14Hub({ start, end }) {
                     <div key={i} style={{
                       display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                       padding: '7px 10px',
-                      background: 'rgba(34,211,238,0.05)',
+                      background: 'rgba(0,179,154,0.05)',
                       border: `1px solid ${C.line}`,
                       borderRadius: 6, fontSize: 13,
                     }}>
@@ -2744,7 +2752,7 @@ function Scene14Hub({ start, end }) {
                     </div>
                   ))}
                   <div style={{ marginTop: 'auto', padding: '8px', background: `linear-gradient(135deg, ${C.cyan}, ${C.gold})`, borderRadius: 6, textAlign: 'center', fontSize: 13, fontWeight: 700, color: C.ink }}>
-                    Score BSD : 42 / 100
+                    Score BS : 42 / 100
                   </div>
                 </div>
               </div>
@@ -2806,7 +2814,7 @@ function Scene14Hub({ start, end }) {
               <div style={{
                 transform: `perspective(1400px) rotateY(${(1-modesIn)*-12}deg) translateY(${(1-modesIn)*20}px)`,
                 padding: 24,
-                background: 'linear-gradient(135deg, rgba(34,211,238,0.1), rgba(34,211,238,0.03))',
+                background: 'linear-gradient(135deg, rgba(0,179,154,0.1), rgba(0,179,154,0.03))',
                 border: `1px solid ${C.cyan}88`,
                 borderRadius: 14,
                 position: 'relative',
@@ -2823,7 +2831,7 @@ function Scene14Hub({ start, end }) {
                 </div>
                 <div style={{ marginTop: 12, paddingLeft: 46, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                   {['Visio HD','Capteurs perso','Prélèvement à domicile','Pilotage app'].map((tag, i) => (
-                    <span key={i} style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.cyan, padding: '4px 10px', border: `1px solid ${C.line}`, borderRadius: 100, background: 'rgba(34,211,238,0.05)' }}>{tag}</span>
+                    <span key={i} style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.cyan, padding: '4px 10px', border: `1px solid ${C.line}`, borderRadius: 100, background: 'rgba(0,179,154,0.05)' }}>{tag}</span>
                   ))}
                 </div>
               </div>
@@ -2863,7 +2871,7 @@ function Scene14Hub({ start, end }) {
               opacity: clamp((t - 5.4) / 0.6, 0, 1),
               padding: '14px 24px', borderRadius: 12,
               border: `1px solid ${C.line}`,
-              background: 'rgba(34,211,238,0.04)',
+              background: 'rgba(0,179,154,0.04)',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               fontFamily: 'JetBrains Mono, monospace', fontSize: 17, color: C.whiteDim, letterSpacing: '0.15em',
             }}>
@@ -2914,7 +2922,7 @@ function Scene12Authors({ start, end }) {
           { label: 'Capteurs connectés',    icon: '◇' },
           { label: 'Biomarqueurs ciblés',   icon: '◉' },
           { label: 'Téléconsultation',      icon: '◎' },
-          { label: 'Score BSD',             icon: '✦' },
+          { label: 'Score BS',             icon: '✦' },
           { label: 'Plan de prévention',    icon: '⌖' },
         ];
 
@@ -3036,7 +3044,7 @@ function Scene12Authors({ start, end }) {
                         fill="none" stroke={C.red} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
                   {/* score chip */}
                   <rect x="-32" y="40" width="64" height="22" rx="6" fill={C.gold} opacity="0.92" />
-                  <text x="0" y="55" textAnchor="middle" fill={C.bg0} fontFamily="JetBrains Mono, monospace" fontSize="14" fontWeight="700">BSD 42</text>
+                  <text x="0" y="55" textAnchor="middle" fill={C.bg0} fontFamily="JetBrains Mono, monospace" fontSize="14" fontWeight="700">BS 42</text>
                 </g>
               </svg>
               {/* Label under */}
@@ -3147,7 +3155,7 @@ function Scene12Authors({ start, end }) {
               opacity: manifestoIn,
               padding: '18px 28px', borderRadius: 12,
               border: `1px solid ${C.gold}55`,
-              background: 'linear-gradient(90deg, rgba(251,191,36,0.1), rgba(34,211,238,0.06))',
+              background: 'linear-gradient(90deg, rgba(251,191,36,0.1), rgba(0,179,154,0.06))',
               fontFamily: 'Inter', fontSize: 24, color: C.white, fontWeight: 300,
               textAlign: 'center', letterSpacing: '0.02em', lineHeight: 1.4,
             }}>
@@ -3163,11 +3171,11 @@ function Scene12Authors({ start, end }) {
 Object.assign(window, { Scene12Authors });
 </script>
   <script type="text/babel" data-from="scenes/scenes-service.jsx">
-// New service-platform scenes — repositioning Austral Lab as a connected,
+// New service-platform scenes — repositioning PREVIQ as a connected,
 // doctor-piloted health companion (not just a score).
 //   SceneStart        — le point de départ : score + 2 consultations + biologie
 //   SceneServices     — la plateforme de service : orchestration des RDV
-//   SceneConcierge    — suivi premium pour dirigeants & cadres pressés
+//   SceneConcierge    — suivi premium en option (pour qui veut tout déléguer)
 //   SceneSecondAvis   — second avis intégré · réseau France / Europe
 
 // ── Scene — Le point de départ : tout part de 3 choses ─────────────────────
@@ -3179,7 +3187,7 @@ function SceneStart({ start, end }) {
         const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
         const pillars = [
           {
-            tag: 'Étape 1', name: 'Le Score BSD', big: '0–100',
+            tag: 'Étape 1', name: 'Le Score BS', big: '0–100',
             sub: 'Questionnaire intelligent · 15 min',
             desc: 'Santé, habitudes, environnement. En sortie : votre risque cardiovasculaire stratifié et personnalisé.',
             icon: '◉', color: C.cyan, tilt: -10,
@@ -3393,7 +3401,7 @@ function SceneServices({ start, end }) {
               opacity: strapIn, transform: `translateY(${(1 - strapIn) * 20}px)`,
               padding: '16px 28px', borderRadius: 12,
               border: `1px solid ${C.gold}55`,
-              background: 'linear-gradient(90deg, rgba(251,191,36,0.1), rgba(34,211,238,0.05))',
+              background: 'linear-gradient(90deg, rgba(251,191,36,0.1), rgba(0,179,154,0.05))',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               fontFamily: 'JetBrains Mono, monospace', fontSize: 17, color: C.whiteDim, letterSpacing: '0.12em',
             }}>
@@ -3408,7 +3416,7 @@ function SceneServices({ start, end }) {
   );
 }
 
-// ── Scene — Suivi premium : dirigeants & cadres pressés ─────────────────────
+// ── Scene — Suivi premium : l'option tout-inclus (pour qui veut déléguer) ────
 function SceneConcierge({ start, end }) {
   return (
     <Sprite start={start} end={end}>
@@ -3429,7 +3437,7 @@ function SceneConcierge({ start, end }) {
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
             <CosmicBackdrop hue="gold" />
-            <SectionTag index="10" label="Suivi premium · dirigeants & cadres" color={C.gold} />
+            <SectionTag index="10" label="En option · le suivi premium tout-inclus" color={C.gold} />
 
             <div style={{
               position: 'absolute', left: 96, top: 160, right: 96,
@@ -3437,8 +3445,8 @@ function SceneConcierge({ start, end }) {
               fontFamily: 'Inter', fontSize: 60, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
-              La 1ʳᵉ plateforme de prévention pour dirigeants <span style={{ fontStyle: 'italic', color: C.gold }}>exigeants et pressés.</span><br/>
-              <span style={{ fontSize: 35, fontWeight: 300, color: C.whiteDim }}>Stress, sédentarité, repas d’affaires, dette de sommeil — un cœur exposé, en silence.</span>
+              Pour qui veut tout déléguer : la prévention <span style={{ fontStyle: 'italic', color: C.gold }}>entièrement pilotée pour vous.</span><br/>
+              <span style={{ fontSize: 35, fontWeight: 300, color: C.whiteDim }}>Actifs pressés, parents surbookés, dirigeants — une option, pour qui veut zéro friction et un cœur sous surveillance.</span>
             </div>
 
             {/* Executive persona portrait + subscription tag */}
@@ -3470,7 +3478,7 @@ function SceneConcierge({ start, end }) {
                 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.gold, letterSpacing: '0.25em' }}>PREMIUM</div>
-                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim }}>Austral Lab</div>
+                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim }}>PREVIQ</div>
                   </div>
                   <div style={{ fontSize: 19, color: C.white, fontWeight: 500 }}>Bonjour, Dr Durand</div>
                   {/* score ring */}
@@ -3578,7 +3586,7 @@ function SceneSecondAvis({ start, end }) {
         const steps = [
           { n: '01', title: 'Dossier transmis', desc: 'Vos résultats, sécurisés et anonymisés, partagés en un clic depuis l’app.', color: C.cyan },
           { n: '02', title: 'Un expert de renommée internationale', desc: 'Un spécialiste de référence, choisi pour votre cas, rend un second avis argumenté — sans liste d’attente.', color: C.gold },
-          { n: '03', title: 'Coordonné par votre médecin', desc: 'Votre médecin Austral Lab intègre l’avis au plan d’action. RDV garanti, réponse en quelques jours.', color: C.red },
+          { n: '03', title: 'Coordonné par votre médecin', desc: 'Votre médecin PREVIQ intègre l’avis au plan d’action. RDV garanti, réponse en quelques jours.', color: C.red },
         ];
 
         return (
@@ -3810,7 +3818,7 @@ function PortraitFrame({ src, color = C.cyan, w = 300, h = 386 }) {
       <div style={{ position: 'absolute', inset: 0, borderRadius: 16, overflow: 'hidden', border: `1px solid ${color}66`, background: C.bg2 }}>
         <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(180deg, ${color}12, transparent 28%, ${C.bg0}77 100%)` }} />
-        <div style={{ position: 'absolute', inset: 0, opacity: 0.22, backgroundImage: 'repeating-linear-gradient(0deg, rgba(34,211,238,0.09) 0px, rgba(34,211,238,0.09) 1px, transparent 1px, transparent 3px)' }} />
+        <div style={{ position: 'absolute', inset: 0, opacity: 0.22, backgroundImage: 'repeating-linear-gradient(0deg, rgba(0,179,154,0.09) 0px, rgba(0,179,154,0.09) 1px, transparent 1px, transparent 3px)' }} />
         <div style={{ position: 'absolute', left: 0, right: 0, top: scanY, height: 16, background: `linear-gradient(180deg, transparent, ${color}66, transparent)` }} />
       </div>
       {['tl', 'tr', 'bl', 'br'].map(p => {
@@ -3834,7 +3842,7 @@ function PortraitFrame({ src, color = C.cyan, w = 300, h = 386 }) {
   );
 }
 
-// ── Scene — À visage humain : patient · médecin · dirigeant ─────────────────
+// ── Scene — À visage humain : patient · médecin · chacun de nous ────────────
 function SceneHumans({ start, end }) {
   return (
     <Sprite start={start} end={end}>
@@ -3844,7 +3852,7 @@ function SceneHumans({ start, end }) {
         const faces = [
           { img: 'patient.png',   color: C.cyan,  name: 'Le patient',   role: 'Acteur de sa prévention', desc: 'Un score clair, un plan compris, un suivi qui le connaît.' },
           { img: 'medecin.png',   color: C.green,  name: 'Le médecin',   role: 'Pilote médical',          desc: 'Décide, valide, accompagne — à chaque étape.' },
-          { img: 'dirigeant.png', color: C.gold,   name: 'Le dirigeant', role: 'Cadre pressé',            desc: 'Un cœur exposé, un suivi concierge sans friction.' },
+          { img: 'dirigeant.png', color: C.gold,   name: 'Chacun de nous', role: 'Une vie bien remplie',   desc: 'Actif, parent, senior : un cœur exposé, un suivi sans friction — premium en option.' },
         ];
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
@@ -3903,7 +3911,7 @@ function SceneBusinessModel({ start, end }) {
         const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
         const planIn = clamp((t - 1.0) / 0.8, 0, 1);
         const included = [
-          'App & Score BSD — validé scientifiquement',
+          'App & Score BS — validé scientifiquement',
           'Suivi des capteurs connectés en continu',
           'IA d\'aide à la lecture · sous contrôle médical',
           'Médecin référent & coordination du parcours',
@@ -3939,7 +3947,7 @@ function SceneBusinessModel({ start, end }) {
                   <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 15, letterSpacing: '0.24em', color: C.gold, textTransform: 'uppercase' }}>Un parcours en deux temps</div>
                   <div style={{ display: 'flex', alignItems: 'stretch', gap: 24, marginTop: 16 }}>
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, letterSpacing: '0.08em', color: C.whiteDim, textTransform: 'uppercase', lineHeight: 1.35 }}>Diagnostic initial<br/>algorithme Score BSD</div>
+                      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, letterSpacing: '0.08em', color: C.whiteDim, textTransform: 'uppercase', lineHeight: 1.35 }}>Diagnostic initial<br/>algorithme Score BS</div>
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginTop: 8 }}>
                         <span style={{ fontFamily: 'Inter', fontSize: 52, fontWeight: 300, color: C.cyan, letterSpacing: '-0.02em' }}>100 €</span>
                         <span style={{ fontSize: 18, color: C.whiteDim }}>une fois</span>
@@ -4016,7 +4024,7 @@ Object.assign(window, { SceneStart, SceneServices, SceneConcierge, SceneSecondAv
 </script>
   <script type="text/babel" data-from="scenes/scenes-pitch.jsx">
 // Pitch slides (business) — team, financial trajectory, competitors.
-// Styled in the Austral Lab brand (cream / navy / pink / orange).
+// Styled in the PREVIQ brand (cream / navy / pink / orange).
 //   SceneTeam        — l'équipe (direction business + comité scientifique)
 //   SceneFinance     — trajectoire financière (revenu Y1→Y5 + valorisation)
 //   SceneCompetition — concurrents & positionnement
@@ -4028,59 +4036,49 @@ function SceneTeam({ start, end }) {
       {({ localTime }) => {
         const t = localTime;
         const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
-        const dir = [
-          { initials: 'AB', name: 'Anna Blanc', role: 'Leadership · Stratégie & Wellbeing', desc: 'Engagement employeur et résultats de santé.', color: C.gold },
-          { initials: 'LC', name: 'Laurent Courbon', role: 'Innovation · Coaching santé', desc: 'Changement comportemental, succès client durable.', color: C.cyan },
-          { initials: 'NR', name: 'Nicolas de Raulin', role: 'Compliance · Juridique & Dév.', desc: 'Conformité et partenariats de croissance.', color: C.red },
+        const team = [
+          { initials: 'SB', name: 'Dr Stéphane Bach', role: 'Fondateur · Médecin de santé publique', desc: 'Concepteur de l\'algorithme — moteur de prédiction cardiovasculaire. Il porte la vision produit & clinique de PREVIQ.', color: C.cyan, tilt: -8 },
+          { initials: 'JS', name: 'Pr José Sampol', role: 'Co-fondateur · Médecine vasculaire', desc: 'Professeur émérite, co-concepteur du Score BS. Validation clinique & stratification thrombo-vasculaire du modèle.', color: C.gold, tilt: 8 },
         ];
-        const sci = [
-          { initials: 'SB', name: 'Dr Stéphane Bach', role: 'Médecin spécialiste de santé publique', desc: 'Concepteur de l\'algorithme — moteur de prédiction cardiovasculaire.', color: C.cyan },
-          { initials: 'JS', name: 'Pr José Sampol', role: 'Co-concepteur · validation clinique', desc: 'Stratification thrombo-vasculaire du modèle.', color: C.gold },
-          { initials: 'FD', name: 'Pr F. Dignat-George', role: 'Conception scientifique · Aix-Marseille', desc: 'Présidente SFTH · conseil INSERM.', color: C.red },
-        ];
-        const Card = (m, i, delay) => {
-          const cIn = clamp((t - delay - i * 0.15) / 0.6, 0, 1);
-          return (
-            <div key={m.initials} style={{
-              width: 620, opacity: cIn, transform: `translateY(${(1 - cIn) * 24}px)`,
-              display: 'flex', gap: 18, alignItems: 'center', padding: '16px 22px', borderRadius: 14,
-              background: 'rgba(255,255,255,0.55)', border: `1px solid ${m.color}44`,
-            }}>
-              <div style={{
-                width: 66, height: 66, flexShrink: 0, borderRadius: '50%',
-                background: `linear-gradient(135deg, ${m.color}, ${m.color}aa)`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontFamily: 'Poppins, Inter, sans-serif', fontWeight: 700, fontSize: 24, color: '#fff',
-              }}>{m.initials}</div>
-              <div style={{ minWidth: 0 }}>
-                <div style={{ fontFamily: 'Inter', fontSize: 23, fontWeight: 600, color: C.white }}>{m.name}</div>
-                <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 11, letterSpacing: '0.12em', color: m.color, textTransform: 'uppercase', marginTop: 4 }}>{m.role}</div>
-                <div style={{ fontSize: 14, color: C.whiteDim, marginTop: 5, lineHeight: 1.4 }}>{m.desc}</div>
-              </div>
-            </div>
-          );
-        };
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
             <CosmicBackdrop hue="cyan" />
-            <SectionTag index="" label="L'équipe · un comité de direction intégré" color={C.cyan} />
+            <SectionTag index="" label="L'équipe · les deux fondateurs" color={C.cyan} />
             <div style={{
-              position: 'absolute', left: 96, top: 150, right: 96,
+              position: 'absolute', left: 96, top: 160, right: 96,
               opacity: titleIn, transform: `translateY(${(1 - titleIn) * 20}px)`,
-              fontFamily: 'Inter', fontSize: 52, fontWeight: 200, color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
+              fontFamily: 'Inter', fontSize: 54, fontWeight: 200, color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
-              Les concepteurs de l'algorithme et de la plateforme <span style={{ fontStyle: 'italic', color: C.gold }}>siègent au comité de direction.</span>
+              Deux médecins fondateurs. <span style={{ fontStyle: 'italic', color: C.cyan }}>Un seul score : le Score BS.</span>
             </div>
 
-            <div style={{ position: 'absolute', left: 96, top: 300 }}>
-              <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 13, letterSpacing: '0.24em', color: C.gold, textTransform: 'uppercase', marginBottom: 6 }}>— Direction & business</div>
-              <div style={{ fontFamily: 'Inter', fontSize: 13, color: C.whiteDim, marginBottom: 14 }}>Exécution commerciale & croissance</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>{dir.map((m, i) => Card(m, i, 1.0))}</div>
-            </div>
-            <div style={{ position: 'absolute', right: 96, top: 300 }}>
-              <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 13, letterSpacing: '0.24em', color: C.cyan, textTransform: 'uppercase', marginBottom: 6 }}>— Concepteurs · membres du comité de direction</div>
-              <div style={{ fontFamily: 'Inter', fontSize: 13, color: C.whiteDim, marginBottom: 14 }}>Ils ont conçu l'algorithme <span style={{ color: C.cyan }}>et</span> la plateforme</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>{sci.map((m, i) => Card(m, i, 1.4))}</div>
+            <div style={{ position: 'absolute', left: 0, right: 0, top: 388, display: 'flex', justifyContent: 'center', gap: 64 }}>
+              {team.map((m, i) => {
+                const cIn = clamp((t - 1.0 - i * 0.3) / 0.7, 0, 1);
+                const wob = Math.sin(t * 1.1 + i) * 4;
+                return (
+                  <div key={m.initials} style={{
+                    width: 560, opacity: cIn,
+                    transform: `perspective(1500px) rotateY(${m.tilt}deg) translateY(${(1 - cIn) * 34 + wob}px) scale(${0.9 + cIn * 0.1})`,
+                    transformStyle: 'preserve-3d',
+                  }}>
+                    <GlassCard x={0} y={0} w={560} h={330} border={`${m.color}55`}>
+                      <div style={{ padding: 40, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+                        <div style={{
+                          width: 92, height: 92, borderRadius: '50%',
+                          background: `linear-gradient(135deg, ${m.color}, ${m.color}aa)`,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          fontFamily: 'Poppins, Inter, sans-serif', fontWeight: 700, fontSize: 34, color: '#fff',
+                          boxShadow: `0 10px 26px ${m.color}44`,
+                        }}>{m.initials}</div>
+                        <div style={{ fontFamily: 'Inter', fontSize: 28, fontWeight: 600, color: C.white, marginTop: 18 }}>{m.name}</div>
+                        <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12.5, letterSpacing: '0.16em', color: m.color, textTransform: 'uppercase', marginTop: 8 }}>{m.role}</div>
+                        <div style={{ fontSize: 16, color: C.whiteDim, marginTop: 14, lineHeight: 1.5, maxWidth: 440 }}>{m.desc}</div>
+                      </div>
+                    </GlassCard>
+                  </div>
+                );
+              })}
             </div>
 
             <div style={{
@@ -4109,16 +4107,16 @@ function SceneMarket({ start, end }) {
             label: 'Marché mondial · santé préventive & longévité',
             sub: 'horizon 2030 · croissance ≈ +11 %/an' },
           { key: 'SAM', w: 60, val: '≈ 36 Md€', color: C.gold,
-            label: 'Europe · 60 M de cadres & actifs premium',
-            sub: 'abonnement annuel moyen ≈ 600 €' },
+            label: 'Europe · 60 M d\'adultes soucieux de leur prévention',
+            sub: 'dépense santé/prévention moyenne ≈ 600 €/an' },
           { key: 'SOM', w: 26, val: '≈ 332 M€', color: C.red,
             label: 'Notre cible à 5 ans · France, Benelux → Pan-Europe',
-            sub: '750 000 cadres abonnés' },
+            sub: '≈ 600 000 abonnés (~550 €/an)' },
         ];
         const pen = [
-          { k: '750 000', v: 'cadres abonnés visés à horizon 5 ans', color: C.cyan },
-          { k: '≈ 1,3 %', v: 'de pénétration du SAM européen premium', color: C.gold },
-          { k: '< 1 %', v: 'du marché adressable — marge de croissance immense', color: C.red },
+          { k: '600 000', v: 'abonnés visés à horizon 5 ans', color: C.cyan },
+          { k: '≈ 1 %', v: 'de pénétration du SAM européen', color: C.gold },
+          { k: '< 0,1 %', v: 'du marché mondial adressable — marge de croissance immense', color: C.red },
         ];
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
@@ -4173,7 +4171,7 @@ function SceneMarket({ start, end }) {
               fontFamily: 'Inter', fontSize: 19, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
               borderTop: `1px solid ${C.line}`, paddingTop: 16,
             }}>
-              Nous ne captons qu'une <span style={{ color: C.cyan, fontWeight: 500 }}>fraction</span> du seul segment européen premium — <span style={{ color: C.gold, fontWeight: 500 }}>l'essentiel du marché reste devant nous.</span>
+              Nous ne captons qu'une <span style={{ color: C.cyan, fontWeight: 500 }}>fraction</span> du marché européen de la prévention — <span style={{ color: C.gold, fontWeight: 500 }}>l'essentiel reste devant nous.</span>
             </div>
           </div>
         );
@@ -4252,7 +4250,7 @@ function SceneFinance({ start, end }) {
               fontFamily: 'Inter', fontSize: 19, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
               borderTop: `1px solid ${C.gold}33`, paddingTop: 16,
             }}>
-              France & Benelux <span style={{ color: C.cyan, fontWeight: 500 }}>Q4 2026</span> · Pan-Europe <span style={{ color: C.cyan, fontWeight: 500 }}>2028</span> · 750 000 cadres · <span style={{ color: C.gold, fontWeight: 500 }}>IPO visée 2031</span>
+              France & Benelux <span style={{ color: C.cyan, fontWeight: 500 }}>Q4 2026</span> · Pan-Europe <span style={{ color: C.cyan, fontWeight: 500 }}>2028</span> · 600 000 abonnés · <span style={{ color: C.gold, fontWeight: 500 }}>IPO visée 2031</span>
             </div>
           </div>
         );
@@ -4321,11 +4319,11 @@ function SceneCompetition({ start, end }) {
               </div>
             </div>
 
-            {/* RIGHT — Austral Lab differentiators */}
+            {/* RIGHT — PREVIQ differentiators */}
             <div style={{ position: 'absolute', right: 96, top: 310, width: 800, opacity: clamp((t - 1.8) / 0.8, 0, 1) }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
                 <div style={{ width: 26, height: 1, background: C.gold }} />
-                <span style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12, letterSpacing: '0.2em', color: C.gold, textTransform: 'uppercase' }}>Austral Lab · notre différence</span>
+                <span style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12, letterSpacing: '0.2em', color: C.gold, textTransform: 'uppercase' }}>PREVIQ · notre différence</span>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 {diff.map((d, i) => {
@@ -4353,7 +4351,7 @@ function SceneCompetition({ start, end }) {
               fontFamily: 'Inter', fontSize: 19, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
               borderTop: `1px solid ${C.line}`, paddingTop: 16,
             }}>
-              Marché prouvé et bien capitalisé — <span style={{ color: C.red, fontWeight: 500 }}>Austral Lab</span> est le seul à l'aborder <span style={{ color: C.gold, fontWeight: 500 }}>de façon holistique et pilotée médicalement.</span>
+              Marché prouvé et bien capitalisé — <span style={{ color: C.red, fontWeight: 500 }}>PREVIQ</span> est le seul à l'aborder <span style={{ color: C.gold, fontWeight: 500 }}>de façon holistique et pilotée médicalement.</span>
             </div>
           </div>
         );
@@ -4456,9 +4454,9 @@ Object.assign(window, { SceneTeam, SceneMarket, SceneFinance, SceneCompetition }
           onClick: (e) => { e.stopPropagation(); if (!disabled) onClick(); }, disabled,
           style: {
             width: big ? 46 : 42, height: big ? 46 : 42, borderRadius: 10,
-            border: '1px solid rgba(18,58,94,0.18)',
-            background: disabled ? 'rgba(18,58,94,0.05)' : 'rgba(250,246,236,0.92)',
-            color: disabled ? 'rgba(18,58,94,0.3)' : '#123a5e',
+            border: '1px solid rgba(10,37,64,0.16)',
+            background: disabled ? 'rgba(10,37,64,0.05)' : 'rgba(255,255,255,0.94)',
+            color: disabled ? 'rgba(10,37,64,0.3)' : '#0a2540',
             cursor: disabled ? 'default' : 'pointer', fontSize: big ? 20 : 22,
             display: 'flex', alignItems: 'center', justifyContent: 'center', lineHeight: 1,
           },
@@ -4469,11 +4467,11 @@ Object.assign(window, { SceneTeam, SceneMarket, SceneFinance, SceneCompetition }
         <div
           ref={ref}
           onClick={() => go(1)}
-          style={{ position: 'fixed', inset: 0, background: '#e7e0d0', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', cursor: ui ? 'default' : 'none' }}
+          style={{ position: 'fixed', inset: 0, background: '#eaf0f2', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', cursor: ui ? 'default' : 'none' }}
         >
           {/* Full-bleed slide */}
           <div style={{
-            width: 1920, height: 1080, background: '#f4f1e8', position: 'relative', overflow: 'hidden',
+            width: 1920, height: 1080, background: '#ffffff', position: 'relative', overflow: 'hidden',
             flexShrink: 0, transform: `${rotated ? 'rotate(90deg) ' : ''}scale(${scale})`, transformOrigin: 'center',
           }}>
             <TimelineContext.Provider value={{ time: cur.start + cur.settle, duration: TOTAL, playing: false }}>
@@ -4483,14 +4481,14 @@ Object.assign(window, { SceneTeam, SceneMarket, SceneFinance, SceneCompetition }
           </div>
 
           {/* Top progress bar */}
-          <div style={{ position: 'fixed', top: 0, left: 0, height: 3, width: `${((i + 1) / N) * 100}%`, background: '#1c6ea4', transition: 'width 180ms', zIndex: 20 }} />
+          <div style={{ position: 'fixed', top: 0, left: 0, height: 3, width: `${((i + 1) / N) * 100}%`, background: '#00b39a', transition: 'width 180ms', zIndex: 20 }} />
 
           {/* Floating controls (auto-hide) */}
           <div style={{
             position: 'fixed', bottom: 22, left: '50%', transform: 'translateX(-50%)', zIndex: 20,
             display: 'flex', alignItems: 'center', gap: 14, padding: '8px 14px', borderRadius: 14,
-            background: 'rgba(244,241,232,0.82)', border: '1px solid rgba(18,58,94,0.12)',
-            boxShadow: '0 8px 28px rgba(60,50,30,0.18)', backdropFilter: 'blur(8px)',
+            background: 'rgba(255,255,255,0.88)', border: '1px solid rgba(10,37,64,0.12)',
+            boxShadow: '0 8px 28px rgba(10,37,64,0.14)', backdropFilter: 'blur(8px)',
             opacity: ui ? 1 : 0, transition: 'opacity 300ms', pointerEvents: ui ? 'auto' : 'none',
             fontFamily: 'Inter, system-ui, sans-serif',
           }}>
