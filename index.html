@@ -2208,11 +2208,14 @@ function Scene11Security({ start, end }) {
               <span style={{ fontStyle: 'italic', color: C.cyan }}>protégées comme un secret médical.</span>
             </div>
 
+            {/* Soft glow behind shield */}
+            <div style={{ position: 'absolute', left: 300, top: 560, transform: 'translate(-50%,-50%)', width: 560, height: 560, borderRadius: '50%', background: `radial-gradient(circle, ${C.cyan}26 0%, transparent 66%)`, opacity: shieldIn }} />
+
             {/* 3D shield */}
             <div style={{
-              position: 'absolute', left: 240, top: 540,
+              position: 'absolute', left: 300, top: 560,
               opacity: shieldIn,
-              transform: `translate(-50%, -50%) perspective(1200px) rotateY(${Math.sin(t * 0.6) * 12}deg) scale(${0.6 + shieldIn * 0.4})`,
+              transform: `translate(-50%, -50%) perspective(1200px) rotateY(${Math.sin(t * 0.6) * 12}deg) scale(${0.7 + shieldIn * 0.4})`,
               transformStyle: 'preserve-3d',
             }}>
               <svg width="380" height="440" viewBox="0 0 380 440" style={{ filter: `drop-shadow(0 0 50px ${C.cyan})` }}>
@@ -2241,31 +2244,40 @@ function Scene11Security({ start, end }) {
               </svg>
             </div>
 
+            {/* Premium caption under shield */}
+            <div style={{ position: 'absolute', left: 300, top: 828, transform: 'translateX(-50%)', opacity: shieldIn, display: 'flex', alignItems: 'center', gap: 10, padding: '10px 22px', borderRadius: 100, background: 'rgba(255,255,255,0.72)', border: `1px solid ${C.cyan}44`, boxShadow: `0 8px 22px ${C.cyan}18`, backdropFilter: 'blur(8px)', fontFamily: 'JetBrains Mono, monospace', fontSize: 14, letterSpacing: '0.16em', textTransform: 'uppercase', color: C.blue, whiteSpace: 'nowrap' }}>
+              <span style={{ width: 8, height: 8, borderRadius: 4, background: C.cyan, boxShadow: `0 0 10px ${C.cyan}` }} />
+              Chiffré de bout en bout · secret médical
+            </div>
+
             <div style={{
-              position: 'absolute', right: 96, top: 420, width: 1000,
-              display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18,
+              position: 'absolute', right: 96, top: 408, width: 1040,
+              display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 22,
             }}>
               {commits.map((c, i) => {
                 const itIn = clamp((t - 2.0 - i * 0.15) / 0.5, 0, 1);
                 return (
                   <div key={i} style={{
                     opacity: itIn, transform: `translateX(${(1-itIn)*30}px)`,
-                    padding: '18px 22px',
-                    background: 'rgba(0,179,154,0.04)',
-                    border: `1px solid ${C.line}`,
-                    borderRadius: 12,
-                    display: 'flex', gap: 14,
+                    padding: '22px 26px',
+                    background: 'linear-gradient(135deg, rgba(255,255,255,0.9), rgba(244,249,250,0.82))',
+                    border: `1px solid ${C.cyan}33`,
+                    borderRadius: 16,
+                    boxShadow: '0 14px 36px rgba(10,37,64,0.08)',
+                    backdropFilter: 'blur(10px)',
+                    display: 'flex', gap: 16, alignItems: 'flex-start',
                   }}>
                     <div style={{
-                      width: 24, height: 24, flexShrink: 0,
-                      borderRadius: '50%',
-                      background: C.cyan,
+                      width: 34, height: 34, flexShrink: 0,
+                      borderRadius: 10,
+                      background: `linear-gradient(135deg, ${C.cyan}, ${C.cyanDim})`,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      color: C.ink, fontWeight: 700, fontSize: 18,
+                      color: '#fff', fontWeight: 700, fontSize: 19,
+                      boxShadow: `0 6px 16px ${C.cyan}55`,
                     }}>✓</div>
                     <div>
-                      <div style={{ fontSize: 20, fontWeight: 500, color: C.white }}>{c.title}</div>
-                      <div style={{ fontSize: 15, color: C.whiteDim, marginTop: 4, lineHeight: 1.5 }}>{c.desc}</div>
+                      <div style={{ fontFamily: 'Inter', fontSize: 22, fontWeight: 600, color: C.white, letterSpacing: '-0.01em' }}>{c.title}</div>
+                      <div style={{ fontSize: 15.5, color: C.whiteDim, marginTop: 6, lineHeight: 1.5 }}>{c.desc}</div>
                     </div>
                   </div>
                 );
@@ -2993,19 +3005,12 @@ function Scene12Authors({ start, end }) {
                 <polygon points="250,120 350,180 350,320 250,380 150,320 150,180"
                          fill="rgba(252,248,238,0.7)" stroke={C.gold} strokeWidth="1.5"
                          transform={`rotate(${-t * 4} 250 250)`} />
-                {/* Phone glyph at the center */}
-                <g transform="translate(250 250)">
-                  <rect x="-46" y="-78" width="92" height="156" rx="16" fill="rgba(252,248,238,0.92)" stroke={C.gold} strokeWidth="2.5" />
-                  <rect x="-46" y="-78" width="92" height="156" rx="16" fill="none" stroke={C.cyan} strokeWidth="1" opacity="0.5" />
-                  <line x1="-12" y1="-68" x2="12" y2="-68" stroke={C.gold} strokeWidth="3" strokeLinecap="round" />
-                  {/* heartbeat */}
-                  <path d="M -34 4 L -16 4 L -8 -20 L 2 28 L 10 -8 L 18 4 L 34 4"
-                        fill="none" stroke={C.red} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
-                  {/* score chip */}
-                  <rect x="-32" y="40" width="64" height="22" rx="6" fill={C.gold} opacity="0.92" />
-                  <text x="0" y="55" textAnchor="middle" fill={C.bg0} fontFamily="JetBrains Mono, monospace" fontSize="14" fontWeight="700">BS 42</text>
-                </g>
               </svg>
+              {/* Real app at the center */}
+              <img src="assets/viz/app-longevity-cut.png" alt="Application PREVIQ" style={{
+                position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -52%)',
+                width: 214, height: 'auto', filter: 'drop-shadow(0 18px 38px rgba(10,37,64,0.30))', pointerEvents: 'none',
+              }} />
               {/* Label under */}
               <div style={{
                 position: 'absolute', left: '50%', bottom: -30,
@@ -3612,15 +3617,17 @@ function SceneSecondAvis({ start, end }) {
                 return (
                   <div key={i} style={{
                     opacity: stIn, transform: `translateX(${(1 - stIn) * 30}px)`,
-                    padding: '20px 24px',
-                    background: `linear-gradient(135deg, ${s.color}10, ${s.color}03)`,
-                    border: `1px solid ${s.color}66`,
-                    borderRadius: 14,
-                    display: 'flex', gap: 18, alignItems: 'flex-start',
+                    padding: '24px 26px',
+                    background: 'linear-gradient(135deg, rgba(255,255,255,0.92), rgba(244,249,250,0.84))',
+                    border: `1px solid ${s.color}44`,
+                    borderRadius: 16,
+                    boxShadow: `0 14px 36px rgba(10,37,64,0.08)`,
+                    backdropFilter: 'blur(10px)',
+                    display: 'flex', gap: 20, alignItems: 'flex-start',
                   }}>
-                    <div style={{ fontFamily: 'Inter', fontSize: 48, fontWeight: 100, color: s.color, lineHeight: 0.9, letterSpacing: '-0.04em', minWidth: 60 }}>{s.n}</div>
+                    <div style={{ fontFamily: 'Inter', fontSize: 52, fontWeight: 100, color: s.color, lineHeight: 0.9, letterSpacing: '-0.04em', minWidth: 64 }}>{s.n}</div>
                     <div>
-                      <div style={{ fontSize: 26, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>{s.title}</div>
+                      <div style={{ fontSize: 26, fontWeight: 600, color: C.white, letterSpacing: '-0.01em' }}>{s.title}</div>
                       <div style={{ fontSize: 17, color: C.whiteDim, marginTop: 6, lineHeight: 1.55 }}>{s.desc}</div>
                     </div>
                   </div>
