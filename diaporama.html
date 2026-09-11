@@ -781,6 +781,33 @@ function PreviqLogo({ mark = 60, word = 40, draw = 1, gap = 16, color = C.blue }
   );
 }
 
+// ── Cinematic full-bleed photo backdrop (Higgsfield visuals) ───────────────
+// Full-bleed image + white scrim so text stays legible on the light theme.
+// scrim: 'left' | 'right' | 'bottom' | 'center' | 'none'. Subtle Ken-Burns drift.
+function PhotoBackdrop({ src, opacity = 0.95, pos = 'center', scrim = 'left', zoom = true, tint = true }) {
+  const t = useTime();
+  const k = zoom ? (1.05 + Math.sin(t * 0.045) * 0.02) : 1;
+  const scrimGrad =
+    scrim === 'left'   ? 'linear-gradient(90deg, rgba(255,255,255,0.97) 0%, rgba(255,255,255,0.86) 32%, rgba(255,255,255,0.42) 60%, rgba(255,255,255,0.10) 100%)' :
+    scrim === 'right'  ? 'linear-gradient(270deg, rgba(255,255,255,0.97) 0%, rgba(255,255,255,0.86) 32%, rgba(255,255,255,0.42) 60%, rgba(255,255,255,0.10) 100%)' :
+    scrim === 'bottom' ? 'linear-gradient(0deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.55) 34%, rgba(255,255,255,0.12) 66%, rgba(255,255,255,0.0) 100%)' :
+    scrim === 'center' ? 'radial-gradient(ellipse 62% 66% at 50% 46%, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.55) 58%, rgba(255,255,255,0.88) 100%)' :
+    'none';
+  return (
+    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: C.bg0 }}>
+      <img src={src} alt="" style={{
+        position: 'absolute', inset: 0, width: '100%', height: '100%',
+        objectFit: 'cover', objectPosition: pos, opacity,
+        transform: `scale(${k})`, transformOrigin: 'center', willChange: 'transform',
+      }} />
+      {tint && <div style={{ position: 'absolute', inset: 0, background: `radial-gradient(60% 70% at 78% 40%, ${C.cyan}14 0%, transparent 60%)`, mixBlendMode: 'multiply' }} />}
+      {scrimGrad !== 'none' && <div style={{ position: 'absolute', inset: 0, background: scrimGrad }} />}
+      {/* top + bottom soft fade so the HUD chrome stays legible */}
+      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.0) 13%, rgba(255,255,255,0.0) 85%, rgba(255,255,255,0.62) 100%)' }} />
+    </div>
+  );
+}
+
 // ── 3D space backdrop with parallax grid + drifting particles ─────────────
 function CosmicBackdrop({ depth = 0, hue = 'cyan' }) {
   const t = useTime();
@@ -1147,7 +1174,7 @@ function ImmersiveHUD({ boundaries = [] }) {
 }
 
 Object.assign(window, {
-  C, CosmicBackdrop, ParticleField, PulseLine, Heart3D, GlassCard, SectionTag, AnimatedNumber, ImmersiveHUD,
+  C, CosmicBackdrop, PhotoBackdrop, PreviqMark, PreviqWord, PreviqLogo, ParticleField, PulseLine, Heart3D, GlassCard, SectionTag, AnimatedNumber, ImmersiveHUD,
 });
 </script>
   <script type="text/babel" data-from="scenes/scenes-1-2.jsx">
@@ -1163,9 +1190,7 @@ function Scene1Intro({ start, end }) {
         const pulseOpacity = clamp((t0 - 0.2) / 0.8, 0, 1) * (1 - clamp((t0 - 5.2) / 0.8, 0, 1));
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
-            <CosmicBackdrop hue="cyan" />
-            <PulseLine y={540} color={C.cyan} amp={140} opacity={pulseOpacity * 0.9} />
-            <PulseLine y={540} color={C.red} amp={120} opacity={pulseOpacity * 0.4} />
+            <PhotoBackdrop src="assets/viz/hero.png" scrim="none" opacity={0.96} />
 
             {/* Center logo mark — PREVIQ */}
             <div style={{
@@ -1232,6 +1257,26 @@ function Scene1Intro({ start, end }) {
               <span>Pas une appli de coaching</span>
               <span style={{ opacity: 0.4 }}>·</span>
               <span>Pilotée par des médecins</span>
+            </div>
+
+            {/* Live / traction badge — the product is real, the score exists */}
+            <div style={{
+              position: 'absolute', left: '50%', bottom: 152,
+              transform: `translate(-50%, ${(1 - taglineAppear) * 16}px)`,
+              opacity: taglineAppear,
+              display: 'flex', alignItems: 'center', gap: 12,
+              padding: '11px 26px', borderRadius: 100,
+              background: 'rgba(255,255,255,0.74)', backdropFilter: 'blur(8px)',
+              border: `1px solid ${C.green}55`, boxShadow: `0 6px 24px ${C.green}22`,
+              fontFamily: 'JetBrains Mono, monospace', fontSize: 15.5,
+              letterSpacing: '0.16em', textTransform: 'uppercase', color: C.blue, whiteSpace: 'nowrap',
+            }}>
+              <span style={{ width: 9, height: 9, borderRadius: 5, background: C.green, boxShadow: `0 0 12px ${C.green}`, opacity: 0.45 + Math.sin(t0 * 4) * 0.45 }} />
+              <span style={{ color: C.green, fontWeight: 700 }}>En production</span>
+              <span style={{ opacity: 0.35 }}>·</span>
+              <span>Application fonctionnelle</span>
+              <span style={{ opacity: 0.35 }}>·</span>
+              <span>Score BS opérationnel</span>
             </div>
 
             {/* Bottom credits */}
@@ -1889,8 +1934,7 @@ function Scene8Outro({ start, end }) {
         const creditsIn = clamp((t - 4.0) / 0.8, 0, 1);
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
-            <CosmicBackdrop hue="cyan" />
-            <PulseLine y={540} color={C.cyan} amp={100} opacity={0.4} />
+            <PhotoBackdrop src="assets/viz/horizon.png" scrim="bottom" opacity={0.62} />
 
             <div style={{
               position: 'absolute', left: '50%', top: '30%',
@@ -4042,7 +4086,7 @@ function SceneTeam({ start, end }) {
         ];
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
-            <CosmicBackdrop hue="cyan" />
+            <PhotoBackdrop src="assets/viz/data.png" scrim="none" opacity={0.55} />
             <SectionTag index="" label="L'équipe · les deux fondateurs" color={C.cyan} />
             <div style={{
               position: 'absolute', left: 96, top: 160, right: 96,
@@ -4360,7 +4404,65 @@ function SceneCompetition({ start, end }) {
   );
 }
 
-Object.assign(window, { SceneTeam, SceneMarket, SceneFinance, SceneCompetition });
+// ── Scene — La preuve : l'application est réelle, le Score BS existe ─────────
+function SceneProof({ start, end }) {
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime }) => {
+        const t = localTime;
+        const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
+        const imgIn = clamp((t - 0.7) / 1.0, 0, 1);
+        const chips = [
+          'Application live — pas une maquette',
+          'Score BS calculé en temps réel',
+          'Suivi piloté par des médecins',
+          'Données chiffrées · secret médical',
+        ];
+        return (
+          <div style={{ position: 'absolute', inset: 0, background: `radial-gradient(72% 92% at 82% 42%, ${C.cyan}12 0%, transparent 60%), ${C.bg0}` }}>
+            <SectionTag index="" label="La preuve · l'app est déjà réelle" color={C.green} />
+
+            <div style={{ position: 'absolute', left: 96, top: 236, width: 820, opacity: titleIn, transform: `translateY(${(1 - titleIn) * 20}px)` }}>
+              <div style={{ fontFamily: 'Inter', fontSize: 66, fontWeight: 200, color: C.white, letterSpacing: '-0.03em', lineHeight: 1.04 }}>
+                L'application <span style={{ fontWeight: 500 }}>existe déjà.</span><br/>
+                <span style={{ fontStyle: 'italic', color: C.cyan }}>Le Score BS tourne.</span>
+              </div>
+              <div style={{ fontSize: 26, fontWeight: 300, color: C.whiteDim, marginTop: 26, lineHeight: 1.5, maxWidth: 730 }}>
+                Pas un concept : une app fonctionnelle, un score calculé en temps réel, un suivi médical déjà opérationnel.
+              </div>
+              <div style={{ marginTop: 36, display: 'flex', flexDirection: 'column', gap: 15 }}>
+                {chips.map((c, i) => {
+                  const cIn = clamp((t - 1.4 - i * 0.18) / 0.6, 0, 1);
+                  return (
+                    <div key={i} style={{ opacity: cIn, transform: `translateX(${(1 - cIn) * 20}px)`, display: 'flex', alignItems: 'center', gap: 15, fontFamily: 'Inter', fontSize: 22, color: C.white }}>
+                      <span style={{ width: 28, height: 28, flexShrink: 0, borderRadius: 8, background: `${C.green}1a`, border: `1px solid ${C.green}66`, color: C.green, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>✓</span>
+                      {c}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Real, functional app — actual product screenshot */}
+            <div style={{ position: 'absolute', right: 30, top: 84, width: 1010, height: 910, opacity: imgIn, transform: `translateY(${(1 - imgIn) * 30}px) scale(${0.94 + imgIn * 0.06})` }}>
+              <img src="assets/viz/app-score.png" alt="Application PREVIQ — Score BS" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              <div style={{ position: 'absolute', right: 150, top: 150, display: 'flex', alignItems: 'center', gap: 10, padding: '9px 18px', borderRadius: 100, background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(6px)', border: `1px solid ${C.green}55`, boxShadow: `0 8px 24px ${C.green}22`, fontFamily: 'JetBrains Mono, monospace', fontSize: 13, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.blue, whiteSpace: 'nowrap' }}>
+                <span style={{ width: 8, height: 8, borderRadius: 4, background: C.green, boxShadow: `0 0 10px ${C.green}`, opacity: 0.5 + Math.sin(t * 4) * 0.5 }} />
+                Score en temps réel
+              </div>
+            </div>
+
+            <div style={{ position: 'absolute', left: 96, right: 96, bottom: 46, opacity: clamp((t - 2.6) / 0.7, 0, 1), fontFamily: 'Inter', fontSize: 20, fontWeight: 300, color: C.whiteDim, textAlign: 'center', borderTop: `1px solid ${C.line}`, paddingTop: 16 }}>
+              De l'idée au produit : <span style={{ color: C.green, fontWeight: 500 }}>PREVIQ est déjà opérationnel</span> — prêt à passer à l'échelle.
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+Object.assign(window, { SceneTeam, SceneMarket, SceneFinance, SceneCompetition, SceneProof });
 </script>
   <script type="text/babel">
     // Slideshow (diaporama) — each scene as a static, fully-revealed full-bleed
@@ -4368,7 +4470,7 @@ Object.assign(window, { SceneTeam, SceneMarket, SceneFinance, SceneCompetition }
     // hiding floating controls. Smooth on any device.
     const TOTAL = 418;
     const RAW = [
-      ['Scene1Intro',0,18],['Scene2Crisis',18,38],['SceneStart',38,58],['Scene4Score',58,80],
+      ['Scene1Intro',0,18],['SceneProof',8,30],['Scene2Crisis',18,38],['SceneStart',38,58],['Scene4Score',58,80],
       ['Scene3Heart',80,100],['Scene5Bilans',100,120],['Scene6Synergy',120,140],['Scene13Exposome',140,162],
       ['Scene14Hub',162,186],['SceneServices',186,208],['SceneConcierge',208,230],['SceneHumans',230,248],
       ['SceneSecondAvis',248,270],['Scene9Mockups',290,308],['Scene7Journey',308,326],
