@@ -1651,25 +1651,25 @@ function Scene5Bilans({ start, end }) {
               Une prescription adaptée à <span style={{ fontStyle: 'italic', color: C.gold }}>VOTRE</span> niveau de risque.
             </div>
 
-            <div style={{ position: 'absolute', left: 96, top: 420, display: 'flex', gap: 36 }}>
+            <div style={{ position: 'absolute', left: 96, top: 392, display: 'flex', gap: 36 }}>
               {bilans.map((b, i) => (
                 <div key={i} style={{
-                  width: 540, height: 520,
+                  width: 540, height: 600,
                   transform: `perspective(1600px) rotateY(${b.tilt}deg) translateY(${(1 - b.in) * 50}px) scale(${0.85 + b.in * 0.15})`,
                   opacity: b.in, transformStyle: 'preserve-3d',
                 }}>
-                  <GlassCard x={0} y={0} w={540} h={520} border={`${b.color}55`}>
+                  <GlassCard x={0} y={0} w={540} h={600} border={`${b.color}55`}>
                     <div style={{ padding: 36, height: '100%', display: 'flex', flexDirection: 'column' }}>
                       <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 17, letterSpacing: '0.3em', color: b.color, textTransform: 'uppercase' }}>BILAN</div>
-                      <div style={{ fontFamily: 'Inter', fontSize: 48, fontWeight: 400, color: C.white, marginTop: 6, letterSpacing: '-0.02em' }}>{b.name}</div>
-                      <div style={{ fontSize: 18, color: C.whiteDim, marginTop: 4, fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.05em' }}>{b.sub}</div>
+                      <div style={{ fontFamily: 'Inter', fontSize: 46, fontWeight: 400, color: C.white, marginTop: 6, letterSpacing: '-0.02em' }}>{b.name}</div>
+                      <div style={{ fontSize: 17, color: C.whiteDim, marginTop: 4, fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.04em' }}>{b.sub}</div>
 
-                      <div style={{ display: 'flex', alignItems: 'baseline', gap: 14, marginTop: 32, marginBottom: 24 }}>
-                        <div style={{ fontFamily: 'Inter', fontSize: 120, fontWeight: 100, color: b.color, lineHeight: 1, letterSpacing: '-0.05em' }}>{b.count}</div>
-                        <div style={{ fontSize: 20, color: C.whiteDim, fontWeight: 300 }}>analyses<br/>biologiques</div>
+                      <div style={{ display: 'flex', alignItems: 'baseline', gap: 14, marginTop: 22, marginBottom: 18 }}>
+                        <div style={{ fontFamily: 'Inter', fontSize: 96, fontWeight: 100, color: b.color, lineHeight: 1, letterSpacing: '-0.05em' }}>{b.count}</div>
+                        <div style={{ fontSize: 19, color: C.whiteDim, fontWeight: 300 }}>analyses<br/>biologiques</div>
                       </div>
 
-                      <div style={{ borderTop: `1px solid ${b.color}33`, paddingTop: 18, fontSize: 17, fontFamily: 'JetBrains Mono, monospace', color: C.whiteDim, lineHeight: 1.8 }}>
+                      <div style={{ borderTop: `1px solid ${b.color}33`, paddingTop: 16, fontSize: 15.5, fontFamily: 'JetBrains Mono, monospace', color: C.whiteDim, lineHeight: 1.55 }}>
                         {b.items.map((it, j) => <div key={j}>{it}</div>)}
                         {b.extra.map((it, j) => <div key={j} style={{ color: b.color }}>{it}</div>)}
                       </div>
@@ -3357,12 +3357,12 @@ function SceneServices({ start, end }) {
                     </div>
                   </div>
                   <div style={{
-                    marginTop: 12, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    marginTop: 12, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10,
                     padding: '7px 12px', borderRadius: 8,
                     background: `linear-gradient(135deg, ${s.color}, ${s.color}aa)`,
                   }}>
-                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.ink, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Réserver</span>
-                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.ink, fontWeight: 600 }}>{s.slot}</span>
+                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.ink, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', flexShrink: 0 }}>Réserver</span>
+                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.ink, fontWeight: 600, whiteSpace: 'nowrap' }}>{s.slot}</span>
                   </div>
                 </div>
               );
