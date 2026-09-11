@@ -1783,18 +1783,22 @@ function Scene6Synergy({ start, end }) {
 
             {/* Right callout */}
             <div style={{
-              position: 'absolute', right: 96, top: 480, width: 540,
+              position: 'absolute', right: 96, top: 452, width: 640,
               opacity: calloutIn, transform: `translateX(${(1-calloutIn)*40}px)`,
             }}>
               <div style={{
-                fontFamily: 'JetBrains Mono, monospace', fontSize: 15,
+                fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 15,
                 letterSpacing: '0.3em', color: C.gold, textTransform: 'uppercase',
-              }}>Innovation propriétaire</div>
+              }}>Innovation propriétaire · facteur différenciant</div>
               <div style={{
-                fontFamily: 'Inter', fontSize: 47, fontWeight: 300,
-                color: C.white, marginTop: 16, lineHeight: 1.15, letterSpacing: '-0.02em',
+                fontFamily: 'Inter', fontSize: 38, fontWeight: 300,
+                color: C.white, marginTop: 14, lineHeight: 1.15, letterSpacing: '-0.02em',
               }}>
-                Aucun autre score au monde n'intègre cette <span style={{ fontStyle: 'italic', color: C.red }}>synergie biologie × exposome.</span>
+                Aucun autre score au monde n'intègre cette <span style={{ fontStyle: 'italic', color: C.red }}>synergie biologie</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 16, marginTop: 6 }}>
+                <span style={{ fontFamily: 'Inter', fontSize: 60, fontWeight: 200, color: C.whiteDim, lineHeight: 0.9 }}>×</span>
+                <span style={{ fontFamily: 'Inter', fontSize: 82, fontWeight: 700, color: C.cyan, letterSpacing: '-0.04em', lineHeight: 0.9 }}>EXPOSOME</span>
               </div>
               <div style={{ marginTop: 28, padding: 24, background: 'rgba(0,179,154,0.05)', border: `1px solid ${C.line}`, borderRadius: 12 }}>
                 <div style={{ fontSize: 20, color: C.whiteDim, lineHeight: 1.5 }}>
@@ -2474,15 +2478,16 @@ function Scene13Exposome({ start, end }) {
             <SectionTag index="07" label="Exposome × Capteurs · au-delà du sang" color={C.cyan} />
 
             <div style={{
-              position: 'absolute', left: 96, top: 170, right: 96,
+              position: 'absolute', left: 96, top: 146, right: 96,
               opacity: titleIn, transform: `translateY(${(1-titleIn)*20}px)`,
-              fontFamily: 'Inter', fontSize: 60, fontWeight: 200,
-              color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
-              Votre risque ne s'arrête pas au sang.<br/>
-              <span style={{ fontStyle: 'italic', fontSize: 38, fontWeight: 300, color: C.cyan }}>
-                Air, bruit, chaleur, capteurs — tout entre dans l'équation.
-              </span>
+              <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 19, letterSpacing: '0.34em', textTransform: 'uppercase', color: C.gold }}>Notre facteur différenciant</div>
+              <div style={{ fontFamily: 'Inter', fontSize: 104, fontWeight: 200, color: C.blue, letterSpacing: '-0.04em', lineHeight: 0.96, marginTop: 8 }}>
+                L'<span style={{ fontWeight: 700, color: C.cyan }}>exposome</span>.
+              </div>
+              <div style={{ fontFamily: 'Inter', fontSize: 31, fontWeight: 300, color: C.whiteDim, marginTop: 12, lineHeight: 1.3 }}>
+                Votre risque ne s'arrête pas au sang — <span style={{ fontStyle: 'italic', color: C.cyan }}>air, bruit, chaleur, capteurs entrent dans l'équation.</span>
+              </div>
             </div>
 
             {/* Two-column header bar */}
@@ -3507,7 +3512,7 @@ function SceneSecondAvis({ start, end }) {
 
         const steps = [
           { n: '01', title: 'Dossier transmis', desc: 'Vos résultats, sécurisés et anonymisés, partagés en un clic depuis l’app.', color: C.cyan },
-          { n: '02', title: 'Un expert de renommée internationale', desc: 'Un spécialiste de référence, choisi pour votre cas, rend un second avis argumenté — sans liste d’attente.', color: C.gold },
+          { n: '02', title: 'Un médecin spécialiste', desc: 'Un spécialiste de référence, choisi pour votre cas, rend un second avis argumenté — sans liste d’attente.', color: C.gold },
           { n: '03', title: 'Coordonné par votre médecin', desc: 'Votre médecin PREVIQ intègre l’avis au plan d’action. RDV garanti, réponse en quelques jours.', color: C.red },
         ];
 
@@ -3523,7 +3528,7 @@ function SceneSecondAvis({ start, end }) {
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
               Un doute ? Un <span style={{ fontStyle: 'italic', color: C.cyan }}>deuxième regard,</span> en quelques jours.<br/>
-              <span style={{ fontSize: 35, fontWeight: 300, color: C.whiteDim }}>Un réseau de correspondants de renommée internationale — France et Europe.</span>
+              <span style={{ fontSize: 35, fontWeight: 300, color: C.whiteDim }}>Un réseau de médecins spécialistes — France et Europe.</span>
             </div>
 
             {/* network constellation */}
@@ -3641,7 +3646,7 @@ function SceneSecondAvis({ start, end }) {
               fontFamily: 'Inter', fontSize: 26, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
               borderTop: `1px solid ${C.line}`, paddingTop: 16,
             }}>
-              Le bon expert, de renommée internationale — <span style={{ color: C.cyan, fontWeight: 500 }}>RDV garanti, zéro liste d’attente, depuis votre téléphone.</span>
+              Le bon médecin spécialiste — <span style={{ color: C.cyan, fontWeight: 500 }}>RDV garanti, zéro liste d’attente, depuis votre téléphone.</span>
             </div>
           </div>
         );
