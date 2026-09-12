@@ -20,3 +20,7 @@ index_pdf.html
 _*.mjs
 package.json
 package-lock.json
+_*.py
+_kit_stage/
+_cap.mjs
+_diag.mjs

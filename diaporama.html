@@ -1476,7 +1476,7 @@ function Scene3Heart({ start, end }) {
                 <div style={{ fontSize: 24, color: C.whiteDim, fontWeight: 300, lineHeight: 1.35 }}>
                   des maladies cardiaques se développent <span style={{ color: C.white, fontStyle: 'italic' }}>sans symptôme</span> pendant 10 à 20 ans.
                 </div>
-                <div style={{ marginTop: 8, fontFamily: 'JetBrains Mono, monospace', fontSize: 15, letterSpacing: '0.22em', color: C.gold, textTransform: 'uppercase' }}>↳ Détection 5 à 10 ans à l'avance</div>
+                <div style={{ marginTop: 8, fontFamily: 'JetBrains Mono, monospace', fontSize: 15, letterSpacing: '0.22em', color: C.gold, textTransform: 'uppercase' }}>↳ Agir sur son mode de vie, tôt</div>
               </div>
             </div>
           </div>
@@ -1609,9 +1609,9 @@ function Scene5Bilans({ start, end }) {
         const c3In = clamp((t - 1.8) / 0.6, 0, 1);
 
         const bilans = [
-          { in: c1In, name: 'SOCLE', sub: 'Risque faible · score < 30', count: 5, color: C.cyan, items: ['HbA1c','Glycémie à jeun','LDL-Cholestérol','HDL-Cholestérol','hs-CRP'], extra: [], tilt: -10 },
-          { in: c2In, name: 'INTERMÉDIAIRE', sub: 'Risque modéré · score 30–59', count: 10, color: C.gold, items: ['HbA1c','Glycémie','LDL','HDL','hs-CRP'], extra: ['+ Triglycérides','+ ApoB','+ Lp(a)','+ ACR urinaire','+ eGFR'], tilt: 0 },
-          { in: c3In, name: 'COMPLET', sub: 'Risque élevé · score ≥ 60', count: 15, color: C.red, items: ['HbA1c','Glycémie','LDL','HDL','hs-CRP','+5'], extra: ['+ NT-proBNP','+ Troponine hs','+ ASAT/ALAT','+ GGT','+ Acide urique'], tilt: 10 },
+          { in: c1In, name: 'SOCLE', sub: 'Score < 30 · niveau de base', count: 5, color: C.cyan, items: ['HbA1c','Glycémie à jeun','LDL-Cholestérol','HDL-Cholestérol','hs-CRP'], extra: [], tilt: -10 },
+          { in: c2In, name: 'INTERMÉDIAIRE', sub: 'Score 30–59 · intermédiaire', count: 10, color: C.gold, items: ['HbA1c','Glycémie','LDL','HDL','hs-CRP'], extra: ['+ Triglycérides','+ ApoB','+ Lp(a)','+ ACR urinaire','+ eGFR'], tilt: 0 },
+          { in: c3In, name: 'COMPLET', sub: 'Score ≥ 60 · complet', count: 15, color: C.red, items: ['HbA1c','Glycémie','LDL','HDL','hs-CRP','+5'], extra: ['+ NT-proBNP','+ Troponine hs','+ ASAT/ALAT','+ GGT','+ Acide urique'], tilt: 10 },
         ];
 
         return (
@@ -1625,7 +1625,7 @@ function Scene5Bilans({ start, end }) {
               fontFamily: 'Inter, sans-serif', fontSize: 65, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
-              Une prescription adaptée à <span style={{ fontStyle: 'italic', color: C.gold }}>VOTRE</span> niveau de risque.
+              Un bilan adapté à <span style={{ fontStyle: 'italic', color: C.gold }}>VOTRE</span> profil — prescrit par un médecin.
             </div>
 
             <div style={{ position: 'absolute', left: 96, top: 392, display: 'flex', gap: 36 }}>
@@ -1825,7 +1825,7 @@ function Scene7Journey({ start, end }) {
         const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
         const steps = [
           { title: 'Questionnaire', sub: '15 min · santé, habitudes, environnement', icon: '✦' },
-          { title: 'Téléconsultation', sub: 'Score · espérance de vie · plan d\'action', icon: '◉' },
+          { title: 'Téléconsultation', sub: 'Indice · tendances · plan lifestyle', icon: '◉' },
           { title: 'Examens biologiques', sub: 'Bilan socle, intermédiaire ou complet', icon: '⬡' },
           { title: 'Restitution finale', sub: 'Score affiné · plan d\'action personnalisé', icon: '★' },
         ];
@@ -2081,7 +2081,7 @@ function Scene10Bilan({ start, end }) {
         const aiIn = clamp((t - 1.0) / 0.8, 0, 1);
         const items = [
           { title: 'Score PREVIQ', sub: '0–100 · 4 dimensions intégrées', desc: 'Clinique · Exposome · Occupationnel · Lifestyle. 15 biomarqueurs et ajustement ethnique automatisés par l\'IA.', icon: '◉', color: C.cyan },
-          { title: 'Stratégie de prévention sur-mesure', sub: 'Plan d\'action priorisé · 6 / 12 / 24 mois', desc: 'L\'IA hiérarchise vos risques et bâtit un vrai programme : objectifs, cibles biologiques, jalons de suivi datés.', icon: '∞', color: C.gold },
+          { title: 'Stratégie lifestyle sur-mesure', sub: 'Plan d\'action priorisé · 6 / 12 / 24 mois', desc: 'L\'IA priorise vos leviers d\'action et bâtit un vrai programme : objectifs, cibles, jalons de suivi datés. Toute décision médicale relève du médecin.', icon: '∞', color: C.gold },
           { title: 'Examens utiles uniquement', sub: 'Fini la prescription à l\'aveugle', desc: 'Le moteur cible les biomarqueurs pertinents pour VOTRE profil. Zéro examen inutile · zéro consultation redondante.', icon: '✦', color: C.cyan },
           { title: 'Documents & dispositif de suivi', sub: '3 livrables bilingues FR / EN', desc: 'Plan de Route Longévité · Certificat Emprunteur · Certificat Engagement Santé. Suivi continu et réajusté par l\'IA.', icon: '◈', color: C.gold },
         ];
@@ -2400,7 +2400,7 @@ function Scene13Exposome({ start, end }) {
 
         // Exposome cards (left column)
         const exposome = [
-          { label: 'Qualité de l\'air', metric: 'PM2.5 · NO₂ · O₃', detail: 'Pollution chronique → inflammation cardiovasculaire. Données géolocalisées intégrées au score.', icon: (
+          { label: 'Qualité de l\'air', metric: 'PM2.5 · NO₂ · O₃', detail: 'Facteur environnemental intégré à votre profil lifestyle. Données géolocalisées.', icon: (
             <svg viewBox="0 0 80 80" width="56" height="56">
               <circle cx="40" cy="40" r="22" fill="none" stroke={C.cyan} strokeWidth="2" />
               <circle cx="40" cy="40" r="3" fill={C.cyan} />
@@ -2411,7 +2411,7 @@ function Scene13Exposome({ start, end }) {
               <path d="M 18 60 Q 40 50 62 60" fill="none" stroke={C.cyan} strokeWidth="1.5" opacity="0.5" />
             </svg>
           )},
-          { label: 'Bruit & nuisance sonore', metric: 'dB(A) résidentiel · trafic', detail: 'Stress chronique cardiovasculaire mesurable. Adresse + environnement professionnel.', icon: (
+          { label: 'Bruit & nuisance sonore', metric: 'dB(A) résidentiel · trafic', detail: 'Facteur de stress environnemental mesurable. Adresse + environnement professionnel.', icon: (
             <svg viewBox="0 0 80 80" width="56" height="56">
               <path d="M 25 32 L 25 48 L 35 48 L 48 58 L 48 22 L 35 32 Z" fill={C.cyan} opacity="0.4" stroke={C.cyan} strokeWidth="1.5" />
               {[0,1,2].map(i => (
@@ -2486,7 +2486,7 @@ function Scene13Exposome({ start, end }) {
                 L'<span style={{ fontWeight: 700, color: C.cyan }}>exposome</span>.
               </div>
               <div style={{ fontFamily: 'Inter', fontSize: 31, fontWeight: 300, color: C.whiteDim, marginTop: 12, lineHeight: 1.3 }}>
-                Votre risque ne s'arrête pas au sang — <span style={{ fontStyle: 'italic', color: C.cyan }}>air, bruit, chaleur, capteurs entrent dans l'équation.</span>
+                Votre profil ne se limite pas au sang — <span style={{ fontStyle: 'italic', color: C.cyan }}>air, bruit, chaleur, capteurs entrent dans l'équation.</span>
               </div>
             </div>
 
@@ -2926,7 +2926,7 @@ function Scene12Authors({ start, end }) {
               fontFamily: 'JetBrains Mono, monospace', fontSize: 18, color: C.cyan,
               letterSpacing: '0.1em',
             }}>
-              Centrée prévention cardiovasculaire — obésité &amp; mode de vie compris · hors dépistage du cancer
+              Centrée mode de vie & bien-être · sans finalité médicale — l'acte médical relève de PREVIQ Care
             </div>
 
             {/* PHASE 1 — "HIER": un parcours éclaté, des délais (0–6.5s) */}
@@ -3158,7 +3158,7 @@ function SceneStart({ start, end }) {
           {
             tag: 'Étape 1', name: 'Le Score BS', big: '0–100',
             sub: 'Questionnaire intelligent · 15 min',
-            desc: 'Santé, habitudes, environnement. En sortie : votre risque cardiovasculaire stratifié et personnalisé.',
+            desc: 'Santé, habitudes, environnement. En sortie : votre profil lifestyle personnalisé.',
             icon: '◉', color: C.cyan, tilt: -10,
           },
           {
@@ -3169,7 +3169,7 @@ function SceneStart({ start, end }) {
           },
           {
             tag: 'Étape 3', name: 'Biologie ciblée', big: '5–15',
-            sub: 'Bilan adapté à votre risque',
+            sub: 'Bilan choisi par votre médecin',
             desc: 'Jamais d’examen à l’aveugle : socle, intermédiaire ou complet. Seulement les biomarqueurs utiles à VOTRE profil.',
             icon: '⬡', color: C.red, tilt: 10,
           },
@@ -3222,7 +3222,7 @@ function SceneStart({ start, end }) {
               fontFamily: 'Inter', fontSize: 28, fontWeight: 300, color: C.whiteDim, textAlign: 'center',
               borderTop: `1px solid ${C.line}`, paddingTop: 20,
             }}>
-              Un check-up, c’est d’abord de la <span style={{ color: C.cyan, fontWeight: 500 }}>prévention cardiovasculaire</span> — obésité et mode de vie compris, le début d’un suivi continu.
+              Un check-up, c’est d’abord comprendre son <span style={{ color: C.cyan, fontWeight: 500 }}>mode de vie</span> — bien-être et habitudes compris, le début d’un suivi lifestyle.
             </div>
           </div>
         );
@@ -3865,7 +3865,7 @@ function SceneBusinessModel({ start, end }) {
               fontFamily: 'Inter', fontSize: 60, fontWeight: 200,
               color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
-              Un diagnostic d'entrée. <span style={{ fontStyle: 'italic', color: C.gold }}>Puis un abonnement unique.</span><br/>
+              Un bilan d'entrée. <span style={{ fontStyle: 'italic', color: C.gold }}>Puis un abonnement unique.</span><br/>
               <span style={{ fontSize: 35, fontWeight: 300, color: C.whiteDim }}>100 € à l'entrée, puis 45 € / mois — mensuel ou annuel.</span>
             </div>
 
@@ -3876,7 +3876,7 @@ function SceneBusinessModel({ start, end }) {
                   <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 15, letterSpacing: '0.24em', color: C.gold, textTransform: 'uppercase' }}>Un parcours en deux temps</div>
                   <div style={{ display: 'flex', alignItems: 'stretch', gap: 24, marginTop: 16 }}>
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, letterSpacing: '0.08em', color: C.whiteDim, textTransform: 'uppercase', lineHeight: 1.35 }}>Diagnostic initial<br/>algorithme Score BS</div>
+                      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, letterSpacing: '0.08em', color: C.whiteDim, textTransform: 'uppercase', lineHeight: 1.35 }}>Bilan initial<br/>indice Score BS</div>
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginTop: 8 }}>
                         <span style={{ fontFamily: 'Inter', fontSize: 52, fontWeight: 300, color: C.cyan, letterSpacing: '-0.02em' }}>100 €</span>
                         <span style={{ fontSize: 18, color: C.whiteDim }}>une fois</span>
@@ -3966,7 +3966,7 @@ function SceneTeam({ start, end }) {
         const t = localTime;
         const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
         const team = [
-          { initials: 'SB', name: 'Dr Stéphane Bach', role: 'Fondateur · Médecin de santé publique', desc: 'Concepteur de l\'algorithme — moteur de prédiction cardiovasculaire. Il porte la vision produit & clinique de PREVIQ.', color: C.cyan, tilt: -8 },
+          { initials: 'SB', name: 'Dr Stéphane Bach', role: 'Fondateur · Médecin de santé publique', desc: 'Concepteur de l\'algorithme — moteur de l'indice lifestyle multidimensionnel. Il porte la vision produit & clinique de PREVIQ.', color: C.cyan, tilt: -8 },
           { initials: 'JS', name: 'Pr José Sampol', role: 'Co-fondateur · Médecine vasculaire', desc: 'Professeur émérite, co-concepteur du Score BS. Validation clinique & stratification thrombo-vasculaire du modèle.', color: C.gold, tilt: 8 },
         ];
         return (
@@ -4205,8 +4205,8 @@ function SceneCompetition({ start, end }) {
           { n: 'Apple (Health)', f: '400 M$', v: '—' },
         ];
         const diff = [
-          { t: 'La SEULE vue holistique cardiovasculaire', s: 'là où les autres ne couvrent qu\'un morceau (wearable, bio, ou app).' },
-          { t: 'Score AUC 0,93', s: 'dépistage cardiovasculaire précoce, précis et validé.' },
+          { t: 'La SEULE vue holistique du mode de vie', s: 'là où les autres ne couvrent qu\'un morceau (wearable, bio, ou app).' },
+          { t: 'Indice multidimensionnel', s: 'indice lifestyle multidimensionnel, précis et validé scientifiquement.' },
           { t: 'Coût −80 % vs concurrents', s: 'à qualité de service supérieure.' },
           { t: 'Monitoring continu + pilotage médical', s: 'capteurs connectés orchestrés par des médecins.' },
         ];
@@ -4399,7 +4399,131 @@ function SceneChAll({ start, end }) {
     sub="Où que vous soyez, dans votre téléphone — plus seulement pour les dirigeants." />;
 }
 
-Object.assign(window, { SceneTeam, SceneMarket, SceneFinance, SceneCompetition, SceneProof, ChapterSlide, SceneChScience, SceneChSensors, SceneChCare, SceneChAll });
+// Architecture — deux univers clairement séparés : PREVIQ Lifestyle (indice
+// bien-être, sans finalité médicale) et PREVIQ Care (téléconsultation
+// réglementée, décision médicale par le médecin). Encode la frontière produit.
+function SceneLifestyleCare({ start, end }) {
+  const universes = [
+    {
+      color: C.cyan, tag: 'Sans finalité médicale',
+      word: 'Lifestyle', icon: '❦',
+      sub: 'L\'indice bien-être & mode de vie',
+      items: ['Indice Score BS · exposome · capteurs', 'Tendances biologiques · habitudes · objectifs', 'Conseils lifestyle & bien-être personnalisés'],
+      foot: 'Ne diagnostique pas · ne prédit pas · ne remplace pas un avis médical',
+    },
+    {
+      color: C.gold, tag: 'Acte médical · responsabilité du médecin',
+      word: 'Care', icon: '✚',
+      sub: 'La téléconsultation réglementée',
+      items: ['Médecins · téléconsultation · HDS', 'Le médecin lit vos données PREVIQ', 'Diagnostic, prescription & décisions par le médecin'],
+      foot: 'Référentiel ANS · RGPD · hébergement de santé certifié',
+    },
+  ];
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime }) => {
+        const t = localTime;
+        const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
+        const c1In = clamp((t - 1.0) / 0.7, 0, 1);
+        const c2In = clamp((t - 1.4) / 0.7, 0, 1);
+        const ruleIn = clamp((t - 2.2) / 0.8, 0, 1);
+        const ins = [c1In, c2In];
+        return (
+          <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
+            <PhotoBackdrop src="assets/viz/aurora.png" scrim="none" opacity={0.82} />
+            <SectionTag index="" label="Architecture · deux univers" color={C.cyan} />
+
+            <div style={{
+              position: 'absolute', left: 96, top: 150, right: 96,
+              opacity: titleIn, transform: `translateY(${(1 - titleIn) * 20}px)`,
+              fontFamily: 'Inter', fontSize: 62, fontWeight: 200,
+              color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
+            }}>
+              Deux univers, <span style={{ fontStyle: 'italic', color: C.cyan }}>une seule plateforme.</span>
+              <div style={{ fontSize: 24, fontWeight: 300, color: C.whiteDim, marginTop: 12, letterSpacing: 0 }}>
+                Le bien-être et l'acte médical, clairement séparés — chacun sous son propre régime.
+              </div>
+            </div>
+
+            <div style={{ position: 'absolute', left: 96, top: 348, display: 'flex', gap: 48 }}>
+              {universes.map((u, i) => (
+                <div key={i} style={{
+                  width: 840, opacity: ins[i],
+                  transform: `translateY(${(1 - ins[i]) * 40}px)`,
+                }}>
+                  <GlassCard x={0} y={0} w={840} h={452} border={`${u.color}aa`}>
+                    <div style={{ padding: 40, height: '100%', display: 'flex', flexDirection: 'column' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                        <div style={{
+                          width: 60, height: 60, borderRadius: 16, flexShrink: 0,
+                          background: `${u.color}1f`, border: `1px solid ${u.color}55`,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          fontSize: 30, color: u.color,
+                        }}>{u.icon}</div>
+                        <div>
+                          <div style={{ fontFamily: 'Inter', fontSize: 15, letterSpacing: '0.02em', color: C.whiteDim, fontWeight: 500 }}>PREVIQ</div>
+                          <div style={{ fontFamily: 'Inter', fontSize: 40, fontWeight: 400, color: u.color, letterSpacing: '-0.02em', lineHeight: 1 }}>{u.word}</div>
+                        </div>
+                        <div style={{
+                          marginLeft: 'auto', alignSelf: 'flex-start',
+                          fontFamily: 'JetBrains Mono, monospace', fontSize: 12.5, letterSpacing: '0.06em',
+                          color: u.color, background: `${u.color}14`, border: `1px solid ${u.color}44`,
+                          borderRadius: 999, padding: '7px 14px', textAlign: 'right', maxWidth: 300,
+                        }}>{u.tag}</div>
+                      </div>
+
+                      <div style={{ fontSize: 20, color: C.whiteDim, marginTop: 20, fontWeight: 300 }}>{u.sub}</div>
+
+                      <div style={{ borderTop: `1px solid ${u.color}33`, marginTop: 18, paddingTop: 18, display: 'flex', flexDirection: 'column', gap: 13 }}>
+                        {u.items.map((it, j) => (
+                          <div key={j} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', fontFamily: 'Inter', fontSize: 20, color: C.white, fontWeight: 300 }}>
+                            <span style={{ color: u.color, fontSize: 18, lineHeight: 1.5 }}>›</span>
+                            <span>{it}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div style={{
+                        marginTop: 'auto', fontFamily: 'JetBrains Mono, monospace', fontSize: 14.5,
+                        color: C.whiteDim, lineHeight: 1.5, letterSpacing: '0.01em',
+                      }}>{u.foot}</div>
+                    </div>
+                  </GlassCard>
+                </div>
+              ))}
+            </div>
+
+            <div style={{
+              position: 'absolute', left: 96, right: 96, top: 848,
+              opacity: ruleIn, transform: `translateY(${(1 - ruleIn) * 16}px)`,
+              display: 'flex', gap: 20, alignItems: 'stretch',
+            }}>
+              {[
+                { k: 'Score BS → conseils lifestyle', v: 'OUI', c: C.cyan },
+                { k: 'Score BS → décision médicale', v: 'NON', c: C.red },
+                { k: 'Médecin + données PREVIQ → décision médicale', v: 'OUI', c: C.gold },
+              ].map((r, i) => (
+                <div key={i} style={{
+                  flex: 1, display: 'flex', alignItems: 'center', gap: 16,
+                  background: 'rgba(10,37,64,0.03)', border: `1px solid ${r.c}44`,
+                  borderRadius: 16, padding: '18px 24px',
+                }}>
+                  <div style={{
+                    fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 22, fontWeight: 700,
+                    color: r.c, letterSpacing: '0.04em', flexShrink: 0, minWidth: 62,
+                  }}>{r.v}</div>
+                  <div style={{ fontFamily: 'Inter', fontSize: 18, color: C.white, fontWeight: 300, lineHeight: 1.25 }}>{r.k}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+Object.assign(window, { SceneTeam, SceneMarket, SceneFinance, SceneCompetition, SceneProof, ChapterSlide, SceneChScience, SceneChSensors, SceneChCare, SceneChAll, SceneLifestyleCare });
 </script>
   <script type="text/babel">
     // Slideshow (diaporama) — each scene as a static, fully-revealed full-bleed
@@ -4411,7 +4535,7 @@ Object.assign(window, { SceneTeam, SceneMarket, SceneFinance, SceneCompetition, 
       ['SceneChScience',50,72],['Scene4Score',58,80],
       ['Scene3Heart',80,100],['Scene5Bilans',100,120],['Scene6Synergy',120,140],['Scene13Exposome',140,162],
       ['SceneChSensors',150,172],['Scene14Hub',162,186],
-      ['SceneChCare',175,197],['SceneServices',186,208],['SceneConcierge',208,230],
+      ['SceneChCare',175,197],['SceneLifestyleCare',186,210],['SceneServices',186,208],['SceneConcierge',208,230],
       ['SceneChAll',220,242],['SceneHumans',230,248],
       ['SceneSecondAvis',248,270],['Scene9Mockups',290,308],['Scene7Journey',308,326],
       ['Scene10Bilan',326,348],['Scene11Security',348,368],['Scene12Authors',368,402],
