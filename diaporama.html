@@ -784,7 +784,7 @@ function PreviqLogo({ mark = 60, word = 40, draw = 1, gap = 16, color = C.blue }
 // ── Cinematic full-bleed photo backdrop (Higgsfield visuals) ───────────────
 // Full-bleed image + white scrim so text stays legible on the light theme.
 // scrim: 'left' | 'right' | 'bottom' | 'center' | 'none'. Subtle Ken-Burns drift.
-function PhotoBackdrop({ src, opacity = 0.55, pos = 'center', scrim = 'left', zoom = true, tint = true, wash = 0.85 }) {
+function PhotoBackdrop({ src, opacity = 0.55, pos = 'center', scrim = 'left', zoom = true, tint = true, wash = 0.94 }) {
   const t = useTime();
   const k = zoom ? (1.05 + Math.sin(t * 0.045) * 0.02) : 1;
   const scrimGrad =
@@ -798,7 +798,7 @@ function PhotoBackdrop({ src, opacity = 0.55, pos = 'center', scrim = 'left', zo
       <img src={src} alt="" style={{
         position: 'absolute', inset: 0, width: '100%', height: '100%',
         objectFit: 'cover', objectPosition: pos, opacity,
-        filter: 'hue-rotate(32deg) saturate(0.68) brightness(1.12)',  // fonds teal → bleu, éclaircis
+        filter: 'hue-rotate(32deg) saturate(0.5) brightness(1.16)',  // fonds teal → bleu, éclaircis
         transform: `scale(${k})`, transformOrigin: 'center', willChange: 'transform',
       }} />
       {/* voile blanc global — garde un fond très clair, juste une texture subtile */}
