@@ -784,7 +784,7 @@ function PreviqLogo({ mark = 60, word = 40, draw = 1, gap = 16, color = C.blue }
 // ── Cinematic full-bleed photo backdrop (Higgsfield visuals) ───────────────
 // Full-bleed image + white scrim so text stays legible on the light theme.
 // scrim: 'left' | 'right' | 'bottom' | 'center' | 'none'. Subtle Ken-Burns drift.
-function PhotoBackdrop({ src, opacity = 0.55, pos = 'center', scrim = 'left', zoom = true, tint = true, wash = 0.94 }) {
+function PhotoBackdrop({ src, opacity = 0.55, pos = 'center', scrim = 'left', zoom = true, tint = true, wash = 1 }) {
   const t = useTime();
   const k = zoom ? (1.05 + Math.sin(t * 0.045) * 0.02) : 1;
   const scrimGrad =
@@ -803,7 +803,7 @@ function PhotoBackdrop({ src, opacity = 0.55, pos = 'center', scrim = 'left', zo
       }} />
       {/* voile blanc global — garde un fond très clair, juste une texture subtile */}
       <div style={{ position: 'absolute', inset: 0, background: `rgba(255,255,255,${wash})` }} />
-      {tint && <div style={{ position: 'absolute', inset: 0, background: `radial-gradient(60% 70% at 78% 40%, ${C.cyan}0f 0%, transparent 60%)`, mixBlendMode: 'multiply' }} />}
+      {tint && <div style={{ position: 'absolute', inset: 0, background: `radial-gradient(60% 70% at 78% 40%, ${C.cyan}00 0%, transparent 60%)`, mixBlendMode: 'multiply' }} />}
       {scrimGrad !== 'none' && <div style={{ position: 'absolute', inset: 0, background: scrimGrad }} />}
       {/* top + bottom soft fade so the HUD chrome stays legible */}
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.12) 14%, rgba(255,255,255,0.12) 84%, rgba(255,255,255,0.74) 100%)' }} />
@@ -1115,10 +1115,9 @@ function ImmersiveHUD({ boundaries = [] }) {
 
   return (
     <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 40, overflow: 'hidden' }}>
-      {/* Cinematic vignette */}
-      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 45%, transparent 50%, rgba(150,140,120,0.62) 100%)' }} />
-      {/* CRT scanlines */}
-      <div style={{ position: 'absolute', inset: 0, opacity: 0.4, backgroundImage: 'repeating-linear-gradient(0deg, rgba(30,95,209,0.07) 0px, rgba(30,95,209,0.07) 1px, transparent 1px, transparent 4px)' }} />
+      {/* Vignette retirée — fond blanc pur */}
+      {/* CRT scanlines — quasi imperceptibles pour garder un fond blanc */}
+      <div style={{ position: 'absolute', inset: 0, opacity: 0.1, backgroundImage: 'repeating-linear-gradient(0deg, rgba(30,95,209,0.05) 0px, rgba(30,95,209,0.05) 1px, transparent 1px, transparent 5px)' }} />
       {/* Rolling scan band */}
       {!LITE && <div style={{ position: 'absolute', left: 0, right: 0, top: `${rollY}%`, height: '9%', background: `linear-gradient(180deg, transparent, ${C.cyan}14, transparent)` }} />}
       {/* Top hairline + scanning node */}
