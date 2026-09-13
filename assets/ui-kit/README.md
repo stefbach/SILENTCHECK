@@ -1,7 +1,7 @@
 # PREVIQ — Kit UI (maquettes application & interfaces)
 
 Maquettes du produit **de A à Z** (patient · médecin · biologiste), pour le développement.
-Style : blanc clinique, accent teal `#00B39A`, logo P + onde, 100 % français.
+Style : blanc clinique, accent bleu `#1E5FD1`, logo P + onde, 100 % français.
 
 **Document de référence global :** [`PREVIQ-Kit-UI-complet.pdf`](./PREVIQ-Kit-UI-complet.pdf) — 28 écrans, 5 sections, chaque écran numéroté, légendé et étiqueté **Lifestyle** ou **Care**.
 
