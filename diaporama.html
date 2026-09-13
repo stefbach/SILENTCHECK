@@ -30,7 +30,7 @@
 // Reusable animation starter: Stage, Timeline, Sprite, easing helpers.
 // Usage (in an HTML file that loads React + Babel):
 //
-//   <Stage width={1280} height={720} duration={10} background="#f6f4ef">
+//   <Stage width={1280} height={720} duration={10} background="#eef3f8">
 //     <MyScene />
 //   </Stage>
 //
@@ -356,7 +356,7 @@ function Stage({
   width = 1280,
   height = 720,
   duration = 10,
-  background = '#f6f4ef',
+  background = '#eef3f8',
   fps = 60,
   loop = true,
   autoplay = true,
@@ -604,7 +604,7 @@ function PlaybackBar({ time, duration, playing, onPlayPause, onReset, onSeek, on
       alignSelf: 'center',
 
       borderRadius: 8,
-      color: '#f6f4ef',
+      color: '#eef3f8',
       fontFamily: 'Inter, system-ui, sans-serif',
       userSelect: 'none',
       flexShrink: 0,
@@ -633,7 +633,7 @@ function PlaybackBar({ time, duration, playing, onPlayPause, onReset, onSeek, on
         fontSize: 12,
         fontVariantNumeric: 'tabular-nums',
         width: 64, textAlign: 'right',
-        color: '#f6f4ef',
+        color: '#eef3f8',
       }}>
         {fmt(time)}
       </div>
@@ -703,7 +703,7 @@ function IconButton({ children, onClick, title }) {
         background: hover ? 'rgba(35,41,58,0.12)' : 'rgba(35,41,58,0.04)',
         border: '1px solid rgba(35,41,58,0.1)',
         borderRadius: 6,
-        color: '#f6f4ef',
+        color: '#eef3f8',
         cursor: 'pointer',
         padding: 0,
         transition: 'background 120ms',
@@ -731,16 +731,16 @@ const C = {
   bg1: '#f5f8f9',
   bg2: '#ffffff',          // card surface
   ink: '#0a2540',          // deep navy ink for text on bright chips
-  cyan: '#00b39a',         // PREVIQ signature — vivid clinical teal (primary accent)
-  cyanDim: '#008e7c',
+  cyan: '#1e5fd1',         // PREVIQ signature — bleu médical (accent principal)
+  cyanDim: '#164aa8',
   blue: '#0a2540',         // deep navy (headlines)
   blueDeep: '#06192e',
-  red: '#f04468',          // semantic — risque élevé (corail)
-  redDim: '#c42b4c',
-  gold: '#eba23b',         // semantic — risque modéré (ambre)
-  goldDim: '#b9781a',
-  green: '#00b39a',        // positive == signature teal (unifié 1 accent)
-  greenDim: '#008e7c',
+  red: '#12336e',          // niveau fort — bleu profond (remplace le corail)
+  redDim: '#0d2550',
+  gold: '#4c86e6',         // accent secondaire — bleu clair (remplace l'ambre)
+  goldDim: '#2e62c6',
+  green: '#1e5fd1',        // positif == accent bleu (unifié)
+  greenDim: '#164aa8',
   white: '#0a2540',        // primary text = deep navy (key kept for reuse)
   whiteDim: 'rgba(10,37,64,0.6)',
   line: 'rgba(10,37,64,0.12)',
@@ -798,6 +798,7 @@ function PhotoBackdrop({ src, opacity = 0.95, pos = 'center', scrim = 'left', zo
       <img src={src} alt="" style={{
         position: 'absolute', inset: 0, width: '100%', height: '100%',
         objectFit: 'cover', objectPosition: pos, opacity,
+        filter: 'hue-rotate(32deg) saturate(1.06)',  // décale les fonds teal vers le bleu (palette bleu + blanc)
         transform: `scale(${k})`, transformOrigin: 'center', willChange: 'transform',
       }} />
       {tint && <div style={{ position: 'absolute', inset: 0, background: `radial-gradient(60% 70% at 78% 40%, ${C.cyan}14 0%, transparent 60%)`, mixBlendMode: 'multiply' }} />}
@@ -974,7 +975,7 @@ function Heart3D({ x = 960, y = 540, size = 280, beat = true }) {
       <svg width={size} height={size} viewBox="-100 -100 200 200">
         <defs>
           <radialGradient id="heartGrad" cx="35%" cy="30%">
-            <stop offset="0%" stopColor="#ff6b8a" />
+            <stop offset="0%" stopColor="#6f9bef" />
             <stop offset="50%" stopColor={C.red} />
             <stop offset="100%" stopColor={C.redDim} />
           </radialGradient>
@@ -1115,7 +1116,7 @@ function ImmersiveHUD({ boundaries = [] }) {
       {/* Cinematic vignette */}
       <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 45%, transparent 50%, rgba(150,140,120,0.62) 100%)' }} />
       {/* CRT scanlines */}
-      <div style={{ position: 'absolute', inset: 0, opacity: 0.4, backgroundImage: 'repeating-linear-gradient(0deg, rgba(0,179,154,0.07) 0px, rgba(0,179,154,0.07) 1px, transparent 1px, transparent 4px)' }} />
+      <div style={{ position: 'absolute', inset: 0, opacity: 0.4, backgroundImage: 'repeating-linear-gradient(0deg, rgba(30,95,209,0.07) 0px, rgba(30,95,209,0.07) 1px, transparent 1px, transparent 4px)' }} />
       {/* Rolling scan band */}
       {!LITE && <div style={{ position: 'absolute', left: 0, right: 0, top: `${rollY}%`, height: '9%', background: `linear-gradient(180deg, transparent, ${C.cyan}14, transparent)` }} />}
       {/* Top hairline + scanning node */}
@@ -1251,9 +1252,9 @@ function Scene1Intro({ start, end }) {
               padding: '12px 26px',
               border: `1px solid ${C.cyan}66`,
               borderRadius: 100,
-              background: 'rgba(0,179,154,0.05)',
+              background: 'rgba(30,95,209,0.05)',
               backdropFilter: 'blur(8px)',
-              boxShadow: `0 0 30px rgba(0,179,154,0.18)`,
+              boxShadow: `0 0 30px rgba(30,95,209,0.18)`,
               fontFamily: 'JetBrains Mono, monospace', fontSize: 17,
               letterSpacing: '0.18em', textTransform: 'uppercase',
               color: C.whiteDim, whiteSpace: 'nowrap',
@@ -1370,7 +1371,7 @@ function Scene2Crisis({ start, end }) {
                       <div style={{
                         fontFamily: 'Inter, sans-serif',
                         fontSize: 140, fontWeight: 200,
-                        background: `linear-gradient(135deg, ${C.red}, #ff8fa3)`,
+                        background: `linear-gradient(135deg, ${C.red}, #8fb3f5)`,
                         WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
                         letterSpacing: '-0.05em', lineHeight: 0.9,
                       }}>
@@ -1516,52 +1517,6 @@ function Scene4Score({ start, end }) {
               <span style={{ fontWeight: 600, background: `linear-gradient(135deg, ${C.cyan}, ${C.gold})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>4 millions de patients.</span>
             </div>
 
-            {/* Radial gauge */}
-            <div style={{
-              position: 'absolute', left: 200, top: 480,
-              opacity: gaugeIn,
-              transform: `scale(${0.6 + gaugeIn * 0.4}) perspective(1000px) rotateY(${(1-gaugeIn)*-30}deg)`,
-              transformOrigin: 'center',
-            }}>
-              <svg width="540" height="540" viewBox="0 0 540 540">
-                <defs>
-                  <linearGradient id="gaugegrad" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor={C.cyan} />
-                    <stop offset="50%" stopColor={C.blue} />
-                    <stop offset="100%" stopColor={C.gold} />
-                  </linearGradient>
-                  <filter id="gaugeglow">
-                    <feGaussianBlur stdDeviation="6" />
-                  </filter>
-                </defs>
-                {/* outer ring */}
-                <circle cx="270" cy="270" r="240" fill="none" stroke={C.line} strokeWidth="1" />
-                {/* tick marks */}
-                {Array.from({length: 60}).map((_, i) => {
-                  const a = (i / 60) * Math.PI * 1.5 + Math.PI * 0.75;
-                  const r1 = 230, r2 = i % 5 === 0 ? 215 : 222;
-                  const x1 = 270 + Math.cos(a) * r1;
-                  const y1 = 270 + Math.sin(a) * r1;
-                  const x2 = 270 + Math.cos(a) * r2;
-                  const y2 = 270 + Math.sin(a) * r2;
-                  return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={i < 60 * (score/100) ? C.cyan : C.line} strokeWidth={i % 5 === 0 ? 2 : 1} />;
-                })}
-                {/* main arc bg */}
-                <circle cx="270" cy="270" r="200" fill="none" stroke="rgba(0,179,154,0.1)" strokeWidth="14"
-                        strokeDasharray={`${arcLen * 0.75} ${arcLen}`} transform="rotate(135 270 270)" strokeLinecap="round" />
-                {/* main arc fg */}
-                <circle cx="270" cy="270" r="200" fill="none" stroke="url(#gaugegrad)" strokeWidth="14"
-                        strokeDasharray={`${dash} ${arcLen}`} transform="rotate(135 270 270)" strokeLinecap="round"
-                        filter="url(#gaugeglow)" />
-                <circle cx="270" cy="270" r="200" fill="none" stroke="url(#gaugegrad)" strokeWidth="14"
-                        strokeDasharray={`${dash} ${arcLen}`} transform="rotate(135 270 270)" strokeLinecap="round" />
-                {/* center text */}
-                <text x="270" y="240" textAnchor="middle" fill={C.whiteDim} fontFamily="JetBrains Mono, monospace" fontSize="18" letterSpacing="6">SCORE BS</text>
-                <text x="270" y="320" textAnchor="middle" fill={C.white} fontFamily="Inter" fontSize="140" fontWeight="200" letterSpacing="-0.04em">{score}</text>
-                <text x="270" y="360" textAnchor="middle" fill={C.cyan} fontFamily="JetBrains Mono, monospace" fontSize="18" letterSpacing="3">/ 100</text>
-              </svg>
-            </div>
-
             {/* Side metrics */}
             <div style={{ position: 'absolute', right: 96, top: 460, width: 600, opacity: sideIn, transform: `translateX(${(1-sideIn)*40}px)` }}>
               {[
@@ -1676,7 +1631,7 @@ function Scene6Synergy({ start, end }) {
 
         const cx = 700, cy = 720;
         const nodes = [
-          { name: 'hs-CRP', sub: 'Inflammation', a: -Math.PI/2, color: '#ff8fa3' },
+          { name: 'hs-CRP', sub: 'Inflammation', a: -Math.PI/2, color: '#8fb3f5' },
           { name: 'ACR urinaire', sub: 'Atteinte rénale', a: Math.PI/2 - Math.PI/3 + Math.PI*2/3, color: C.cyan },
           { name: 'NT-proBNP', sub: 'Souffrance cardiaque', a: -Math.PI/2 + Math.PI*4/3, color: C.gold },
         ];
@@ -1800,7 +1755,7 @@ function Scene6Synergy({ start, end }) {
                 <span style={{ fontFamily: 'Inter', fontSize: 60, fontWeight: 200, color: C.whiteDim, lineHeight: 0.9 }}>×</span>
                 <span style={{ fontFamily: 'Inter', fontSize: 82, fontWeight: 700, color: C.cyan, letterSpacing: '-0.04em', lineHeight: 0.9 }}>EXPOSOME</span>
               </div>
-              <div style={{ marginTop: 28, padding: 24, background: 'rgba(0,179,154,0.05)', border: `1px solid ${C.line}`, borderRadius: 12 }}>
+              <div style={{ marginTop: 28, padding: 24, background: 'rgba(30,95,209,0.05)', border: `1px solid ${C.line}`, borderRadius: 12 }}>
                 <div style={{ fontSize: 20, color: C.whiteDim, lineHeight: 1.5 }}>
                   Quand les trois biomarqueurs sont élevés, l'inflammation <span style={{ color: C.cyan }}>amplifie</span> l'impact de la pollution, du stress et de la chaleur sur votre cœur.
                 </div>
@@ -1964,8 +1919,8 @@ function Scene8Outro({ start, end }) {
                 borderRadius: 100,
                 fontFamily: 'JetBrains Mono, monospace', fontSize: 20,
                 letterSpacing: '0.3em', color: C.white, textTransform: 'uppercase',
-                background: 'rgba(0,179,154,0.05)',
-                boxShadow: `0 0 40px rgba(0,179,154,0.3)`,
+                background: 'rgba(30,95,209,0.05)',
+                boxShadow: `0 0 40px rgba(30,95,209,0.3)`,
               }}>
                 Votre compagnon de suivi validé
               </div>
@@ -2108,7 +2063,7 @@ function Scene10Bilan({ start, end }) {
               position: 'absolute', right: 96, top: 180,
               opacity: aiIn, transform: `translateY(${(1-aiIn)*20}px)`,
               padding: '14px 22px',
-              background: 'linear-gradient(135deg, rgba(0,179,154,0.15), rgba(251,191,36,0.1))',
+              background: 'linear-gradient(135deg, rgba(30,95,209,0.15), rgba(251,191,36,0.1))',
               border: `1px solid ${C.cyan}88`, borderRadius: 100,
               display: 'flex', alignItems: 'center', gap: 12,
               boxShadow: `0 0 30px ${C.cyan}44`,
@@ -2165,7 +2120,7 @@ function Scene10Bilan({ start, end }) {
               opacity: clamp((t - 4.5) / 0.7, 0, 1),
               padding: '16px 28px', borderRadius: 12,
               border: `1px solid ${C.gold}55`,
-              background: 'linear-gradient(90deg, rgba(251,191,36,0.08), rgba(0,179,154,0.05))',
+              background: 'linear-gradient(90deg, rgba(251,191,36,0.08), rgba(30,95,209,0.05))',
               fontFamily: 'Inter', fontSize: 23, color: C.white, fontWeight: 300,
               textAlign: 'center', letterSpacing: '0.02em',
             }}>
@@ -2311,7 +2266,7 @@ function Scene12Authors({ start, end }) {
           },
           {
             initials: 'JS', name: 'Pr. José Sampol',
-            role: 'Hématologie & médecine vasculaire',
+            role: 'Hématologiste',
             desc: 'Professeur émérite. Référent international pour la stratification des risques thrombo-vasculaires.',
             tilt: 10,
           },
@@ -2527,12 +2482,12 @@ function Scene13Exposome({ start, end }) {
                       transformStyle: 'preserve-3d',
                       padding: '18px 22px',
                       display: 'flex', gap: 18, alignItems: 'center',
-                      background: 'linear-gradient(135deg, rgba(0,179,154,0.06), rgba(0,179,154,0.02))',
+                      background: 'linear-gradient(135deg, rgba(30,95,209,0.06), rgba(30,95,209,0.02))',
                       border: `1px solid ${C.lineStrong}`,
                       borderRadius: 14,
                       backdropFilter: 'blur(10px)',
                     }}>
-                      <div style={{ flexShrink: 0, width: 64, height: 64, borderRadius: 12, background: 'rgba(0,179,154,0.08)', border: `1px solid ${C.lineStrong}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{e.icon}</div>
+                      <div style={{ flexShrink: 0, width: 64, height: 64, borderRadius: 12, background: 'rgba(30,95,209,0.08)', border: `1px solid ${C.lineStrong}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{e.icon}</div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ fontFamily: 'Inter', fontSize: 24, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>{e.label}</div>
                         <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.cyan, letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: 3 }}>{e.metric}</div>
@@ -2578,7 +2533,7 @@ function Scene13Exposome({ start, end }) {
               transform: `translateY(${(1-synthesisIn)*20}px)`,
               padding: '20px 32px',
               borderRadius: 14,
-              background: `linear-gradient(90deg, rgba(0,179,154,0.1), rgba(244,63,94,0.1), rgba(251,191,36,0.1))`,
+              background: `linear-gradient(90deg, rgba(30,95,209,0.1), rgba(244,63,94,0.1), rgba(251,191,36,0.1))`,
               border: `1px solid ${C.gold}66`,
               display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 24,
             }}>
@@ -2719,7 +2674,7 @@ function Scene14Hub({ start, end }) {
                     <div key={i} style={{
                       display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                       padding: '7px 10px',
-                      background: 'rgba(0,179,154,0.05)',
+                      background: 'rgba(30,95,209,0.05)',
                       border: `1px solid ${C.line}`,
                       borderRadius: 6, fontSize: 13,
                     }}>
@@ -2790,7 +2745,7 @@ function Scene14Hub({ start, end }) {
               <div style={{
                 transform: `perspective(1400px) rotateY(${(1-modesIn)*-12}deg) translateY(${(1-modesIn)*20}px)`,
                 padding: 24,
-                background: 'linear-gradient(135deg, rgba(0,179,154,0.1), rgba(0,179,154,0.03))',
+                background: 'linear-gradient(135deg, rgba(30,95,209,0.1), rgba(30,95,209,0.03))',
                 border: `1px solid ${C.cyan}88`,
                 borderRadius: 14,
                 position: 'relative',
@@ -2807,7 +2762,7 @@ function Scene14Hub({ start, end }) {
                 </div>
                 <div style={{ marginTop: 12, paddingLeft: 46, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                   {['Visio HD','Capteurs perso','Prélèvement à domicile','Pilotage app'].map((tag, i) => (
-                    <span key={i} style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.cyan, padding: '4px 10px', border: `1px solid ${C.line}`, borderRadius: 100, background: 'rgba(0,179,154,0.05)' }}>{tag}</span>
+                    <span key={i} style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.cyan, padding: '4px 10px', border: `1px solid ${C.line}`, borderRadius: 100, background: 'rgba(30,95,209,0.05)' }}>{tag}</span>
                   ))}
                 </div>
               </div>
@@ -2847,7 +2802,7 @@ function Scene14Hub({ start, end }) {
               opacity: clamp((t - 5.4) / 0.6, 0, 1),
               padding: '14px 24px', borderRadius: 12,
               border: `1px solid ${C.line}`,
-              background: 'rgba(0,179,154,0.04)',
+              background: 'rgba(30,95,209,0.04)',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               fontFamily: 'JetBrains Mono, monospace', fontSize: 17, color: C.whiteDim, letterSpacing: '0.15em',
             }}>
@@ -3124,7 +3079,7 @@ function Scene12Authors({ start, end }) {
               opacity: manifestoIn,
               padding: '18px 28px', borderRadius: 12,
               border: `1px solid ${C.gold}55`,
-              background: 'linear-gradient(90deg, rgba(251,191,36,0.1), rgba(0,179,154,0.06))',
+              background: 'linear-gradient(90deg, rgba(251,191,36,0.1), rgba(30,95,209,0.06))',
               fontFamily: 'Inter', fontSize: 24, color: C.white, fontWeight: 300,
               textAlign: 'center', letterSpacing: '0.02em', lineHeight: 1.4,
             }}>
@@ -3370,7 +3325,7 @@ function SceneServices({ start, end }) {
               opacity: strapIn, transform: `translateY(${(1 - strapIn) * 20}px)`,
               padding: '16px 28px', borderRadius: 12,
               border: `1px solid ${C.gold}55`,
-              background: 'linear-gradient(90deg, rgba(251,191,36,0.1), rgba(0,179,154,0.05))',
+              background: 'linear-gradient(90deg, rgba(251,191,36,0.1), rgba(30,95,209,0.05))',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               fontFamily: 'JetBrains Mono, monospace', fontSize: 17, color: C.whiteDim, letterSpacing: '0.12em',
             }}>
@@ -3747,7 +3702,7 @@ function PortraitFrame({ src, color = C.cyan, w = 300, h = 386 }) {
       <div style={{ position: 'absolute', inset: 0, borderRadius: 16, overflow: 'hidden', border: `1px solid ${color}66`, background: C.bg2 }}>
         <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(180deg, ${color}12, transparent 28%, ${C.bg0}77 100%)` }} />
-        <div style={{ position: 'absolute', inset: 0, opacity: 0.22, backgroundImage: 'repeating-linear-gradient(0deg, rgba(0,179,154,0.09) 0px, rgba(0,179,154,0.09) 1px, transparent 1px, transparent 3px)' }} />
+        <div style={{ position: 'absolute', inset: 0, opacity: 0.22, backgroundImage: 'repeating-linear-gradient(0deg, rgba(30,95,209,0.09) 0px, rgba(30,95,209,0.09) 1px, transparent 1px, transparent 3px)' }} />
         <div style={{ position: 'absolute', left: 0, right: 0, top: scanY, height: 16, background: `linear-gradient(180deg, transparent, ${color}66, transparent)` }} />
       </div>
       {['tl', 'tr', 'bl', 'br'].map(p => {
@@ -3966,8 +3921,8 @@ function SceneTeam({ start, end }) {
         const t = localTime;
         const titleIn = clamp((t - 0.2) / 0.8, 0, 1);
         const team = [
-          { initials: 'SB', name: 'Dr Stéphane Bach', role: 'Fondateur · Médecin de santé publique', desc: 'Concepteur de l\'algorithme — moteur de l'indice lifestyle multidimensionnel. Il porte la vision produit & clinique de PREVIQ.', color: C.cyan, tilt: -8 },
-          { initials: 'JS', name: 'Pr José Sampol', role: 'Co-fondateur · Médecine vasculaire', desc: 'Professeur émérite, co-concepteur du Score BS. Validation clinique & stratification thrombo-vasculaire du modèle.', color: C.gold, tilt: 8 },
+          { initials: 'SB', name: 'Dr Stéphane Bach', role: 'Fondateur · Médecin de santé publique', desc: 'Concepteur de l\'algorithme — moteur de l\'indice lifestyle multidimensionnel. Il porte la vision produit & clinique de PREVIQ.', color: C.cyan, tilt: -8 },
+          { initials: 'JS', name: 'Pr José Sampol', role: 'Co-fondateur · Hématologiste', desc: 'Professeur émérite, co-concepteur du Score BS. Validation clinique & stratification thrombo-vasculaire du modèle.', color: C.gold, tilt: 8 },
         ];
         return (
           <div style={{ position: 'absolute', inset: 0, background: C.bg0 }}>
@@ -3978,7 +3933,7 @@ function SceneTeam({ start, end }) {
               opacity: titleIn, transform: `translateY(${(1 - titleIn) * 20}px)`,
               fontFamily: 'Inter', fontSize: 54, fontWeight: 200, color: C.white, letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
-              Deux médecins fondateurs. <span style={{ fontStyle: 'italic', color: C.cyan }}>Un seul score : le Score BS.</span>
+              Deux professionnels de santé fondateurs. <span style={{ fontStyle: 'italic', color: C.cyan }}>Un seul score : le Score BS.</span>
             </div>
 
             <div style={{ position: 'absolute', left: 0, right: 0, top: 388, display: 'flex', justifyContent: 'center', gap: 64 }}>
@@ -4647,7 +4602,7 @@ Object.assign(window, { SceneTeam, SceneMarket, SceneFinance, SceneCompetition, 
           </div>
 
           {/* Top progress bar */}
-          <div style={{ position: 'fixed', top: 0, left: 0, height: 3, width: `${((i + 1) / N) * 100}%`, background: '#00b39a', transition: 'width 180ms', zIndex: 20 }} />
+          <div style={{ position: 'fixed', top: 0, left: 0, height: 3, width: `${((i + 1) / N) * 100}%`, background: '#1e5fd1', transition: 'width 180ms', zIndex: 20 }} />
 
           {/* Floating controls (auto-hide) */}
           <div style={{
