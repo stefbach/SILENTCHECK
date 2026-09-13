@@ -278,7 +278,7 @@ function ImageSprite({
       background: 'repeating-linear-gradient(135deg, #eef2f4 0 10px, #e2e8ec 10px 20px)',
       color: '#7a8794',
       fontFamily: 'JetBrains Mono, ui-monospace, monospace',
-      fontSize: 13,
+      fontSize: 14,
       letterSpacing: '0.04em',
       textTransform: 'uppercase',
     }}>
@@ -630,7 +630,7 @@ function PlaybackBar({ time, duration, playing, onPlayPause, onReset, onSeek, on
       {/* Current time: fixed width so it doesn't thrash */}
       <div style={{
         fontFamily: mono,
-        fontSize: 12,
+        fontSize: 14,
         fontVariantNumeric: 'tabular-nums',
         width: 64, textAlign: 'right',
         color: '#eef3f8',
@@ -678,7 +678,7 @@ function PlaybackBar({ time, duration, playing, onPlayPause, onReset, onSeek, on
       {/* Duration: fixed width */}
       <div style={{
         fontFamily: mono,
-        fontSize: 12,
+        fontSize: 14,
         fontVariantNumeric: 'tabular-nums',
         width: 64, textAlign: 'left',
         color: 'rgba(246,244,239,0.55)',
@@ -742,7 +742,7 @@ const C = {
   green: '#1e5fd1',        // positif == accent bleu (unifié)
   greenDim: '#164aa8',
   white: '#0a2540',        // primary text = deep navy (key kept for reuse)
-  whiteDim: 'rgba(10,37,64,0.6)',
+  whiteDim: 'rgba(10,37,64,0.74)',
   line: 'rgba(10,37,64,0.12)',
   lineStrong: 'rgba(10,37,64,0.24)',
 };
@@ -784,7 +784,7 @@ function PreviqLogo({ mark = 60, word = 40, draw = 1, gap = 16, color = C.blue }
 // ── Cinematic full-bleed photo backdrop (Higgsfield visuals) ───────────────
 // Full-bleed image + white scrim so text stays legible on the light theme.
 // scrim: 'left' | 'right' | 'bottom' | 'center' | 'none'. Subtle Ken-Burns drift.
-function PhotoBackdrop({ src, opacity = 0.55, pos = 'center', scrim = 'left', zoom = true, tint = true, wash = 0.55 }) {
+function PhotoBackdrop({ src, opacity = 0.55, pos = 'center', scrim = 'left', zoom = true, tint = true, wash = 0.85 }) {
   const t = useTime();
   const k = zoom ? (1.05 + Math.sin(t * 0.045) * 0.02) : 1;
   const scrimGrad =
@@ -798,7 +798,7 @@ function PhotoBackdrop({ src, opacity = 0.55, pos = 'center', scrim = 'left', zo
       <img src={src} alt="" style={{
         position: 'absolute', inset: 0, width: '100%', height: '100%',
         objectFit: 'cover', objectPosition: pos, opacity,
-        filter: 'hue-rotate(32deg) saturate(0.9) brightness(1.08)',  // fonds teal → bleu, éclaircis
+        filter: 'hue-rotate(32deg) saturate(0.68) brightness(1.12)',  // fonds teal → bleu, éclaircis
         transform: `scale(${k})`, transformOrigin: 'center', willChange: 'transform',
       }} />
       {/* voile blanc global — garde un fond très clair, juste une texture subtile */}
@@ -1132,7 +1132,7 @@ function ImmersiveHUD({ boundaries = [] }) {
       <div style={{
         position: 'absolute', top: 18, left: '50%', transform: 'translateX(-50%)',
         display: 'flex', alignItems: 'center', gap: 12,
-        fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 14,
+        fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 15,
         letterSpacing: '0.3em', textTransform: 'uppercase',
         color: 'rgba(18,58,94,0.6)', whiteSpace: 'nowrap',
       }}>
@@ -1153,7 +1153,7 @@ function ImmersiveHUD({ boundaries = [] }) {
         </svg>
         <div style={{
           position: 'absolute', bottom: 10, right: 28,
-          fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 15,
+          fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 16,
           color: C.red, letterSpacing: '0.15em', textShadow: `0 0 12px ${C.red}`,
         }}>♥ {bpm} BPM</div>
       </React.Fragment>
@@ -1368,7 +1368,7 @@ function Scene2Crisis({ start, end }) {
                   opacity: s.in,
                   transformStyle: 'preserve-3d',
                 }}>
-                  <GlassCard x={0} y={0} w={540} h={320} border={`rgba(244,63,94,0.3)`}>
+                  <GlassCard x={0} y={0} w={540} h={320} border={`rgba(19,51,110,0.3)`}>
                     <div style={{ padding: 36, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                       <div style={{
                         fontFamily: 'Inter, sans-serif',
@@ -1460,7 +1460,7 @@ function Scene3Heart({ start, end }) {
                     background: 'rgba(255,255,255,0.62)', border: `1px solid ${C.line}`,
                     backdropFilter: 'blur(6px)',
                   }}>
-                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.cyan, fontWeight: 600 }}>{String(i+1).padStart(2,'0')}</span>
+                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.cyan, fontWeight: 600 }}>{String(i+1).padStart(2,'0')}</span>
                     <span style={{ fontFamily: 'Inter', fontSize: 16.5, color: C.white, fontWeight: 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{m}</span>
                   </div>
                 );
@@ -1479,7 +1479,7 @@ function Scene3Heart({ start, end }) {
                 <div style={{ fontSize: 24, color: C.whiteDim, fontWeight: 300, lineHeight: 1.35 }}>
                   des maladies cardiaques se développent <span style={{ color: C.white, fontStyle: 'italic' }}>sans symptôme</span> pendant 10 à 20 ans.
                 </div>
-                <div style={{ marginTop: 8, fontFamily: 'JetBrains Mono, monospace', fontSize: 15, letterSpacing: '0.22em', color: C.gold, textTransform: 'uppercase' }}>↳ Agir sur son mode de vie, tôt</div>
+                <div style={{ marginTop: 8, fontFamily: 'JetBrains Mono, monospace', fontSize: 16, letterSpacing: '0.22em', color: C.gold, textTransform: 'uppercase' }}>↳ Agir sur son mode de vie, tôt</div>
               </div>
             </div>
           </div>
@@ -1677,7 +1677,7 @@ function Scene6Synergy({ start, end }) {
               {/* triangle between nodes */}
               <polygon
                 points={nodes.map(n => `${cx + Math.cos(n.a)*240},${cy + Math.sin(n.a)*240}`).join(' ')}
-                fill="rgba(244,63,94,0.06)" stroke={C.red} strokeWidth="1.5" opacity={linesIn * 0.7} strokeDasharray="3 6" />
+                fill="rgba(19,51,110,0.06)" stroke={C.red} strokeWidth="1.5" opacity={linesIn * 0.7} strokeDasharray="3 6" />
             </svg>
 
             {/* 3 nodes */}
@@ -1702,7 +1702,7 @@ function Scene6Synergy({ start, end }) {
                     backdropFilter: 'blur(8px)',
                   }}>
                     <div style={{ fontFamily: 'Inter', fontSize: 28, fontWeight: 600, color: C.white }}>{n.name}</div>
-                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 15, color: 'rgba(18,58,94,0.85)', marginTop: 4, letterSpacing: '0.1em' }}>{n.sub}</div>
+                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 16, color: 'rgba(18,58,94,0.85)', marginTop: 4, letterSpacing: '0.1em' }}>{n.sub}</div>
                   </div>
                 </div>
               );
@@ -1723,7 +1723,7 @@ function Scene6Synergy({ start, end }) {
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               }}>
                 <div style={{ fontFamily: 'Inter', fontSize: 48, fontWeight: 200, color: C.white, letterSpacing: '0.1em' }}>TRIO</div>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.gold, letterSpacing: '0.3em', textTransform: 'uppercase' }}>Amplificateur</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 15, color: C.gold, letterSpacing: '0.3em', textTransform: 'uppercase' }}>Amplificateur</div>
               </div>
               {/* Pulse rings */}
               {[0,1,2].map(i => {
@@ -1744,7 +1744,7 @@ function Scene6Synergy({ start, end }) {
               opacity: calloutIn, transform: `translateX(${(1-calloutIn)*40}px)`,
             }}>
               <div style={{
-                fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 15,
+                fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 16,
                 letterSpacing: '0.3em', color: C.gold, textTransform: 'uppercase',
               }}>Innovation propriétaire · facteur différenciant</div>
               <div style={{
@@ -1937,7 +1937,7 @@ function Scene8Outro({ start, end }) {
               display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
               fontFamily: 'Inter',
             }}>
-              <div style={{ fontSize: 14, color: 'rgba(18,58,94,0.5)', letterSpacing: '0.25em', fontFamily: 'JetBrains Mono, monospace' }}>
+              <div style={{ fontSize: 15, color: 'rgba(18,58,94,0.5)', letterSpacing: '0.25em', fontFamily: 'JetBrains Mono, monospace' }}>
                 © 2026 · Score BS v5.0 · Validé par 53 références internationales
               </div>
             </div>
@@ -2012,7 +2012,7 @@ function Scene9Mockups({ start, end }) {
                     }} />
                     <div style={{
                       marginTop: 18, textAlign: 'center',
-                      fontFamily: 'JetBrains Mono, monospace', fontSize: 14,
+                      fontFamily: 'JetBrains Mono, monospace', fontSize: 15,
                       color: C.whiteDim, letterSpacing: '0.2em', textTransform: 'uppercase',
                     }}>
                       Écran {i+1} · {p.label}
@@ -2065,7 +2065,7 @@ function Scene10Bilan({ start, end }) {
               position: 'absolute', right: 96, top: 180,
               opacity: aiIn, transform: `translateY(${(1-aiIn)*20}px)`,
               padding: '14px 22px',
-              background: 'linear-gradient(135deg, rgba(30,95,209,0.15), rgba(251,191,36,0.1))',
+              background: 'linear-gradient(135deg, rgba(30,95,209,0.15), rgba(30,95,209,0.1))',
               border: `1px solid ${C.cyan}88`, borderRadius: 100,
               display: 'flex', alignItems: 'center', gap: 12,
               boxShadow: `0 0 30px ${C.cyan}44`,
@@ -2105,7 +2105,7 @@ function Scene10Bilan({ start, end }) {
                           fontSize: 33, color: it.color,
                         }}>{it.icon}</div>
                         <div style={{ flex: 1 }}>
-                          <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: it.color, letterSpacing: '0.2em', textTransform: 'uppercase' }}>{it.sub}</div>
+                          <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: it.color, letterSpacing: '0.2em', textTransform: 'uppercase' }}>{it.sub}</div>
                           <div style={{ fontFamily: 'Inter', fontSize: 28, fontWeight: 500, color: C.white, marginTop: 6, letterSpacing: '-0.01em' }}>{it.title}</div>
                           <div style={{ fontSize: 17, color: C.whiteDim, marginTop: 10, lineHeight: 1.5 }}>{it.desc}</div>
                         </div>
@@ -2122,7 +2122,7 @@ function Scene10Bilan({ start, end }) {
               opacity: clamp((t - 4.5) / 0.7, 0, 1),
               padding: '16px 28px', borderRadius: 12,
               border: `1px solid ${C.gold}55`,
-              background: 'linear-gradient(90deg, rgba(251,191,36,0.08), rgba(30,95,209,0.05))',
+              background: 'linear-gradient(90deg, rgba(30,95,209,0.08), rgba(30,95,209,0.05))',
               fontFamily: 'Inter', fontSize: 23, color: C.white, fontWeight: 300,
               textAlign: 'center', letterSpacing: '0.02em',
             }}>
@@ -2206,7 +2206,7 @@ function Scene11Security({ start, end }) {
             </div>
 
             {/* Premium caption under shield */}
-            <div style={{ position: 'absolute', left: 300, top: 828, transform: 'translateX(-50%)', opacity: shieldIn, display: 'flex', alignItems: 'center', gap: 10, padding: '10px 22px', borderRadius: 100, background: 'rgba(255,255,255,0.72)', border: `1px solid ${C.cyan}44`, boxShadow: `0 8px 22px ${C.cyan}18`, backdropFilter: 'blur(8px)', fontFamily: 'JetBrains Mono, monospace', fontSize: 14, letterSpacing: '0.16em', textTransform: 'uppercase', color: C.blue, whiteSpace: 'nowrap' }}>
+            <div style={{ position: 'absolute', left: 300, top: 828, transform: 'translateX(-50%)', opacity: shieldIn, display: 'flex', alignItems: 'center', gap: 10, padding: '10px 22px', borderRadius: 100, background: 'rgba(255,255,255,0.72)', border: `1px solid ${C.cyan}44`, boxShadow: `0 8px 22px ${C.cyan}18`, backdropFilter: 'blur(8px)', fontFamily: 'JetBrains Mono, monospace', fontSize: 15, letterSpacing: '0.16em', textTransform: 'uppercase', color: C.blue, whiteSpace: 'nowrap' }}>
               <span style={{ width: 8, height: 8, borderRadius: 4, background: C.cyan, boxShadow: `0 0 10px ${C.cyan}` }} />
               Chiffré de bout en bout · secret médical
             </div>
@@ -2313,7 +2313,7 @@ function Scene12Authors({ start, end }) {
                           marginTop: 8, marginBottom: 28,
                         }}>{a.initials}</div>
                         <div style={{ fontFamily: 'Inter', fontSize: 28, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>{a.name}</div>
-                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.gold, letterSpacing: '0.2em', textTransform: 'uppercase', marginTop: 10 }}>{a.role}</div>
+                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 15, color: C.gold, letterSpacing: '0.2em', textTransform: 'uppercase', marginTop: 10 }}>{a.role}</div>
                         <div style={{ fontSize: 18, color: C.whiteDim, marginTop: 22, lineHeight: 1.55, fontWeight: 300 }}>{a.desc}</div>
                       </div>
                     </GlassCard>
@@ -2455,11 +2455,11 @@ function Scene13Exposome({ start, end }) {
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
                 <div style={{ width: 32, height: 1, background: C.cyan }} />
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 15, letterSpacing: '0.3em', color: C.cyan, textTransform: 'uppercase' }}>Exposome environnemental</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 16, letterSpacing: '0.3em', color: C.cyan, textTransform: 'uppercase' }}>Exposome environnemental</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
                 <div style={{ width: 32, height: 1, background: C.gold }} />
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 15, letterSpacing: '0.3em', color: C.gold, textTransform: 'uppercase' }}>Capteurs connectés</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 16, letterSpacing: '0.3em', color: C.gold, textTransform: 'uppercase' }}>Capteurs connectés</div>
               </div>
             </div>
 
@@ -2470,7 +2470,7 @@ function Scene13Exposome({ start, end }) {
 
             {/* Two columns of cards */}
             <div style={{
-              position: 'absolute', left: 96, top: 410, right: 560, bottom: 140,
+              position: 'absolute', left: 96, top: 392, right: 560, bottom: 128,
               display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 28,
             }}>
               {/* Left — exposome */}
@@ -2482,7 +2482,7 @@ function Scene13Exposome({ start, end }) {
                       opacity: itIn,
                       transform: `perspective(1500px) rotateY(${(1-itIn)*-12}deg) translateX(${(1-itIn)*-30}px)`,
                       transformStyle: 'preserve-3d',
-                      padding: '18px 22px',
+                      padding: '12px 22px',
                       display: 'flex', gap: 18, alignItems: 'center',
                       background: 'linear-gradient(135deg, rgba(30,95,209,0.06), rgba(30,95,209,0.02))',
                       border: `1px solid ${C.lineStrong}`,
@@ -2492,8 +2492,8 @@ function Scene13Exposome({ start, end }) {
                       <div style={{ flexShrink: 0, width: 64, height: 64, borderRadius: 12, background: 'rgba(30,95,209,0.08)', border: `1px solid ${C.lineStrong}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{e.icon}</div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ fontFamily: 'Inter', fontSize: 24, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>{e.label}</div>
-                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.cyan, letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: 3 }}>{e.metric}</div>
-                        <div style={{ fontSize: 15, color: C.whiteDim, marginTop: 6, lineHeight: 1.5 }}>{e.detail}</div>
+                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 15, color: C.cyan, letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: 3 }}>{e.metric}</div>
+                        <div style={{ fontSize: 16, color: C.whiteDim, marginTop: 6, lineHeight: 1.5 }}>{e.detail}</div>
                       </div>
                     </div>
                   );
@@ -2509,18 +2509,18 @@ function Scene13Exposome({ start, end }) {
                       opacity: itIn,
                       transform: `perspective(1500px) rotateY(${(1-itIn)*12}deg) translateX(${(1-itIn)*30}px)`,
                       transformStyle: 'preserve-3d',
-                      padding: '18px 22px',
+                      padding: '12px 22px',
                       display: 'flex', gap: 18, alignItems: 'center',
-                      background: 'linear-gradient(135deg, rgba(251,191,36,0.06), rgba(251,191,36,0.02))',
+                      background: 'linear-gradient(135deg, rgba(30,95,209,0.06), rgba(30,95,209,0.02))',
                       border: `1px solid ${C.gold}55`,
                       borderRadius: 14,
                       backdropFilter: 'blur(10px)',
                     }}>
-                      <div style={{ flexShrink: 0, width: 64, height: 64, borderRadius: 12, background: 'rgba(251,191,36,0.08)', border: `1px solid ${C.gold}55`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{d.icon}</div>
+                      <div style={{ flexShrink: 0, width: 64, height: 64, borderRadius: 12, background: 'rgba(30,95,209,0.08)', border: `1px solid ${C.gold}55`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{d.icon}</div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ fontFamily: 'Inter', fontSize: 24, fontWeight: 500, color: C.white, letterSpacing: '-0.01em' }}>{d.label}</div>
-                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.gold, letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: 3 }}>{d.metric}</div>
-                        <div style={{ fontSize: 15, color: C.whiteDim, marginTop: 6, lineHeight: 1.5 }}>{d.detail}</div>
+                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 15, color: C.gold, letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: 3 }}>{d.metric}</div>
+                        <div style={{ fontSize: 16, color: C.whiteDim, marginTop: 6, lineHeight: 1.5 }}>{d.detail}</div>
                       </div>
                     </div>
                   );
@@ -2535,11 +2535,11 @@ function Scene13Exposome({ start, end }) {
               transform: `translateY(${(1-synthesisIn)*20}px)`,
               padding: '20px 32px',
               borderRadius: 14,
-              background: `linear-gradient(90deg, rgba(30,95,209,0.1), rgba(244,63,94,0.1), rgba(251,191,36,0.1))`,
+              background: `linear-gradient(90deg, rgba(30,95,209,0.1), rgba(19,51,110,0.1), rgba(30,95,209,0.1))`,
               border: `1px solid ${C.gold}66`,
               display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 24,
             }}>
-              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 15, color: C.whiteDim, letterSpacing: '0.25em', textTransform: 'uppercase' }}>4 Dimensions intégrées</div>
+              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 16, color: C.whiteDim, letterSpacing: '0.25em', textTransform: 'uppercase' }}>4 Dimensions intégrées</div>
               <div style={{ display: 'flex', gap: 36, fontSize: 22, fontWeight: 400 }}>
                 <span style={{ color: C.cyan }}>● Clinique</span>
                 <span style={{ color: C.cyan }}>● Exposome</span>
@@ -2660,8 +2660,8 @@ function Scene14Hub({ start, end }) {
                   display: 'flex', flexDirection: 'column', gap: 8,
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.cyan, letterSpacing: '0.2em' }}>● LIVE</div>
-                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim }}>PREVIQ</div>
+                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.cyan, letterSpacing: '0.2em' }}>● LIVE</div>
+                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.whiteDim }}>PREVIQ</div>
                   </div>
                   <div style={{ fontSize: 18, color: C.white, fontWeight: 500, marginTop: 4 }}>Tableau de bord</div>
                   {/* Mini metrics */}
@@ -2678,13 +2678,13 @@ function Scene14Hub({ start, end }) {
                       padding: '7px 10px',
                       background: 'rgba(30,95,209,0.05)',
                       border: `1px solid ${C.line}`,
-                      borderRadius: 6, fontSize: 13,
+                      borderRadius: 6, fontSize: 14,
                     }}>
                       <span style={{ color: C.whiteDim }}>{k}</span>
                       <span style={{ color: col, fontWeight: 600, fontFamily: 'JetBrains Mono, monospace' }}>{v}</span>
                     </div>
                   ))}
-                  <div style={{ marginTop: 'auto', padding: '8px', background: `linear-gradient(135deg, ${C.cyan}, ${C.gold})`, borderRadius: 6, textAlign: 'center', fontSize: 13, fontWeight: 700, color: C.ink }}>
+                  <div style={{ marginTop: 'auto', padding: '8px', background: `linear-gradient(135deg, ${C.cyan}, ${C.gold})`, borderRadius: 6, textAlign: 'center', fontSize: 14, fontWeight: 700, color: C.ink }}>
                     Score BS : 42 / 100
                   </div>
                 </div>
@@ -2723,10 +2723,10 @@ function Scene14Hub({ start, end }) {
                   minWidth: 110, textAlign: 'center',
                   zIndex: 5,
                 }}>
-                  <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: s.color, letterSpacing: '0.15em', textTransform: 'uppercase' }}>{s.label}</div>
+                  <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: s.color, letterSpacing: '0.15em', textTransform: 'uppercase' }}>{s.label}</div>
                   <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 4, marginTop: 2 }}>
                     <span style={{ fontFamily: 'Inter', fontSize: 20, fontWeight: 600, color: C.white }}>{s.value}</span>
-                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.whiteDim }}>{s.unit}</span>
+                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.whiteDim }}>{s.unit}</span>
                   </div>
                 </div>
               );
@@ -2738,7 +2738,7 @@ function Scene14Hub({ start, end }) {
               opacity: modesIn,
               display: 'flex', flexDirection: 'column', gap: 18,
             }}>
-              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 15, color: C.gold, letterSpacing: '0.3em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 16, color: C.gold, letterSpacing: '0.3em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 12 }}>
                 <div style={{ width: 24, height: 1, background: C.gold }} />
                 Distanciel d'abord · présentiel à la demande
               </div>
@@ -2764,7 +2764,7 @@ function Scene14Hub({ start, end }) {
                 </div>
                 <div style={{ marginTop: 12, paddingLeft: 46, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                   {['Visio HD','Capteurs perso','Prélèvement à domicile','Pilotage app'].map((tag, i) => (
-                    <span key={i} style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.cyan, padding: '4px 10px', border: `1px solid ${C.line}`, borderRadius: 100, background: 'rgba(30,95,209,0.05)' }}>{tag}</span>
+                    <span key={i} style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.cyan, padding: '4px 10px', border: `1px solid ${C.line}`, borderRadius: 100, background: 'rgba(30,95,209,0.05)' }}>{tag}</span>
                   ))}
                 </div>
               </div>
@@ -2773,7 +2773,7 @@ function Scene14Hub({ start, end }) {
               <div style={{
                 transform: `perspective(1400px) rotateY(${(1-modesIn)*-12}deg) translateY(${(1-modesIn)*30}px)`,
                 padding: 24,
-                background: 'linear-gradient(135deg, rgba(251,191,36,0.1), rgba(251,191,36,0.03))',
+                background: 'linear-gradient(135deg, rgba(30,95,209,0.1), rgba(30,95,209,0.03))',
                 border: `1px solid ${C.gold}88`,
                 borderRadius: 14,
                 position: 'relative',
@@ -2792,7 +2792,7 @@ function Scene14Hub({ start, end }) {
                 </div>
                 <div style={{ marginTop: 12, paddingLeft: 46, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                   {['Médecin référent','Partenaires privilégiés','Zéro liste d\'attente','Examen paraclinique'].map((tag, i) => (
-                    <span key={i} style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.gold, padding: '4px 10px', border: `1px solid ${C.gold}55`, borderRadius: 100, background: 'rgba(251,191,36,0.05)' }}>{tag}</span>
+                    <span key={i} style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.gold, padding: '4px 10px', border: `1px solid ${C.gold}55`, borderRadius: 100, background: 'rgba(30,95,209,0.05)' }}>{tag}</span>
                   ))}
                 </div>
               </div>
@@ -2904,7 +2904,7 @@ function Scene12Authors({ start, end }) {
               ].map((n, i) => (
                 <div key={i} style={{
                   padding: '20px 26px',
-                  background: n.pain ? 'rgba(244,63,94,0.12)' : 'rgba(18,58,94,0.04)',
+                  background: n.pain ? 'rgba(19,51,110,0.12)' : 'rgba(18,58,94,0.04)',
                   border: `1px solid ${n.pain ? C.red + '88' : C.line}`,
                   borderRadius: 10,
                   fontFamily: 'Inter', fontSize: 20, fontWeight: n.pain ? 500 : 300,
@@ -2980,7 +2980,7 @@ function Scene12Authors({ start, end }) {
                 fontFamily: 'Inter', whiteSpace: 'nowrap',
               }}>
                 <div style={{ fontSize: 33, fontWeight: 400, color: C.white, letterSpacing: '0.05em' }}>L’APPLICATION</div>
-                <div style={{ fontSize: 14, fontFamily: 'JetBrains Mono, monospace', color: C.gold, letterSpacing: '0.4em', marginTop: 6 }}>· PILOTE ·</div>
+                <div style={{ fontSize: 15, fontFamily: 'JetBrains Mono, monospace', color: C.gold, letterSpacing: '0.4em', marginTop: 6 }}>· PILOTE ·</div>
               </div>
             </div>
 
@@ -3006,7 +3006,7 @@ function Scene12Authors({ start, end }) {
                   boxShadow: `0 0 16px ${C.cyan}33`,
                 }}>
                   <span style={{ color: C.cyan, fontSize: 18 }}>{tool.icon}</span>
-                  <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.white, letterSpacing: '0.15em', textTransform: 'uppercase' }}>{tool.label}</span>
+                  <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.white, letterSpacing: '0.15em', textTransform: 'uppercase' }}>{tool.label}</span>
                 </div>
               );
             })}
@@ -3081,7 +3081,7 @@ function Scene12Authors({ start, end }) {
               opacity: manifestoIn,
               padding: '18px 28px', borderRadius: 12,
               border: `1px solid ${C.gold}55`,
-              background: 'linear-gradient(90deg, rgba(251,191,36,0.1), rgba(30,95,209,0.06))',
+              background: 'linear-gradient(90deg, rgba(30,95,209,0.1), rgba(30,95,209,0.06))',
               fontFamily: 'Inter', fontSize: 24, color: C.white, fontWeight: 300,
               textAlign: 'center', letterSpacing: '0.02em', lineHeight: 1.4,
             }}>
@@ -3159,11 +3159,11 @@ function SceneStart({ start, end }) {
                     <GlassCard x={0} y={0} w={540} h={470} border={`${p.color}55`}>
                       <div style={{ padding: 36, height: '100%', display: 'flex', flexDirection: 'column' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 15, letterSpacing: '0.3em', color: p.color, textTransform: 'uppercase' }}>{p.tag}</div>
+                          <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 16, letterSpacing: '0.3em', color: p.color, textTransform: 'uppercase' }}>{p.tag}</div>
                           <div style={{ width: 54, height: 54, borderRadius: 14, background: `linear-gradient(135deg, ${p.color}33, ${p.color}11)`, border: `1px solid ${p.color}66`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 31, color: p.color }}>{p.icon}</div>
                         </div>
                         <div style={{ fontFamily: 'Inter', fontSize: 40, fontWeight: 400, color: C.white, marginTop: 14, letterSpacing: '-0.02em' }}>{p.name}</div>
-                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 15, color: C.whiteDim, marginTop: 6, letterSpacing: '0.1em' }}>{p.sub}</div>
+                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 16, color: C.whiteDim, marginTop: 6, letterSpacing: '0.1em' }}>{p.sub}</div>
                         <div style={{ fontFamily: 'Inter', fontSize: 92, fontWeight: 100, color: p.color, lineHeight: 1, letterSpacing: '-0.05em', marginTop: 16 }}>{p.big}</div>
                         <div style={{ borderTop: `1px solid ${p.color}33`, marginTop: 'auto', paddingTop: 18, fontSize: 18, color: C.whiteDim, lineHeight: 1.55 }}>{p.desc}</div>
                       </div>
@@ -3259,9 +3259,9 @@ function SceneServices({ start, end }) {
                 boxShadow: `0 0 70px ${C.gold}88, inset 0 0 30px rgba(18,58,94,0.15)`,
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center',
               }}>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.ink, letterSpacing: '0.25em', fontWeight: 600 }}>POINT D'ENTRÉE</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 15, color: C.ink, letterSpacing: '0.25em', fontWeight: 600 }}>POINT D'ENTRÉE</div>
                 <div style={{ fontFamily: 'Inter', fontSize: 31, fontWeight: 500, color: C.ink, marginTop: 6, letterSpacing: '-0.01em' }}>Généraliste + biologie</div>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.ink, opacity: 0.75, letterSpacing: '0.2em', marginTop: 6, textTransform: 'uppercase' }}>puis on décline · piloté par l'app</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.ink, opacity: 0.75, letterSpacing: '0.2em', marginTop: 6, textTransform: 'uppercase' }}>puis on décline · piloté par l'app</div>
               </div>
               {[0, 1, 2].map(i => {
                 const phase = (t * 0.7 + i * 0.6) % 2;
@@ -3307,7 +3307,7 @@ function SceneServices({ start, end }) {
                     )}
                     <div style={{ minWidth: 0 }}>
                       <div style={{ fontFamily: 'Inter', fontSize: 23, fontWeight: 600, color: C.white, letterSpacing: '-0.01em' }}>{s.label}</div>
-                      <div style={{ fontFamily: 'Inter', fontSize: 14, color: C.whiteDim, marginTop: 2, lineHeight: 1.3 }}>{s.sub}</div>
+                      <div style={{ fontFamily: 'Inter', fontSize: 15, color: C.whiteDim, marginTop: 2, lineHeight: 1.3 }}>{s.sub}</div>
                     </div>
                   </div>
                   <div style={{
@@ -3315,8 +3315,8 @@ function SceneServices({ start, end }) {
                     padding: '7px 12px', borderRadius: 8,
                     background: `linear-gradient(135deg, ${s.color}, ${s.color}aa)`,
                   }}>
-                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.ink, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', flexShrink: 0 }}>Réserver</span>
-                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: C.ink, fontWeight: 600, whiteSpace: 'nowrap' }}>{s.slot}</span>
+                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.ink, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', flexShrink: 0 }}>Réserver</span>
+                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.ink, fontWeight: 600, whiteSpace: 'nowrap' }}>{s.slot}</span>
                   </div>
                 </div>
               );
@@ -3327,7 +3327,7 @@ function SceneServices({ start, end }) {
               opacity: strapIn, transform: `translateY(${(1 - strapIn) * 20}px)`,
               padding: '16px 28px', borderRadius: 12,
               border: `1px solid ${C.gold}55`,
-              background: 'linear-gradient(90deg, rgba(251,191,36,0.1), rgba(30,95,209,0.05))',
+              background: 'linear-gradient(90deg, rgba(30,95,209,0.1), rgba(30,95,209,0.05))',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               fontFamily: 'JetBrains Mono, monospace', fontSize: 17, color: C.whiteDim, letterSpacing: '0.12em',
             }}>
@@ -3379,7 +3379,7 @@ function SceneConcierge({ start, end }) {
             <div style={{ position: 'absolute', left: 90, top: 444, opacity: phoneIn, transform: `translateY(${(1 - phoneIn) * 30}px)` }}>
               <PortraitFrame src="assets/faces/dirigeante.png" color={C.gold} w={280} h={360} />
               <div style={{ textAlign: 'center', marginTop: 14, fontFamily: 'Inter', fontSize: 20, color: C.white, fontWeight: 500 }}>Vous, pilote de votre santé</div>
-              <div style={{ textAlign: 'center', marginTop: 6, fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 13, letterSpacing: '0.2em', color: C.gold, textTransform: 'uppercase' }}>Abonnement premium</div>
+              <div style={{ textAlign: 'center', marginTop: 6, fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 14, letterSpacing: '0.2em', color: C.gold, textTransform: 'uppercase' }}>Abonnement premium</div>
             </div>
 
             {/* Premium dashboard — vrai rendu de l'app */}
@@ -3405,20 +3405,21 @@ function SceneConcierge({ start, end }) {
                   <div key={i} style={{
                     opacity: fIn, transform: `translateX(${(1 - fIn) * 30}px)`,
                     padding: '18px 22px',
-                    background: 'rgba(251,191,36,0.04)',
-                    border: `1px solid ${C.gold}44`,
+                    background: '#ffffff',
+                    border: `1px solid ${C.cyan}44`,
                     borderRadius: 12,
+                    boxShadow: '0 8px 24px rgba(10,37,64,0.10)',
                     display: 'flex', gap: 16,
                   }}>
                     <div style={{
-                      width: 44, height: 44, flexShrink: 0, borderRadius: 11,
-                      background: `linear-gradient(135deg, ${C.gold}33, ${C.gold}11)`,
-                      border: `1px solid ${C.gold}66`,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.gold, fontSize: 26,
+                      width: 46, height: 46, flexShrink: 0, borderRadius: 11,
+                      background: `linear-gradient(135deg, ${C.cyan}22, ${C.cyan}0d)`,
+                      border: `1px solid ${C.cyan}66`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.cyan, fontSize: 26,
                     }}>{f.icon}</div>
                     <div>
                       <div style={{ fontSize: 22, fontWeight: 500, color: C.white }}>{f.title}</div>
-                      <div style={{ fontSize: 15, color: C.whiteDim, marginTop: 5, lineHeight: 1.5 }}>{f.desc}</div>
+                      <div style={{ fontSize: 16, color: C.whiteDim, marginTop: 5, lineHeight: 1.5 }}>{f.desc}</div>
                     </div>
                   </div>
                 );
@@ -3522,7 +3523,7 @@ function SceneSecondAvis({ start, end }) {
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               }}>
                 <div style={{ fontFamily: 'Inter', fontSize: 31, fontWeight: 400, color: C.ink, letterSpacing: '0.04em' }}>VOTRE CAS</div>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: C.ink, opacity: 0.75, letterSpacing: '0.2em', marginTop: 4 }}>SÉCURISÉ</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.ink, opacity: 0.75, letterSpacing: '0.2em', marginTop: 4 }}>SÉCURISÉ</div>
               </div>
               {[0, 1, 2].map(i => {
                 const phase = (t * 0.7 + i * 0.6) % 2;
@@ -3553,7 +3554,7 @@ function SceneSecondAvis({ start, end }) {
                   backdropFilter: 'blur(6px)',
                 }}>
                   <div style={{ width: 8, height: 8, borderRadius: 4, background: col, boxShadow: `0 0 8px ${col}` }} />
-                  <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.white, letterSpacing: '0.08em' }}>{n.name}</span>
+                  <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 15, color: C.white, letterSpacing: '0.08em' }}>{n.name}</span>
                 </div>
               );
             })}
@@ -3563,7 +3564,7 @@ function SceneSecondAvis({ start, end }) {
               position: 'absolute', left: cx, top: 920,
               transform: 'translateX(-50%)', opacity: netIn,
               display: 'flex', gap: 24,
-              fontFamily: 'JetBrains Mono, monospace', fontSize: 14, letterSpacing: '0.15em', textTransform: 'uppercase',
+              fontFamily: 'JetBrains Mono, monospace', fontSize: 15, letterSpacing: '0.15em', textTransform: 'uppercase',
             }}>
               <span style={{ color: C.cyan }}>● France</span>
               <span style={{ color: C.gold }}>● Europe</span>
@@ -3720,7 +3721,7 @@ function PortraitFrame({ src, color = C.cyan, w = 300, h = 386 }) {
       })}
       <div style={{
         position: 'absolute', top: 9, left: 11, display: 'flex', alignItems: 'center', gap: 6,
-        fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 10, letterSpacing: '0.22em', color,
+        fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12, letterSpacing: '0.22em', color,
       }}>
         <span style={{ width: 6, height: 6, borderRadius: 3, background: color, boxShadow: `0 0 8px ${color}`, opacity: 0.6 + Math.sin(t * 4) * 0.4 }} />SCAN
       </div>
@@ -3766,7 +3767,7 @@ function SceneHumans({ start, end }) {
                   }}>
                     <PortraitFrame src={'assets/faces/' + f.img} color={f.color} />
                     <div style={{ fontFamily: 'Inter', fontSize: 31, fontWeight: 500, color: C.white, marginTop: 14, letterSpacing: '-0.01em' }}>{f.name}</div>
-                    <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 14, color: f.color, letterSpacing: '0.22em', textTransform: 'uppercase', marginTop: 8 }}>{f.role}</div>
+                    <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 15, color: f.color, letterSpacing: '0.22em', textTransform: 'uppercase', marginTop: 8 }}>{f.role}</div>
                     <div style={{ fontSize: 18, color: C.whiteDim, marginTop: 12, lineHeight: 1.5, maxWidth: 280, marginLeft: 'auto', marginRight: 'auto' }}>{f.desc}</div>
                   </div>
                 );
@@ -3830,10 +3831,10 @@ function SceneBusinessModel({ start, end }) {
             <div style={{ position: 'absolute', left: 96, top: 392, width: 780, opacity: planIn, transform: `translateY(${(1 - planIn) * 30}px)` }}>
               <GlassCard x={0} y={0} w={780} h={548} border={`${C.gold}aa`}>
                 <div style={{ padding: 36, height: '100%', display: 'flex', flexDirection: 'column' }}>
-                  <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 15, letterSpacing: '0.24em', color: C.gold, textTransform: 'uppercase' }}>Un parcours en deux temps</div>
+                  <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 16, letterSpacing: '0.24em', color: C.gold, textTransform: 'uppercase' }}>Un parcours en deux temps</div>
                   <div style={{ display: 'flex', alignItems: 'stretch', gap: 24, marginTop: 16 }}>
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, letterSpacing: '0.08em', color: C.whiteDim, textTransform: 'uppercase', lineHeight: 1.35 }}>Bilan initial<br/>indice Score BS</div>
+                      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, letterSpacing: '0.08em', color: C.whiteDim, textTransform: 'uppercase', lineHeight: 1.35 }}>Bilan initial<br/>indice Score BS</div>
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginTop: 8 }}>
                         <span style={{ fontFamily: 'Inter', fontSize: 52, fontWeight: 300, color: C.cyan, letterSpacing: '-0.02em' }}>100 €</span>
                         <span style={{ fontSize: 18, color: C.whiteDim }}>une fois</span>
@@ -3841,12 +3842,12 @@ function SceneBusinessModel({ start, end }) {
                     </div>
                     <div style={{ width: 1, background: `${C.gold}33` }} />
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, letterSpacing: '0.08em', color: C.whiteDim, textTransform: 'uppercase', lineHeight: 1.35 }}>Puis abonnement<br/>suivi continu</div>
+                      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, letterSpacing: '0.08em', color: C.whiteDim, textTransform: 'uppercase', lineHeight: 1.35 }}>Puis abonnement<br/>suivi continu</div>
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginTop: 8 }}>
                         <span style={{ fontFamily: 'Inter', fontSize: 52, fontWeight: 300, color: C.gold, letterSpacing: '-0.02em' }}>45 €</span>
                         <span style={{ fontSize: 18, color: C.whiteDim }}>/ mois</span>
                       </div>
-                      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: 'rgba(18,58,94,0.45)', letterSpacing: '0.08em', marginTop: 4 }}>mensuel ou annuel</div>
+                      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: 'rgba(18,58,94,0.45)', letterSpacing: '0.08em', marginTop: 4 }}>mensuel ou annuel</div>
                     </div>
                   </div>
                   <div style={{ borderTop: `1px solid ${C.gold}33`, marginTop: 18, paddingTop: 18, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px 24px' }}>
@@ -3864,7 +3865,7 @@ function SceneBusinessModel({ start, end }) {
             <div style={{ position: 'absolute', right: 96, top: 392, width: 760 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
                 <div style={{ width: 28, height: 1, background: C.cyan }} />
-                <span style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 15, letterSpacing: '0.26em', color: C.cyan, textTransform: 'uppercase' }}>Les soins · facturation transparente</span>
+                <span style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 16, letterSpacing: '0.26em', color: C.cyan, textTransform: 'uppercase' }}>Les soins · facturation transparente</span>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 13 }}>
                 {actes.map((a, i) => {
@@ -3878,7 +3879,7 @@ function SceneBusinessModel({ start, end }) {
                     }}>
                       <div>
                         <div style={{ fontFamily: 'Inter', fontSize: 24, fontWeight: 500, color: C.white }}>{a.label}</div>
-                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: C.whiteDim, letterSpacing: '0.06em', marginTop: 4 }}>{a.sub}</div>
+                        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 15, color: C.whiteDim, letterSpacing: '0.06em', marginTop: 4 }}>{a.sub}</div>
                       </div>
                       <div style={{ fontFamily: 'Inter', fontSize: 20, fontWeight: 500, color: a.color, whiteSpace: 'nowrap', textAlign: 'right' }}>{a.price}</div>
                     </div>
@@ -3897,7 +3898,7 @@ function SceneBusinessModel({ start, end }) {
               borderTop: `1px solid ${C.gold}33`, paddingTop: 16,
             }}>
               <span style={{ color: C.cyan, fontWeight: 500 }}>100 % fondé sur la science validée</span> — aucune pseudoscience, aucun gadget marketing.
-              <span style={{ display: 'block', fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: 'rgba(18,58,94,0.4)', letterSpacing: '0.12em', marginTop: 8 }}>Sans engagement · mensuel ou annuel</span>
+              <span style={{ display: 'block', fontFamily: 'JetBrains Mono, monospace', fontSize: 15, color: 'rgba(18,58,94,0.4)', letterSpacing: '0.12em', marginTop: 8 }}>Sans engagement · mensuel ou annuel</span>
             </div>
           </div>
         );
@@ -3958,7 +3959,7 @@ function SceneTeam({ start, end }) {
                           boxShadow: `0 10px 26px ${m.color}44`,
                         }}>{m.initials}</div>
                         <div style={{ fontFamily: 'Inter', fontSize: 28, fontWeight: 600, color: C.white, marginTop: 18 }}>{m.name}</div>
-                        <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12.5, letterSpacing: '0.16em', color: m.color, textTransform: 'uppercase', marginTop: 8 }}>{m.role}</div>
+                        <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 13.5, letterSpacing: '0.16em', color: m.color, textTransform: 'uppercase', marginTop: 8 }}>{m.role}</div>
                         <div style={{ fontSize: 16, color: C.whiteDim, marginTop: 14, lineHeight: 1.5, maxWidth: 440 }}>{m.desc}</div>
                       </div>
                     </GlassCard>
@@ -4025,7 +4026,7 @@ function SceneMarket({ start, end }) {
                     <div style={{ width: 380, flexShrink: 0 }}>
                       <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 20, fontWeight: 700, letterSpacing: '0.12em', color: L.color }}>{L.key}</div>
                       <div style={{ fontFamily: 'Inter', fontSize: 18, fontWeight: 500, color: C.white, marginTop: 5, lineHeight: 1.25 }}>{L.label}</div>
-                      <div style={{ fontSize: 13.5, color: C.whiteDim, marginTop: 3 }}>{L.sub}</div>
+                      <div style={{ fontSize: 14.5, color: C.whiteDim, marginTop: 3 }}>{L.sub}</div>
                     </div>
                     <div style={{ flex: 1, height: 82 }}>
                       <div style={{
@@ -4114,7 +4115,7 @@ function SceneFinance({ start, end }) {
                         <div style={{ width: 118, height: Math.max(6, h), borderRadius: '10px 10px 0 0', background: `linear-gradient(180deg, ${colBy(i)}, ${colBy(i)}bb)`, boxShadow: `0 6px 18px ${colBy(i)}33` }} />
                       </div>
                       <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 18, fontWeight: 600, letterSpacing: '0.1em', color: colBy(i), marginTop: 14 }}>{d.y}</div>
-                      <div style={{ fontSize: 12.5, color: C.whiteDim, marginTop: 6, textAlign: 'center', maxWidth: 180, lineHeight: 1.35 }}>{d.sub}</div>
+                      <div style={{ fontSize: 13.5, color: C.whiteDim, marginTop: 6, textAlign: 'center', maxWidth: 180, lineHeight: 1.35 }}>{d.sub}</div>
                     </div>
                   );
                 })}
@@ -4126,7 +4127,7 @@ function SceneFinance({ start, end }) {
               {callouts.map((c, i) => (
                 <div key={i} style={{ padding: '18px 20px', borderRadius: 14, background: 'rgba(255,255,255,0.55)', border: `1px solid ${C.line}` }}>
                   <div style={{ fontFamily: 'Inter', fontSize: 32, fontWeight: 300, color: C.gold, letterSpacing: '-0.02em' }}>{c.k}</div>
-                  <div style={{ fontSize: 13, color: C.whiteDim, marginTop: 6, lineHeight: 1.4 }}>{c.v}</div>
+                  <div style={{ fontSize: 14, color: C.whiteDim, marginTop: 6, lineHeight: 1.4 }}>{c.v}</div>
                 </div>
               ))}
             </div>
@@ -4183,7 +4184,7 @@ function SceneCompetition({ start, end }) {
             <div style={{ position: 'absolute', left: 96, top: 310, width: 800 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
                 <div style={{ width: 26, height: 1, background: C.whiteDim }} />
-                <span style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12, letterSpacing: '0.2em', color: C.whiteDim, textTransform: 'uppercase' }}>Acteurs clés · levée · valorisation</span>
+                <span style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 14, letterSpacing: '0.2em', color: C.whiteDim, textTransform: 'uppercase' }}>Acteurs clés · levée · valorisation</span>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
                 {comp.map((c, i) => {
@@ -4195,7 +4196,7 @@ function SceneCompetition({ start, end }) {
                       padding: '13px 20px', borderRadius: 11, background: 'rgba(255,255,255,0.45)', border: `1px solid ${C.line}`,
                     }}>
                       <div style={{ fontFamily: 'Inter', fontSize: 20, fontWeight: 500, color: C.white }}>{c.n}</div>
-                      <div style={{ display: 'flex', gap: 26, fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 15 }}>
+                      <div style={{ display: 'flex', gap: 26, fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 16 }}>
                         <span style={{ color: C.whiteDim }}>levée <span style={{ color: C.white }}>{c.f}</span></span>
                         <span style={{ color: C.whiteDim, minWidth: 130, textAlign: 'right' }}>valo <span style={{ color: C.gold }}>{c.v}</span></span>
                       </div>
@@ -4209,7 +4210,7 @@ function SceneCompetition({ start, end }) {
             <div style={{ position: 'absolute', right: 96, top: 310, width: 800, opacity: clamp((t - 1.8) / 0.8, 0, 1) }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
                 <div style={{ width: 26, height: 1, background: C.gold }} />
-                <span style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 12, letterSpacing: '0.2em', color: C.gold, textTransform: 'uppercase' }}>PREVIQ · notre différence</span>
+                <span style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 14, letterSpacing: '0.2em', color: C.gold, textTransform: 'uppercase' }}>PREVIQ · notre différence</span>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 {diff.map((d, i) => {
@@ -4224,7 +4225,7 @@ function SceneCompetition({ start, end }) {
                       <span style={{ color: C.green, fontSize: 18, marginTop: 1 }}>✓</span>
                       <div>
                         <div style={{ fontFamily: 'Inter', fontSize: 19, fontWeight: 600, color: C.white }}>{d.t}</div>
-                        <div style={{ fontSize: 14, color: C.whiteDim, marginTop: 4, lineHeight: 1.45 }}>{d.s}</div>
+                        <div style={{ fontSize: 15, color: C.whiteDim, marginTop: 4, lineHeight: 1.45 }}>{d.s}</div>
                       </div>
                     </div>
                   );
@@ -4288,7 +4289,7 @@ function SceneProof({ start, end }) {
             {/* Real, functional app — actual product screenshot */}
             <div style={{ position: 'absolute', right: 30, top: 84, width: 1010, height: 910, opacity: imgIn, transform: `translateY(${(1 - imgIn) * 30}px) scale(${0.94 + imgIn * 0.06})` }}>
               <img src="assets/viz/app-score-cut.png" alt="Application PREVIQ — Score BS" style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'drop-shadow(0 30px 60px rgba(10,37,64,0.26))' }} />
-              <div style={{ position: 'absolute', right: 150, top: 150, display: 'flex', alignItems: 'center', gap: 10, padding: '9px 18px', borderRadius: 100, background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(6px)', border: `1px solid ${C.green}55`, boxShadow: `0 8px 24px ${C.green}22`, fontFamily: 'JetBrains Mono, monospace', fontSize: 13, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.blue, whiteSpace: 'nowrap' }}>
+              <div style={{ position: 'absolute', right: 150, top: 150, display: 'flex', alignItems: 'center', gap: 10, padding: '9px 18px', borderRadius: 100, background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(6px)', border: `1px solid ${C.green}55`, boxShadow: `0 8px 24px ${C.green}22`, fontFamily: 'JetBrains Mono, monospace', fontSize: 14, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.blue, whiteSpace: 'nowrap' }}>
                 <span style={{ width: 8, height: 8, borderRadius: 4, background: C.green, boxShadow: `0 0 10px ${C.green}`, opacity: 0.5 + Math.sin(t * 4) * 0.5 }} />
                 Score en temps réel
               </div>
@@ -4418,12 +4419,12 @@ function SceneLifestyleCare({ start, end }) {
                           fontSize: 30, color: u.color,
                         }}>{u.icon}</div>
                         <div>
-                          <div style={{ fontFamily: 'Inter', fontSize: 15, letterSpacing: '0.02em', color: C.whiteDim, fontWeight: 500 }}>PREVIQ</div>
+                          <div style={{ fontFamily: 'Inter', fontSize: 16, letterSpacing: '0.02em', color: C.whiteDim, fontWeight: 500 }}>PREVIQ</div>
                           <div style={{ fontFamily: 'Inter', fontSize: 40, fontWeight: 400, color: u.color, letterSpacing: '-0.02em', lineHeight: 1 }}>{u.word}</div>
                         </div>
                         <div style={{
                           marginLeft: 'auto', alignSelf: 'flex-start',
-                          fontFamily: 'JetBrains Mono, monospace', fontSize: 12.5, letterSpacing: '0.06em',
+                          fontFamily: 'JetBrains Mono, monospace', fontSize: 13.5, letterSpacing: '0.06em',
                           color: u.color, background: `${u.color}14`, border: `1px solid ${u.color}44`,
                           borderRadius: 999, padding: '7px 14px', textAlign: 'right', maxWidth: 300,
                         }}>{u.tag}</div>
@@ -4441,7 +4442,7 @@ function SceneLifestyleCare({ start, end }) {
                       </div>
 
                       <div style={{
-                        marginTop: 'auto', fontFamily: 'JetBrains Mono, monospace', fontSize: 14.5,
+                        marginTop: 'auto', fontFamily: 'JetBrains Mono, monospace', fontSize: 15.5,
                         color: C.whiteDim, lineHeight: 1.5, letterSpacing: '0.01em',
                       }}>{u.foot}</div>
                     </div>
@@ -4616,7 +4617,7 @@ Object.assign(window, { SceneTeam, SceneMarket, SceneFinance, SceneCompetition, 
             fontFamily: 'Inter, system-ui, sans-serif',
           }}>
             {ctrl('‹', () => go(-1), i === 0)}
-            <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 14, letterSpacing: '0.14em', minWidth: 92, textAlign: 'center', color: 'rgba(18,58,94,0.72)' }}>
+            <div style={{ fontFamily: 'Orbitron, JetBrains Mono, monospace', fontSize: 15, letterSpacing: '0.14em', minWidth: 92, textAlign: 'center', color: 'rgba(18,58,94,0.72)' }}>
               {String(i + 1).padStart(2, '0')} / {String(N).padStart(2, '0')}
             </div>
             {ctrl('›', () => go(1), i === N - 1)}
