@@ -12,3 +12,15 @@ node_modules/
 
 # Build/render artifacts
 render-harness.html
+# PDF / screenshot generation harness (transient, regenerated on demand)
+_vendor/
+_fonts/
+index_test.html
+index_pdf.html
+_*.mjs
+package.json
+package-lock.json
+_*.py
+_kit_stage/
+_cap.mjs
+_diag.mjs
